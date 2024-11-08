@@ -6,29 +6,8 @@ package graph
 
 import (
 	"context"
-	"fmt"
 	"gaishi-app/backend/graph/model"
 )
-
-// CreateUser is the resolver for the createUser field.
-func (r *mutationResolver) CreateUser(ctx context.Context, input model.NewUserInput) (*model.User, error) {
-	panic(fmt.Errorf("not implemented: CreateUser - createUser"))
-}
-
-// FollowUser is the resolver for the followUser field.
-func (r *mutationResolver) FollowUser(ctx context.Context, followerID string, followeeID string) (*model.User, error) {
-	panic(fmt.Errorf("not implemented: FollowUser - followUser"))
-}
-
-// UnfollowUser is the resolver for the unfollowUser field.
-func (r *mutationResolver) UnfollowUser(ctx context.Context, followerID string, followeeID string) (*model.User, error) {
-	panic(fmt.Errorf("not implemented: UnfollowUser - unfollowUser"))
-}
-
-// Users is the resolver for the users field.
-func (r *queryResolver) Users(ctx context.Context) ([]*model.User, error) {
-	panic(fmt.Errorf("not implemented: Users - users"))
-}
 
 // User is the resolver for the user field.
 func (r *queryResolver) User(ctx context.Context, id string) (*model.User, error) {
@@ -39,11 +18,7 @@ func (r *queryResolver) User(ctx context.Context, id string) (*model.User, error
 	return model.FormatUserResponse(user), nil
 }
 
-// Mutation returns MutationResolver implementation.
-func (r *Resolver) Mutation() MutationResolver { return &mutationResolver{r} }
-
 // Query returns QueryResolver implementation.
 func (r *Resolver) Query() QueryResolver { return &queryResolver{r} }
 
-type mutationResolver struct{ *Resolver }
 type queryResolver struct{ *Resolver }

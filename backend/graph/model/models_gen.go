@@ -2,9 +2,6 @@
 
 package model
 
-type Mutation struct {
-}
-
 type NewUserInput struct {
 	Username string `json:"username"`
 	Email    string `json:"email"`

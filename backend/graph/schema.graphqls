@@ -5,12 +5,5 @@ input NewUserInput {
 }
 
 type Query {
-  users: [User!]!
   user(id: ID!): User
-}
-
-type Mutation {
-  createUser(input: NewUserInput!): User!
-  followUser(followerId: ID!, followeeId: ID!): User!
-  unfollowUser(followerId: ID!, followeeId: ID!): User!
 }

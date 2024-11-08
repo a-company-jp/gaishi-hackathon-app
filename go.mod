@@ -15,6 +15,7 @@ require (
 	github.com/xo/xo v1.0.2
 	golang.org/x/tools v0.26.0
 	gopkg.in/yaml.v3 v3.0.1
+	gorm.io/driver/postgres v1.5.9
 	gorm.io/gorm v1.25.12
 	mvdan.cc/gofumpt v0.7.0
 )
@@ -291,7 +292,6 @@ require (
 	gopkg.in/ini.v1 v1.67.0 // indirect
 	gopkg.in/yaml.v2 v2.4.0 // indirect
 	gorm.io/driver/bigquery v1.2.0 // indirect
-	gorm.io/driver/postgres v1.5.9 // indirect
 	honnef.co/go/tools v0.5.1 // indirect
 	mvdan.cc/unparam v0.0.0-20240528143540-8a5130ca722f // indirect
 )
