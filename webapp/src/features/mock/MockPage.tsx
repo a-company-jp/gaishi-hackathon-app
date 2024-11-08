@@ -1,3 +1,5 @@
+"use client"
+
 import {gql} from "@/gql/__generated__";
 import { useSuspenseQuery } from "@apollo/client";
 
