@@ -1,10 +1,11 @@
 package settings
 
 import (
-	"github.com/joho/godotenv"
-	"gopkg.in/yaml.v3"
 	"log"
 	"os"
+
+	"github.com/joho/godotenv"
+	"gopkg.in/yaml.v3"
 )
 
 var config *Config

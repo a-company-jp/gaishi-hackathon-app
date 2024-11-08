@@ -2,11 +2,12 @@ package main
 
 import (
 	"fmt"
+	"log"
+
 	"gaishi-app/backend/middleware"
 	"gaishi-app/backend/pkg/settings"
 	"gaishi-app/backend/repository"
 	"gaishi-app/backend/service"
-	"log"
 
 	"gaishi-app/backend/graph"
 

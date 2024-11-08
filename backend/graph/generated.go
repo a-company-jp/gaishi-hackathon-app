@@ -8,10 +8,11 @@ import (
 	"embed"
 	"errors"
 	"fmt"
-	"gaishi-app/backend/graph/model"
 	"strconv"
 	"sync"
 	"sync/atomic"
+
+	"gaishi-app/backend/graph/model"
 
 	"github.com/99designs/gqlgen/graphql"
 	"github.com/99designs/gqlgen/graphql/introspection"
