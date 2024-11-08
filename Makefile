@@ -63,15 +63,15 @@ clean-dbmodel: ## DBモデルを削除
 	@rm -rf backend/db_model/*.xo.go
 
 .PHONY: gen-api
-gen-api:
+gen-api: ## schema.graphqlsとmodel.graphqlsからGoのコードを生成する
 	$(GOBIN)/gqlgen
 
 .PHONY: start-backend
-start-backend:
+start-backend: ## APIとDBの起動
 	docker compose -f backend/docker-compose.yml up -d
 .PHONY: stop-backend
-stop-backend:
+stop-backend: ## APIとDBの停止
 	docker compose -f backend/docker-compose.yml down
 .PHONY: build-backend-nocache
-build-backend-nocache:
+build-backend-nocache: ## nocacheでビルド
 	docker compose -f backend/docker-compose.yml build --no-cache
