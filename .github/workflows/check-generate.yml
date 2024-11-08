@@ -12,6 +12,7 @@ jobs:
       - uses: actions/checkout@v4
       - name: Start Postgres
         run: docker run --name postgres-test -e POSTGRES_DB=gaishi -e POSTGRES_USER=postgres -e POSTGRES_PASSWORD=postgres -p 5432:5432 -d postgres:16 &
+      - uses: actions/setup-go@v5
         with:
           go-version-file: 'go.mod'
       - name: Install go tools
