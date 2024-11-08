@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"gaishi-app/backend/middleware"
 	"gaishi-app/backend/pkg/settings"
 	"gaishi-app/backend/repository"
 	"gaishi-app/backend/service"
@@ -38,7 +39,7 @@ func playgroundHandler() gin.HandlerFunc {
 }
 
 func main() {
-	r := gin.Default()
+	engine := gin.Default()
 	conf := settings.Get()
 	var dbUrl string
 	switch conf.Infrastructure.Postgres.Protocol {
@@ -67,9 +68,15 @@ func main() {
 	userRepo := repository.NewUser()
 	userSvc := service.NewUser(db, userRepo)
 
-	r.POST("/query", graphqlHandler(userSvc))
-	r.GET("/", playgroundHandler())
+	apiV1 := engine.Group("/api/v1")
+	middleware.NewCORS().ConfigureCORS(apiV1)
+
+	apiV1.POST("/query", graphqlHandler(userSvc))
+	apiV1.GET("/", playgroundHandler())
 
 	log.Printf("connect to http://localhost:%s/ for GraphQL playground", "8080")
-	log.Fatal(r.Run())
+	if err := engine.Run(":8080"); err != nil {
+		log.Fatalf("Failed to start server... %v", err)
+		return
+	}
 }
