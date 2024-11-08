@@ -1,0 +1,8 @@
+type User {
+    id: ID!
+    username: String!
+    email: String!
+    created_at: String!
+    followers: [User!]!
+    following: [User!]!
+}

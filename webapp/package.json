@@ -1,0 +1,37 @@
+{
+  "name": "webapp",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "eslint --ext .js,.tsx,.ts .",
+    "typecheck": "tsc --noEmit",
+    "format": "prettier -w .",
+    "format:check": "prettier -c .",
+    "graphql-codegen": "graphql-codegen --config graphql.config.ts"
+  },
+  "dependencies": {
+    "graphql": "^16.9.0",
+    "next": "15.0.3",
+    "react": "19.0.0-rc-66855b96-20241106",
+    "react-dom": "19.0.0-rc-66855b96-20241106"
+  },
+  "devDependencies": {
+    "@graphql-codegen/add": "^5.0.3",
+    "@graphql-codegen/cli": "^5.0.3",
+    "@graphql-codegen/client-preset": "^4.5.0",
+    "@graphql-codegen/fragment-matcher": "^5.0.2",
+    "@graphql-codegen/typescript": "^4.1.1",
+    "@graphql-codegen/typescript-operations": "^4.3.1",
+    "@types/node": "^20",
+    "@types/react": "^18",
+    "@types/react-dom": "^18",
+    "eslint": "^8",
+    "eslint-config-next": "15.0.3",
+    "postcss": "^8",
+    "tailwindcss": "^3.4.1",
+    "typescript": "^5"
+  }
+}

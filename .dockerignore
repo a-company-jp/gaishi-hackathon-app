@@ -1,0 +1,14 @@
+# Node.js の依存関係フォルダを除外
+node_modules
+# Git リポジトリ関連のフォルダを除外
+.git
+# ビルド成果物を除外
+dist
+# Docker に必要ない設定ファイルを除外
+*.env
+# ロックファイル
+pnpm-lock.yaml
+# ローカルテスト用ファイルを除外
+tests
+# Webアプリケーションのソース
+webapp
