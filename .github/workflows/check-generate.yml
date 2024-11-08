@@ -1,0 +1,31 @@
+name: migrate and generate model
+
+on:
+  push:
+    branches: [ main ]
+
+jobs:
+  generate:
+    name: Generate
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Start Postgres
+        run: docker run --name postgres-test -e POSTGRES_DB=gaishi -e POSTGRES_USER=postgres -e POSTGRES_PASSWORD=postgres -p 5432:5432 -d postgres:16 &
+        with:
+          go-version-file: 'go.mod'
+      - name: Install go tools
+        run: make go-install-tools
+      - name: Run migration
+        run: make migrate-up
+      - name: Run make gen
+        run: make gen
+      - name: Run make backend/format
+        run: make backend/format
+      - name: Check for changes
+        run: |
+          if [[ -n $(git status --porcelain) ]]; then
+            echo "Changes detected after running 'make gen'. Please run 'make gen' locally and commit the changes."
+            git diff
+            exit 1
+          fi
