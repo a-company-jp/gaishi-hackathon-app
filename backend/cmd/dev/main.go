@@ -65,18 +65,27 @@ func main() {
 		log.Fatalf("failed to connect to database, err: %v", err)
 	}
 
-	userRepo := repository.NewUser()
-	userSvc := service.NewUser(db, userRepo)
-
 	apiV1 := engine.Group("/api/v1")
 	middleware.NewCORS().ConfigureCORS(apiV1)
 
-	apiV1.POST("/query", graphqlHandler(userSvc))
-	apiV1.GET("/", playgroundHandler())
-
-	log.Printf("connect to http://localhost:%s/ for GraphQL playground", "8080")
+	if err := implement(apiV1, db); err != nil {
+		log.Fatalf("Failed to start server... %v", err)
+		return
+	}
 	if err := engine.Run(":8080"); err != nil {
 		log.Fatalf("Failed to start server... %v", err)
 		return
 	}
+}
+
+func implement(rg *gin.RouterGroup, db *gorm.DB) error {
+	// graphql playground
+	rg.GET("/", playgroundHandler())
+
+	userRepo := repository.NewUser()
+	userSvc := service.NewUser(db, userRepo)
+
+	rg.POST("/query", graphqlHandler(userSvc))
+
+	return nil
 }
