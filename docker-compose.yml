@@ -4,12 +4,12 @@ services:
     depends_on:
       - db
     build:
-      context: ../
+      context: ./
       dockerfile: backend/build/Dockerfile.dev
     ports:
       - "8080:8080"
     volumes:
-      - ..:/app
+      - .:/app
   db:
     container_name: gaishi-db
     image: postgres:16

@@ -68,10 +68,10 @@ gen-api: ## schema.graphqlsとmodel.graphqlsからGoのコードを生成する
 
 .PHONY: start-backend
 start-backend: ## APIとDBの起動
-	docker compose -f backend/docker-compose.yml up -d
+	docker compose up -d
 .PHONY: stop-backend
 stop-backend: ## APIとDBの停止
-	docker compose -f backend/docker-compose.yml down
+	docker compose down
 .PHONY: build-backend-nocache
 build-backend-nocache: ## nocacheでビルド
-	docker compose -f backend/docker-compose.yml build --no-cache
+	docker compose build --no-cache
