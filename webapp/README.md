@@ -1,36 +1,40 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Frontend Application
 
-## Getting Started
+---
 
-First, run the development server:
+## 技術スタック
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+- ライブラリ・フレームワーク
+
+- [Next.js](https://nextjs.org/) ([with AppRouter](https://nextjs.org/docs/app))
+- 学習コンテンツ
+- [LEARN REACT](https://ja.react.dev/learn): Reactの基礎を学習できます
+- [Learn Next.js](https://nextjs.org/learn): Next.jsの基礎を学習できます
+
+- フォームと入力バリデーション
+- フォーム: [react-hook-form](https://react-hook-form.com/)
+- 入力バリデーション: [zod](https://github.com/colinhacks/zod)
+- UIライブラリ
+- [shadcn/ui](https://ui.shadcn.com/)
+- [Tailwind CSS](https://tailwindcss.com/)や[radix-ui](https://www.radix-ui.com/)を利用している。
+- [`components.json`](https://ui.shadcn.com/docs/components-json)にはこのプロジェクトの[shadcn/ui](https://ui.shadcn.com/)の設定が保存されています。
+- `src/componsnts/ui`や`src/lib/utils`には、[shadcn/ui](https://ui.shadcn.com/)のツールで生成したコンポーネントやユーティリティ関数が保存されています。
+- コンポーネントの追加や更新は [CLI](https://ui.shadcn.com/docs/cli)で行う事ができます。
+- GraphQL
+- クライアント: [Apollo Client](https://www.apollographql.com/docs/react/)
+- コード生成: [GraphQL Code Generator](https://the-guild.dev/graphql/codegen/docs/guides/react-query)
+- `graphql.config.ts`に設定ファイルがあります。
+- GraphQL Code Generatorで生成されたquery, mutationは`src/gql/__generated__`ディレクトリに保存されています。
+
+## srcディレクトリの構成
+
 ```
+tree -d -L 1 ./src
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
-
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
-
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
-
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+./src
+├── app         Next.jsのAppディレクトリ(基本はルーティングのみを定義)
+├── components  汎用的なReactコンポーネントを置くディレクトリ
+├── features    ドメインごとのReactコンポーネントを置くディレクトリ
+├── gql         GraphQL Code Generatorで生成されたコードを置くディレクトリ
+└── lib         Typescriptのユーティリティ関数を置くディレクトリ
+```
