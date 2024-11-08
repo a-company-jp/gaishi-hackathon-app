@@ -14,8 +14,10 @@ import type { TypedDocumentNode as DocumentNode } from "@graphql-typed-document-
  * Learn more about it here: https://the-guild.dev/graphql/codegen/plugins/presets/preset-client#reducing-bundle-size
  */
 const documents = {
-  "\n    query GetMockPage($id: ID!) {\n        user(id: $id) {\n            username\n            email\n        }\n    }\n":
+  "\n    query GetMockPage($id: ID!) {\n        user(id: $id) {\n            ...MockFragment\n        }\n    }\n":
     types.GetMockPageDocument,
+  "\n    fragment MockFragment on User {\n        username\n        email\n    }\n":
+    types.MockFragmentFragmentDoc,
 };
 
 /**
@@ -36,8 +38,14 @@ export function gql(source: string): unknown;
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function gql(
-  source: "\n    query GetMockPage($id: ID!) {\n        user(id: $id) {\n            username\n            email\n        }\n    }\n"
-): (typeof documents)["\n    query GetMockPage($id: ID!) {\n        user(id: $id) {\n            username\n            email\n        }\n    }\n"];
+  source: "\n    query GetMockPage($id: ID!) {\n        user(id: $id) {\n            ...MockFragment\n        }\n    }\n"
+): (typeof documents)["\n    query GetMockPage($id: ID!) {\n        user(id: $id) {\n            ...MockFragment\n        }\n    }\n"];
+/**
+ * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function gql(
+  source: "\n    fragment MockFragment on User {\n        username\n        email\n    }\n"
+): (typeof documents)["\n    fragment MockFragment on User {\n        username\n        email\n    }\n"];
 
 export function gql(source: string) {
   return (documents as any)[source] ?? {};

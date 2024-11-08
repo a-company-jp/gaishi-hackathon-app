@@ -38,7 +38,7 @@ export type NewUserInput = {
 };
 
 export type Query = {
-  user: Maybe<User>;
+  user: User;
 };
 
 export type QueryUserArgs = {
@@ -58,10 +58,30 @@ export type GetMockPageQueryVariables = Exact<{
   id: Scalars["ID"]["input"];
 }>;
 
-export type GetMockPageQuery = {
-  user: { username: string; email: string } | null;
-};
+export type GetMockPageQuery = { user: { username: string; email: string } };
 
+export type MockFragmentFragment = { username: string; email: string };
+
+export const MockFragmentFragmentDoc = {
+  kind: "Document",
+  definitions: [
+    {
+      kind: "FragmentDefinition",
+      name: { kind: "Name", value: "MockFragment" },
+      typeCondition: {
+        kind: "NamedType",
+        name: { kind: "Name", value: "User" },
+      },
+      selectionSet: {
+        kind: "SelectionSet",
+        selections: [
+          { kind: "Field", name: { kind: "Name", value: "username" } },
+          { kind: "Field", name: { kind: "Name", value: "email" } },
+        ],
+      },
+    },
+  ],
+} as unknown as DocumentNode<MockFragmentFragment, unknown>;
 export const GetMockPageDocument = {
   kind: "Document",
   definitions: [
@@ -98,11 +118,28 @@ export const GetMockPageDocument = {
             selectionSet: {
               kind: "SelectionSet",
               selections: [
-                { kind: "Field", name: { kind: "Name", value: "username" } },
-                { kind: "Field", name: { kind: "Name", value: "email" } },
+                {
+                  kind: "FragmentSpread",
+                  name: { kind: "Name", value: "MockFragment" },
+                },
               ],
             },
           },
+        ],
+      },
+    },
+    {
+      kind: "FragmentDefinition",
+      name: { kind: "Name", value: "MockFragment" },
+      typeCondition: {
+        kind: "NamedType",
+        name: { kind: "Name", value: "User" },
+      },
+      selectionSet: {
+        kind: "SelectionSet",
+        selections: [
+          { kind: "Field", name: { kind: "Name", value: "username" } },
+          { kind: "Field", name: { kind: "Name", value: "email" } },
         ],
       },
     },
