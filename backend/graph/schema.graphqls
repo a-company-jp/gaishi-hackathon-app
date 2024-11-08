@@ -5,5 +5,5 @@ input NewUserInput {
 }
 
 type Query {
-  user(id: ID!): User
+  user(id: ID!): User!
 }
