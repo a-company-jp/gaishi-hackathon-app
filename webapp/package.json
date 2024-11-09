@@ -42,5 +42,11 @@
     "prettier": "^3.3.3",
     "tailwindcss": "^3.4.1",
     "typescript": "^5"
+  },
+  "packageManager": "pnpm@9.12.3",
+  "lint-staged": {
+    "*.{js,ts,tsx}": [
+      "pnpm run /^(lint|typecheck|format)$/"
+    ]
   }
 }
