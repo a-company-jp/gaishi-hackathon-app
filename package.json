@@ -8,7 +8,6 @@
     "start": "pnpm -r start",
     "lint": "pnpm -r lint",
     "format": "pnpm -r format",
-    "format:check": "pnpm -r format:check",
     "graphql-codegen": "pnpm -r graphql-codegen",
     "prepare": "husky"
   },
