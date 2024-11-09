@@ -1,5 +1,5 @@
-import {MockPage} from "@/features/mock/MockPage";
+import { MockPage } from "@/features/mock/MockPage";
 
 export default function Mock() {
-    return <MockPage />
+  return <MockPage />;
 }

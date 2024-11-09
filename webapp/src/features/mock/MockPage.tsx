@@ -1,8 +1,8 @@
-"use client"
+"use client";
 
-import {gql} from "@/gql/__generated__";
+import { gql } from "@/gql/__generated__";
 import { useSuspenseQuery } from "@apollo/client";
-import {MockUser} from "@/features/mock/MockUser";
+import { MockUser } from "@/features/mock/MockUser";
 
 /**
  * ちょっとした説明
@@ -12,24 +12,24 @@ import {MockUser} from "@/features/mock/MockUser";
  * -> loadingの処理を描かなくて良い
  * */
 
-const Query = gql(/* GraphQL */`
-    query GetMockPage($id: ID!) {
-        user(id: $id) {
-            ...MockFragment
-        }
+const Query = gql(/* GraphQL */ `
+  query GetMockPage($id: ID!) {
+    user(id: $id) {
+      ...MockFragment
     }
-`)
+  }
+`);
 
 export function MockPage() {
-    const id = "1"
-    const { data } = useSuspenseQuery(Query, { variables: { id } })
-    return (
-        <>
-            <h1>モックページ</h1>
-            <h3>APIレスポンス</h3>
-            <div>
-                <MockUser user={data.user} />
-            </div>
-        </>
-    )
+  const id = "1";
+  const { data } = useSuspenseQuery(Query, { variables: { id } });
+  return (
+    <>
+      <h1>モックページ</h1>
+      <h3>APIレスポンス</h3>
+      <div>
+        <MockUser user={data.user} />
+      </div>
+    </>
+  );
 }
