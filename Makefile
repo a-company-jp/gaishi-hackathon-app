@@ -73,7 +73,7 @@ gen: gen-dbmodel gen-api ## 生成系のコマンドを実行
 
 .PHONY: gen-dbmodel
 gen-dbmodel: clean-dbmodel ## DBモデルを生成
-	@go run -mod=mod github.com/xo/xo schema $(DATABASE_HOST)/$(RDB_NAME)?sslmode=disable --out backend/db_model --src backend/db_model/templates/go
+	@go run -mod=mod github.com/xo/xo schema $(DATABASE_HOST)/$(RDB_NAME)?sslmode=disable --out backend/db_model --src backend/db_model/templates/go -e schema_migrations*
 
 .PHONY: clean-dbmodel
 clean-dbmodel: ## DBモデルを削除
