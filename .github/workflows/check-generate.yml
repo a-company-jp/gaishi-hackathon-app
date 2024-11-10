@@ -23,7 +23,8 @@ jobs:
         with:
           go-version-file: 'backend/go.mod'
       - name: Run migration
-        run: make migrate-up
+        run: |
+          make migrate-setup migrate-up
       - name: Run make gen
         run: make gen
       - name: Check for changes
