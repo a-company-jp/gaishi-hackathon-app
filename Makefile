@@ -12,6 +12,8 @@ gen-help-md: ## ヘルプをMarkdown形式で出力
 	@printf "|---------|-------------|\n"
 	@grep -E '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) | awk 'BEGIN {FS = ":.*?## "}; {printf "| make %-20s | %s |\n", $$1, $$2}'
 
+
+# TODO: update this to use backend folder
 go-install-tools: ## Goツールをインストール
 	@echo Install go tools
 	@mkdir -p $(GOBIN)
