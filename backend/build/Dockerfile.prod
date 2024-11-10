@@ -1,0 +1,19 @@
+FROM golang:1.23.2-alpine AS builder
+
+## assume secret is mounted on /secrets, TODO
+WORKDIR /app
+
+COPY . .
+
+RUN go mod download
+RUN --mount=type=cache,target=/go/pkg/mod \
+    --mount=type=cache,target=/root/.cache/go-build \
+    --mount=type=secret,id=certificates,target=/etc/ssl/certs/ca-certificates.crt \
+    go build -o /app/main ./cmd/dev
+
+FROM alpine:3.20
+ENV ENV_LOCATION=/secrets/settings.yaml
+WORKDIR /app
+COPY --from=builder /app/main /app/main
+COPY --from=builder /app/db_schema /app/db_schema
+CMD ["/app/main"]
