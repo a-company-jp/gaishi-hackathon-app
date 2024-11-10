@@ -4,7 +4,13 @@ on:
   push:
     branches:
       - main
-
+  pull_request:
+    branches:
+      - main
+    paths:
+      - '.github/workflows/check-generate.yml'
+      - 'backend/**'
+      - 'graphql/**'
 jobs:
   generate:
     name: Generate
@@ -15,15 +21,12 @@ jobs:
         run: docker run --name postgres-test -e POSTGRES_DB=gaishi -e POSTGRES_USER=user -e POSTGRES_PASSWORD=password -p 5432:5432 -d postgres:16 &
       - uses: actions/setup-go@v5
         with:
-          go-version-file: 'go.mod'
-      - name: Install go tools
-        run: make go-install-tools
+          go-version-file: 'backend/go.mod'
       - name: Run migration
-        run: make migrate-up
+        run: |
+          make migrate-setup migrate-up
       - name: Run make gen
         run: make gen
-      - name: Run make backend/format
-        run: make backend/format
       - name: Check for changes
         run: |
           if [[ -n $(git status --porcelain) ]]; then

@@ -1,4 +1,4 @@
-name: backend
+name: build backend
 
 on:
   push:
@@ -18,9 +18,10 @@ jobs:
       - name: Set up Go
         uses: actions/setup-go@v5
         with:
-          go-version-file: go.mod
-          cache-dependency-path: go.sum
+          go-version-file: backend/go.mod
+          cache-dependency-path: backend/go.sum
       - name: Execute Build
         run: |
           set -e
+          cd backend
           go build -v ./...

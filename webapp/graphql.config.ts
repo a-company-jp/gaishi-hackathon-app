@@ -12,7 +12,7 @@ const filename = fileURLToPath(import.meta.url);
 const dirname = path.dirname(filename);
 
 const config = {
-  schema: "./*.graphqls",
+  schema: "../graphql/*.graphqls",
   documents: path.join(dirname, "./src/**/*.{ts,tsx}"),
   extensions: {
     codegen: {
