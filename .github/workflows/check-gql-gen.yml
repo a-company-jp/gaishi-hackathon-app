@@ -1,0 +1,31 @@
+name: check frontend gql generation
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+    paths:
+      - '.github/workflows/check-gql-gen.yml'
+      - '**/*.graphqls'
+      - 'webapp/src/gql/**'
+jobs:
+  run-frontend-gql-gen:
+    name: Run frontend gql generation
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+        name: Setup pnpm
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: 'pnpm'
+      - name: Install dependencies
+        run: pnpm install
+      - name: Run gql generation
+        run: pnpm run graphql-codegen
+      - name: Check for changes
+        run: git diff --exit-code
