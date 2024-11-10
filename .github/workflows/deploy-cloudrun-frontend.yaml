@@ -49,6 +49,7 @@ jobs:
           file: ./webapp/Dockerfile
           build-args: |
             NEXT_PUBLIC_BACKEND_URL=${{ vars.NEXT_PUBLIC_BACKEND_URL }}
+            NEXT_PUBLIC_GRAPHQL_SERVER_URL=${{ vars.NEXT_PUBLIC_GRAPHQL_SERVER_URL }}
       - name: Download Cloud Run Service YAML
         run: |
           gcloud run services describe frontend-main --format yaml --region asia-northeast1 > ./service-frontend.yaml
