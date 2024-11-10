@@ -68,7 +68,7 @@ jobs:
         with:
           push: true
           tags: asia-northeast1-docker.pkg.dev/itadakimasu-engulid/itadakimasu/backend:latest
-          context: ./backend
+          context: ./
           file: ./backend/build/Dockerfile.prod
           cache-from: type=gha
           cache-to: type=gha,mode=max
