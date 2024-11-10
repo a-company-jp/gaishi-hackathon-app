@@ -16,7 +16,7 @@ infrastructure:
     project_id:
     use_credentials_file:
     credentials_file_path:
-  mysql:
+  postgres:
     protocol:
     host:
     port:
