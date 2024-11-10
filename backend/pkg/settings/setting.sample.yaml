@@ -16,7 +16,7 @@ infrastructure:
     project_id: some-project-id
     use_credentials_file: true
     credentials_file_path: /dev/null
-  mysql:
+  postgres:
     protocol: tcp
     host: localhost
     port: 1234
