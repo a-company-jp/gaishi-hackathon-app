@@ -5,11 +5,10 @@ WORKDIR /app
 
 COPY . .
 
-RUN go mod download
 RUN --mount=type=cache,target=/go/pkg/mod \
     --mount=type=cache,target=/root/.cache/go-build \
     --mount=type=secret,id=certificates,target=/etc/ssl/certs/ca-certificates.crt \
-    go build -o /app/main ./cmd/dev
+    go build -o /app/main ./backend/cmd/dev
 
 FROM alpine:3.20
 ENV ENV_LOCATION=/secrets/settings.yaml
