@@ -1,6 +1,6 @@
 package graph
 
-import "gaishi-app/backend/service"
+import "github.com/a-company-jp/gaishi-hackathon-app/backend/service"
 
 // This file will not be regenerated automatically.
 //

@@ -7,7 +7,7 @@ package graph
 import (
 	"context"
 
-	"gaishi-app/backend/graph/model"
+	"github.com/a-company-jp/gaishi-hackathon-app/backend/graph/model"
 )
 
 // User is the resolver for the user field.

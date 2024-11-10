@@ -12,7 +12,7 @@ import (
 	"sync"
 	"sync/atomic"
 
-	"gaishi-app/backend/graph/model"
+	"github.com/a-company-jp/gaishi-hackathon-app/backend/graph/model"
 
 	"github.com/99designs/gqlgen/graphql"
 	"github.com/99designs/gqlgen/graphql/introspection"

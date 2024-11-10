@@ -4,12 +4,12 @@ import (
 	"fmt"
 	"log"
 
-	"gaishi-app/backend/middleware"
-	"gaishi-app/backend/pkg/settings"
-	"gaishi-app/backend/repository"
-	"gaishi-app/backend/service"
+	"github.com/a-company-jp/gaishi-hackathon-app/backend/middleware"
+	"github.com/a-company-jp/gaishi-hackathon-app/backend/pkg/settings"
+	"github.com/a-company-jp/gaishi-hackathon-app/backend/repository"
+	"github.com/a-company-jp/gaishi-hackathon-app/backend/service"
 
-	"gaishi-app/backend/graph"
+	"github.com/a-company-jp/gaishi-hackathon-app/backend/graph"
 
 	"github.com/99designs/gqlgen/graphql/handler"
 	"github.com/99designs/gqlgen/graphql/playground"

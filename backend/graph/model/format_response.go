@@ -1,6 +1,6 @@
 package model
 
-import "gaishi-app/backend/db_model"
+import "github.com/a-company-jp/gaishi-hackathon-app/backend/db_model"
 
 func FormatUserResponse(row *db_model.User) *User {
 	return &User{

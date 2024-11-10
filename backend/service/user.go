@@ -3,8 +3,8 @@ package service
 import (
 	"context"
 
-	"gaishi-app/backend/db_model"
-	"gaishi-app/backend/repository"
+	"github.com/a-company-jp/gaishi-hackathon-app/backend/db_model"
+	"github.com/a-company-jp/gaishi-hackathon-app/backend/repository"
 
 	"gorm.io/gorm"
 )
