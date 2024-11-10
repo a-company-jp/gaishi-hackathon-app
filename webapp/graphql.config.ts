@@ -12,61 +12,61 @@ const filename = fileURLToPath(import.meta.url);
 const dirname = path.dirname(filename);
 
 const config = {
-    schema: "./*.graphqls",
-    documents: path.join(dirname, "./src/**/*.{ts,tsx}"),
-    extensions: {
-        codegen: {
-            ignoreNoDocuments: true,
-            generates: {
-                "./src/gql/__generated__/": {
-                    preset: "client",
-                    presetConfig: {
-                        fragmentMasking: false,
-                        gqlTagName: "gql",
-                    } satisfies ClientPresetConfig,
-                    config: {
-                        strictScalars: true,
-                        useTypeImports: true,
-                        skipTypename: true,
-                        arrayInputCoercion: true,
-                        avoidOptionals: {
-                            field: true,
-                            inputValue: false,
-                            object: true,
-                            defaultValue: false,
-                        },
-                        enumsAsTypes: true,
-                        scalars: {
-                            Uint: "number",
-                            Uint32: "number",
-                            Date: "DateString",
-                            Time: "TimeString",
-                        },
-                    } satisfies TypeScriptPluginConfig & TypeScriptDocumentsPluginConfig,
-                    plugins: [
-                        {
-                            add: {
-                                content: [
-                                    "export type DateString = string & { readonly brand: unique symbol };",
-                                    "export type TimeString = string & { readonly brand: unique symbol };",
-                                ],
-                            } satisfies AddPluginConfig,
-                        },
-                    ],
-                },
-                "./src/gql/__generated__/introspection.ts": {
-                    plugins: ["fragment-matcher"],
-                    config: {
-                        apolloClientVersion: 3,
-                        useExplicitTyping: true,
-                    } satisfies FragmentMatcherConfig,
-                },
+  schema: "./*.graphqls",
+  documents: path.join(dirname, "./src/**/*.{ts,tsx}"),
+  extensions: {
+    codegen: {
+      ignoreNoDocuments: true,
+      generates: {
+        "./src/gql/__generated__/": {
+          preset: "client",
+          presetConfig: {
+            fragmentMasking: false,
+            gqlTagName: "gql",
+          } satisfies ClientPresetConfig,
+          config: {
+            strictScalars: true,
+            useTypeImports: true,
+            skipTypename: true,
+            arrayInputCoercion: true,
+            avoidOptionals: {
+              field: true,
+              inputValue: false,
+              object: true,
+              defaultValue: false,
             },
-            hooks: {
-                afterAllFileWrite: ["prettier --write"],
+            enumsAsTypes: true,
+            scalars: {
+              Uint: "number",
+              Uint32: "number",
+              Date: "DateString",
+              Time: "TimeString",
             },
-        } satisfies CodegenConfig,
-    },
+          } satisfies TypeScriptPluginConfig & TypeScriptDocumentsPluginConfig,
+          plugins: [
+            {
+              add: {
+                content: [
+                  "export type DateString = string & { readonly brand: unique symbol };",
+                  "export type TimeString = string & { readonly brand: unique symbol };",
+                ],
+              } satisfies AddPluginConfig,
+            },
+          ],
+        },
+        "./src/gql/__generated__/introspection.ts": {
+          plugins: ["fragment-matcher"],
+          config: {
+            apolloClientVersion: 3,
+            useExplicitTyping: true,
+          } satisfies FragmentMatcherConfig,
+        },
+      },
+      hooks: {
+        afterAllFileWrite: ["prettier --write"],
+      },
+    } satisfies CodegenConfig,
+  },
 } satisfies IGraphQLConfig;
 
 export default config;
