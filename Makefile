@@ -26,35 +26,50 @@ RDB_PASS ?= password
 RDB_NAME ?= gaishi
 DBMATE_DB_SCHEMA ?= backend
 DATABASE_HOST ?= postgres://$(RDB_USER):$(RDB_PASS)@$(RDB_HOST):$(RDB_PORT)
+DATABASE_URL ?= $(DATABASE_HOST)/$(RDB_NAME)?sslmode=disable
 
 MIGRATION_COMMENT ?= $(shell bash -c 'read -p "Comments: " pwd; echo $$pwd')
 migrate-new: ## マイグレーションファイル作成
-	DATABASE_URL=$(DATABASE_HOST)/$(RDB_NAME)?sslmode=disable $(GOBIN)/dbmate -d $(DBMATE_DB_SCHEMA)/db_schema/migrations -s $(DBMATE_DB_SCHEMA)/db_schema/schema.sql new $(MIGRATION_COMMENT)
+ifndef NAME
+	@echo "Usage: make NAME=migration_name migrate-new"
+else
+	migrate create -ext sql -dir ./backend/db_schema/migrations -seq $(NAME)
+endif
 
-migrate-status: ## マイグレーションステータス確認
-	@DATABASE_URL=$(DATABASE_HOST)/$(RDB_NAME)?sslmode=disable $(GOBIN)/dbmate -d $(DBMATE_DB_SCHEMA)/db_schema/migrations -s $(DBMATE_DB_SCHEMA)/db_schema/schema.sql status
+migrate-setup:
+	@go install -tags 'postgres' github.com/golang-migrate/migrate/v4/cmd/migrate@latest
 
 migrate-up: ## マイグレーション実行
-	@DATABASE_URL=$(DATABASE_HOST)/$(RDB_NAME)?sslmode=disable $(GOBIN)/dbmate -d $(DBMATE_DB_SCHEMA)/db_schema/migrations -s $(DBMATE_DB_SCHEMA)/db_schema/schema.sql up
+	migrate -source file://backend/db_schema/migrations -database $(DATABASE_URL) up
 
 migrate-down: ## マイグレーションロールバック
-	@DATABASE_URL=$(DATABASE_HOST)/$(RDB_NAME)?sslmode=disable $(GOBIN)/dbmate -d $(DBMATE_DB_SCHEMA)/db_schema/migrations -s $(DBMATE_DB_SCHEMA)/db_schema/schema.sql down
+	migrate -source file://backend/db_schema/migrations -database $(DATABASE_URL) down 1
 
 migrate-drop: ## データベース削除
-	@DATABASE_URL=$(DATABASE_HOST)/$(RDB_NAME)?sslmode=disable $(GOBIN)/dbmate -d $(DBMATE_DB_SCHEMA)/db_schema/migrations -s $(DBMATE_DB_SCHEMA)/db_schema/schema.sql drop
+	migrate -source file://backend/db_schema/migrations -database $(DATABASE_URL) drop
 
-migrate-seed: ## データベース初期データ投入
-	@DATABASE_URL=$(DATABASE_HOST)/$(RDB_NAME)?sslmode=disable $(GOBIN)/dbmate -d $(DBMATE_DB_SCHEMA)/db_schema/seed -s $(DBMATE_DB_SCHEMA)/db_schema/schema.sql up
+migrate-seed-new: ## マイグレーションファイル作成
+ifndef NAME
+	@echo "Usage: make NAME=migration_name migrate-new"
+else
+	migrate create -ext sql -dir ./backend/db_schema/seed -seq $(NAME)
+endif
+
+migrate-seed-up: ## データベース初期データ投入
+	migrate -source file://backend/db_schema/seed -database "$(DATABASE_URL)&x-migrations-table=schema_migrations_seed" up
+
+migrate-seed-down: ## データベース初期データ投入
+	migrate -source file://backend/db_schema/seed -database "$(DATABASE_URL)&x-migrations-table=schema_migrations_seed" down 1
 
 ## マイグレーションリセット
-migrate-reset: migrate-drop migrate-up migrate-seed
+migrate-reset: migrate-drop migrate-up migrate-seed-up
 
-.PHONY: backend/format
-backend/format: ## コードのフォーマット
-	@goimports -local gaishi-app -w ./backend
+#.PHONY: backend/format
+#backend/format: ## コードのフォーマット
+#	@goimports -local gaishi-app -w ./backend
 
 .PHONY: gen
-gen: gen-dbmodel gen-api backend/format ## 生成系のコマンドを実行
+gen: gen-dbmodel gen-api ## 生成系のコマンドを実行
 
 .PHONY: gen-dbmodel
 gen-dbmodel: clean-dbmodel ## DBモデルを生成
@@ -66,7 +81,7 @@ clean-dbmodel: ## DBモデルを削除
 
 .PHONY: gen-api
 gen-api: ## schema.graphqlsとmodel.graphqlsからGoのコードを生成する
-	$(GOBIN)/gqlgen
+	cd backend && go run github.com/99designs/gqlgen generate
 
 .PHONY: start-backend
 start-backend: ## APIとDBの起動
