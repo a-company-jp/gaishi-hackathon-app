@@ -22,8 +22,6 @@ jobs:
       - uses: actions/setup-go@v5
         with:
           go-version-file: 'backend/go.mod'
-      - name: Install go tools
-        run: make go-install-tools
       - name: Run migration
         run: make migrate-up
       - name: Run make gen
