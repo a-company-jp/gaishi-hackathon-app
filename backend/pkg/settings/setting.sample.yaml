@@ -24,6 +24,10 @@ infrastructure:
     username: shion
     password: ifeelluckytoday
     database: shionDB
+  redis:
+    enable: true
+    host: redis
+    port: 6379
 third_party:
 service:
   authentication:

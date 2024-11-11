@@ -24,6 +24,10 @@ infrastructure:
     username:
     password:
     database:
+  redis:
+    enable:
+    host:
+    port:
 third_party:
 service:
   authentication:
