@@ -2,6 +2,7 @@ package settings
 
 type Infrastructure struct {
 	Postgres    Postgres    `yaml:"postgres"`
+	Redis       Redis       `yaml:"redis"`
 	GoogleCloud GoogleCloud `yaml:"google_cloud"`
 }
 
@@ -19,4 +20,10 @@ type Postgres struct {
 	User       string `yaml:"username"`
 	Password   string `yaml:"password"`
 	DBName     string `yaml:"database"`
+}
+
+type Redis struct {
+	Enable bool   `yaml:"enable"`
+	Host   string `yaml:"host"`
+	Port   string `yaml:"port"`
 }

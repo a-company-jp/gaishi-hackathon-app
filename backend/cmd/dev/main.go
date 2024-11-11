@@ -1,7 +1,9 @@
 package main
 
 import (
+	"context"
 	"fmt"
+	"github.com/redis/go-redis/v9"
 	"log"
 
 	"github.com/a-company-jp/gaishi-hackathon-app/backend/middleware"
@@ -64,6 +66,22 @@ func main() {
 	db, err := gorm.Open(postgres.Open(dbUrl), &gorm.Config{})
 	if err != nil {
 		log.Fatalf("failed to connect to database, err: %v", err)
+	}
+
+	var redisClient *redis.Client
+	if conf.Infrastructure.Redis.Enable {
+		log.Println("Redis is enabled")
+		redisDst := fmt.Sprintf("%s:%s", conf.Infrastructure.Redis.Host, conf.Infrastructure.Redis.Port)
+		redisClient = redis.NewClient(&redis.Options{
+			Addr:     redisDst,
+			Password: "", // no password set
+			DB:       0,  // use default DB
+		})
+		ctx := context.Background()
+		p := redisClient.Ping(ctx)
+		if p.Err() != nil {
+			log.Fatalf("failed to connect to redis, err: %v", p.Err())
+		}
 	}
 
 	apiV1 := engine.Group("/api/v1")
