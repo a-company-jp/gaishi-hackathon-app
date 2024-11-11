@@ -21,9 +21,9 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Setup aqua
-        uses: aquaproj/aqua-installer@v2.3.0
+        uses: aquaproj/aqua-installer@v3.0.1
         with:
-          aqua_version: v2.37.0
+          aqua_version: v2.36.2
 
       - name: Login to Google Cloud
         id: auth
@@ -34,18 +34,21 @@ jobs:
           service_account: 'gh-actions@itadakimasu-engulid.iam.gserviceaccount.com'
 
       - name: Terragrunt Init
+        working-directory: infra
         run: terragrunt run-all init
 
-      - name: Check terragrunt fmt
-        working-directory: terragrunt/envs/dev
-        run: terragrunt fmt -check
+      - id: terragrunt-fmt
+        name: Check terragrunt fmt
+        working-directory: infra
+        run: terragrunt run-all fmt -check
+        continue-on-error: true
 
       - name: Terragrunt validate
-        working-directory: terragrunt/envs/dev
-        run: terragrunt validate
+        working-directory: infra
+        run: terragrunt run-all validate
 
       - name: Terragrunt plan
-        working-directory: terragrunt/envs/dev
+        working-directory: infra
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |

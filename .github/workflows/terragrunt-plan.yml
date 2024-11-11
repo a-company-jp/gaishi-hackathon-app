@@ -37,20 +37,21 @@ jobs:
           service_account: 'gh-actions@itadakimasu-engulid.iam.gserviceaccount.com'
 
       - name: Terragrunt Init
+        working-directory: infra
         run: terragrunt run-all init
 
       - id: terragrunt-fmt
         name: Check terragrunt fmt
-        working-directory: terragrunt/envs/dev
-        run: terragrunt fmt -check
+        working-directory: infra
+        run: terragrunt run-all fmt -check
         continue-on-error: true
 
       - name: Terragrunt validate
-        working-directory: terragrunt/envs/dev
-        run: terragrunt validate
+        working-directory: infra
+        run: terragrunt run-all validate
 
       - name: Terragrunt plan
-        working-directory: terragrunt/envs/dev
+        working-directory: infra
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
