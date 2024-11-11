@@ -1,0 +1,63 @@
+name: "Run terragrunt plan on PR submission"
+on:
+  pull_request:
+    branches:
+      - main
+    types:
+      - opened
+      - synchronize
+    paths:
+      - 'infra/**'
+      - '.github/workflows/terragrunt-plan.yml'
+concurrency:
+  group: terragrunt-plan
+  cancel-in-progress: true
+jobs:
+  run-terraform-plan:
+    runs-on: ubuntu-latest
+    permissions:
+      pull-requests: 'write'
+      contents: 'read'
+      id-token: 'write'
+    steps:
+      - name: setup repository
+        uses: actions/checkout@v4
+
+      - name: Setup aqua
+        uses: aquaproj/aqua-installer@v3.0.1
+        with:
+          aqua_version: v2.36.2
+
+      - name: Login to Google Cloud
+        id: auth
+        uses: google-github-actions/auth@v2
+        with:
+          token_format: access_token
+          workload_identity_provider: 'projects/236289982072/locations/global/workloadIdentityPools/gh-pool/providers/provider-github'
+          service_account: 'gh-actions@itadakimasu-engulid.iam.gserviceaccount.com'
+
+      - name: Terragrunt Init
+        working-directory: infra
+        run: terragrunt run-all init
+
+      - id: terragrunt-fmt
+        name: Check terragrunt fmt
+        working-directory: infra
+        run: terragrunt run-all fmt -check
+        continue-on-error: true
+
+      - name: Terragrunt validate
+        working-directory: infra
+        run: terragrunt run-all validate
+
+      - name: Terragrunt plan
+        working-directory: infra
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          chmod 755 $GITHUB_WORKSPACE/.github/scripts/tfwrapper.sh
+          terragrunt run-all plan --terragrunt-non-interactive --terragrunt-tfpath $GITHUB_WORKSPACE/.github/scripts/tfwrapper.sh
+
+      - name: fail if terragrunt fmt failed
+        if: steps.terragrunt-fmt.outputs.exitcode != 0
+        run: exit 1
