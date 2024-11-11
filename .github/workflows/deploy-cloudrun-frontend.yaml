@@ -5,7 +5,7 @@ on:
       - main
     paths:
       - '.github/workflows/deploy-cloudrun-frontend.yaml'
-      - 'frontend/**'
+      - 'webapp/**'
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
