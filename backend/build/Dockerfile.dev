@@ -2,7 +2,7 @@ FROM golang:1.23.3-alpine
 
 RUN go install github.com/air-verse/air@latest
 
-ENV ENV_LOCATION=/app/backend/pkg/settings/setting.yaml
+ENV ENV_LOCATION=/app/pkg/settings/setting.yaml
 
 WORKDIR /app
 
