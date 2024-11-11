@@ -7,8 +7,11 @@ on:
       - opened
       - synchronize
     paths:
-      - 'terragrunt/**'
+      - 'infra/**'
       - '.github/workflows/terragrunt-plan.yml'
+concurrency:
+  group: terragrunt-plan
+  cancel-in-progress: true
 jobs:
   run-terraform-plan:
     runs-on: ubuntu-latest

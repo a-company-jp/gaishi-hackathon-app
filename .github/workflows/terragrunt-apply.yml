@@ -4,8 +4,11 @@ on:
     branches:
       - main
     path:
-      - 'terragrunt/**'
+      - 'infra/**'
       - '.github/workflows/terragrunt-apply.yml'
+concurrency:
+  group: terragrunt-apply
+  cancel-in-progress: true
 jobs:
   run-terraform-apply:
     runs-on: ubuntu-latest
