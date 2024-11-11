@@ -1,0 +1,72 @@
+name: "Run terragrunt plan on PR submission"
+on:
+  pull_request:
+    branches:
+      - main
+    types:
+      - opened
+      - synchronize
+    paths:
+      - 'terragrunt/**'
+      - '.github/workflows/terragrunt-plan.yml'
+jobs:
+  run-terraform-plan:
+    runs-on: ubuntu-latest
+    permissions:
+      pull-requests: 'write'
+      contents: 'read'
+      id-token: 'write'
+    steps:
+      - name: setup repository
+        uses: actions/checkout@v4
+
+      - name: Setup aqua
+        uses: aquaproj/aqua-installer@v2.3.0
+        with:
+          aqua_version: v2.37.0
+
+      - name: Login to Google Cloud
+        id: auth
+        uses: google-github-actions/auth@v2
+        with:
+          token_format: access_token
+          workload_identity_provider: 'projects/236289982072/locations/global/workloadIdentityPools/gh-pool/providers/provider-github'
+          service_account: 'gh-actions@itadakimasu-engulid.iam.gserviceaccount.com'
+
+      - name: Terragrunt Init
+        run: terragrunt run-all init
+
+      - name: TFlint
+        working-directory: terragrunt/envs/dev
+        env:
+          REVIEWDOG_GITHUB_API_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          tflint --config $GITHUB_WORKSPACE/terragrunt/.tflint.hcl --init
+          tflint --config $GITHUB_WORKSPACE/terragrunt/.tflint.hcl --format=checkstyle | \
+          reviewdog -f=checkstyle \
+                    -name="tflint" \
+                    -reporter=github-pr-review \
+                    -filter-mode=nofilter \
+                    -fail-on-error
+
+      - id: terragrunt-fmt
+        name: Check terragrunt fmt
+        working-directory: terragrunt/envs/dev
+        run: terragrunt fmt -check
+        continue-on-error: true
+
+      - name: Terragrunt validate
+        working-directory: terragrunt/envs/dev
+        run: terragrunt validate
+
+      - name: Terragrunt plan
+        working-directory: terragrunt/envs/dev
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          chmod 755 $GITHUB_WORKSPACE/.github/scripts/tfwrapper.sh
+          terragrunt run-all plan --terragrunt-non-interactive --terragrunt-tfpath $GITHUB_WORKSPACE/.github/scripts/tfwrapper.sh
+
+      - name: fail if terragrunt fmt failed
+        if: steps.terragrunt-fmt.outputs.exitcode != 0
+        run: exit 1
