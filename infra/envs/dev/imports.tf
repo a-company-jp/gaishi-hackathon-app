@@ -28,4 +28,28 @@ import {
   to = google_compute_network.default
 }
 
+import {
+  id = "projects/itadakimasu-engulid/managedZones/custom-stores"
+  to = google_dns_managed_zone.default
+}
+
+import {
+  id = "projects/itadakimasu-engulid/managedZones/custom-stores/rrsets/*.i.a.shion.pro./CNAME"
+  to = google_dns_record_set.wildcard_cname_2_store
+}
+
+import {
+  id = "projects/itadakimasu-engulid/managedZones/custom-stores/rrsets/i.a.shion.pro./NS"
+  to = google_dns_record_set.ns
+}
+
+import {
+  id = "projects/itadakimasu-engulid/managedZones/custom-stores/rrsets/i.a.shion.pro./SOA"
+  to = google_dns_record_set.soa
+}
+
+import {
+  id = "projects/itadakimasu-engulid/managedZones/custom-stores/rrsets/store.i.a.shion.pro./CNAME"
+  to = google_dns_record_set.store_cname
+}
 

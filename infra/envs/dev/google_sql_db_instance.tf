@@ -25,7 +25,7 @@ resource "google_sql_database_instance" "main-sql" {
     pricing_plan                 = "PER_USE"
     tier                         = "db-f1-micro"
     time_zone                    = null
-    user_labels = {}
+    user_labels                  = {}
     backup_configuration {
       binary_log_enabled             = false
       enabled                        = true
