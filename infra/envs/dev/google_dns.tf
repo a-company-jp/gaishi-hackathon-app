@@ -51,3 +51,12 @@ resource "google_dns_record_set" "store_cname" {
   ttl          = 18000
   type         = "CNAME"
 }
+
+resource "google_dns_record_set" "acme_challenge" {
+  managed_zone = google_dns_managed_zone.default.name
+  name         = "_acme-challenge_fizlgepnyqs3zrax.i.a.shion.pro."
+  project      = google_project.itadakimasu.project_id
+  rrdatas      = ["228c606f-c1d7-471b-8454-ec124bc2e620.2.asia-northeast1.authorize.certificatemanager.goog."]
+  ttl          = 60
+  type         = "CNAME"
+}
