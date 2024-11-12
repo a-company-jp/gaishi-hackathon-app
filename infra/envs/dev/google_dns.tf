@@ -16,20 +16,6 @@ resource "google_dns_record_set" "soa" {
   type         = "SOA"
 }
 
-resource "google_dns_record_set" "wildcard_cname_2_store" {
-  managed_zone = google_dns_managed_zone.default.name
-  name         = "*.i.a.shion.pro."
-  project      = google_project.itadakimasu.project_id
-  ttl          = 3600
-  type         = "CNAME"
-  routing_policy {
-    wrr {
-      rrdatas = ["store.i.a.shion.pro."]
-      weight  = 1000
-    }
-  }
-}
-
 resource "google_dns_managed_zone" "default" {
   description   = null
   dns_name      = "i.a.shion.pro."
