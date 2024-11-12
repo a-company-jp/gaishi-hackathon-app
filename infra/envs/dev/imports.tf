@@ -62,3 +62,13 @@ import {
   id = "projects/${google_project.itadakimasu.project_id}/regions/asia-northeast1/subnetworks/default"
   to = google_compute_subnetwork.default
 }
+
+import {
+  id = "projects/${google_project.itadakimasu.project_id}/global/forwardingRules/lb-frontend-forwarding-rule"
+  to = google_compute_global_forwarding_rule.lb_frontend
+}
+
+import {
+  id = "projects/${google_project.itadakimasu.project_id}/global/targetHttpsProxies/lb-frontend-target-proxy"
+  to = google_compute_target_https_proxy.lb_frontend_target_proxy
+}
