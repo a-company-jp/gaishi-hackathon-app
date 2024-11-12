@@ -1,11 +1,11 @@
 import {
-  id = "locations/asia-northeast1/namespaces/itadakimasu-engulid/services/backend-main"
-  to = google_cloud_run_service.backend
+  id = "projects/itadakimasu-engulid/locations/asia-northeast1/services/backend-main"
+  to = google_cloud_run_v2_service.backend
 }
 
 import {
-  id = "locations/asia-northeast1/namespaces/itadakimasu-engulid/services/frontend-main"
-  to = google_cloud_run_service.frontend
+  id = "projects/itadakimasu-engulid/locations/asia-northeast1/services/frontend-main"
+  to = google_cloud_run_v2_service.frontend
 }
 
 import {
