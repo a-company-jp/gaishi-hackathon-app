@@ -53,3 +53,7 @@ import {
   to = google_dns_record_set.store_cname
 }
 
+import {
+  id = "projects/itadakimasu-engulid/secrets/backend-settings-yaml"
+  to = google_secret_manager_secret.backend-settings-yaml
+}
