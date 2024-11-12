@@ -57,3 +57,8 @@ import {
   id = "projects/itadakimasu-engulid/secrets/backend-settings-yaml"
   to = google_secret_manager_secret.backend-settings-yaml
 }
+
+import {
+  id = "itadakimasu-engulid"
+  to = google_project.itadakimasu
+}
