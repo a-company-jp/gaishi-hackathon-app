@@ -44,8 +44,8 @@ import {
 }
 
 import {
-  id = "projects/${google_project.itadakimasu.project_id}/managedZones/custom-stores/rrsets/store.i.a.shion.pro./CNAME"
-  to = google_dns_record_set.store_cname
+  id = "projects/${google_project.itadakimasu.project_id}/managedZones/custom-stores/rrsets/*.i.a.shion.pro./A"
+  to = google_dns_record_set.wildcard_i_a_shion_pro
 }
 
 import {

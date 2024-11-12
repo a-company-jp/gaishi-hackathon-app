@@ -34,9 +34,9 @@ resource "google_dns_managed_zone" "default" {
   }
 }
 
-resource "google_dns_record_set" "store_cname" {
+resource "google_dns_record_set" "wildcard_i_a_shion_pro" {
   managed_zone = google_dns_managed_zone.default.name
-  name         = "store.i.a.shion.pro."
+  name         = "*.i.a.shion.pro."
   project      = google_project.itadakimasu.project_id
   rrdatas      = [data.google_compute_global_address.ip_frontend.address]
   ttl          = 18000
