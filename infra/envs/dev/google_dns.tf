@@ -52,11 +52,11 @@ resource "google_dns_record_set" "store_cname" {
   type         = "CNAME"
 }
 
-resource "google_dns_record_set" "acme_challenge" {
-  managed_zone = google_dns_managed_zone.default.name
-  name         = "_acme-challenge_fizlgepnyqs3zrax.i.a.shion.pro."
-  project      = google_project.itadakimasu.project_id
-  rrdatas      = ["228c606f-c1d7-471b-8454-ec124bc2e620.2.asia-northeast1.authorize.certificatemanager.goog."]
-  ttl          = 60
-  type         = "CNAME"
+resource "google_dns_record_set" "acme_challenge_i_a_shion_pro" {
+    managed_zone = google_dns_managed_zone.default.name
+    name         = "_acme-challenge_kfs2xoh3ykfhojhw.i.a.shion.pro."
+    project      = google_project.itadakimasu.project_id
+    rrdatas      = ["accefa0b-f34f-4e6e-bb84-b810a1063275.9.authorize.certificatemanager.goog."]
+    ttl          = 3600
+    type         = "CNAME"
 }
