@@ -9,9 +9,9 @@ resource "google_cloud_run_v2_service" "frontend" {
   invoker_iam_disabled = false
   labels               = {}
   launch_stage         = "GA"
-  location             = "asia-northeast1"
+  location             = var.region
   name                 = "frontend-main"
-  project              = "itadakimasu-engulid"
+  project              = google_project.itadakimasu.project_id
   template {
     annotations           = {}
     encryption_key        = null
@@ -28,7 +28,7 @@ resource "google_cloud_run_v2_service" "frontend" {
       args        = []
       command     = []
       depends_on  = []
-      image       = "asia-northeast1-docker.pkg.dev/itadakimasu-engulid/itadakimasu/frontend:latest"
+      image       = "${var.region}-docker.pkg.dev/${google_project.itadakimasu.project_id}/${google_artifact_registry_repository.itadakimasu.repository_id}/frontend:latest"
       name        = "frontend-1"
       working_dir = null
       ports {
@@ -77,9 +77,9 @@ resource "google_cloud_run_v2_service" "backend" {
   invoker_iam_disabled = false
   labels               = {}
   launch_stage         = "GA"
-  location             = "asia-northeast1"
+  location             = var.region
   name                 = "backend-main"
-  project              = "itadakimasu-engulid"
+  project              = google_project.itadakimasu.project_id
   template {
     annotations           = {}
     encryption_key        = null
@@ -96,7 +96,7 @@ resource "google_cloud_run_v2_service" "backend" {
       args        = []
       command     = []
       depends_on  = []
-      image       = "asia-northeast1-docker.pkg.dev/itadakimasu-engulid/itadakimasu/backend:latest"
+      image       = "${var.region}-docker.pkg.dev/${google_project.itadakimasu.project_id}/${google_artifact_registry_repository.itadakimasu.repository_id}/backend:latest"
       name        = "backend-1"
       working_dir = null
       ports {

@@ -7,6 +7,6 @@ resource "google_compute_network" "default" {
   mtu                                       = 0
   name                                      = "default"
   network_firewall_policy_enforcement_order = "AFTER_CLASSIC_FIREWALL"
-  project                                   = "itadakimasu-engulid"
+  project                                   = google_project.itadakimasu.project_id
   routing_mode                              = "REGIONAL"
 }
