@@ -10,7 +10,7 @@ resource "google_redis_instance" "main" {
   maintenance_version     = "20240411_00_00"
   memory_size_gb          = 1
   name                    = "redis-main"
-  project                 = "itadakimasu-engulid"
+  project                 = google_project.itadakimasu.project_id
   read_replicas_mode      = "READ_REPLICAS_DISABLED"
   redis_configs           = {}
   redis_version           = "REDIS_7_0"

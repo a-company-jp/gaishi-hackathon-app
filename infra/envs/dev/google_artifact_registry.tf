@@ -4,9 +4,9 @@ resource "google_artifact_registry_repository" "itadakimasu" {
   format                 = "DOCKER"
   kms_key_name           = null
   labels                 = {}
-  location               = "asia-northeast1"
+  location               = var.region
   mode                   = "STANDARD_REPOSITORY"
-  project                = "itadakimasu-engulid"
+  project                = google_project.itadakimasu.project_id
   repository_id          = "itadakimasu"
   cleanup_policies {
     action = "DELETE"

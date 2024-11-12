@@ -6,8 +6,8 @@ resource "google_sql_database_instance" "main-sql" {
   maintenance_version  = "POSTGRES_16_4.R20240910.01_15"
   master_instance_name = null
   name                 = "main-sql"
-  project              = "itadakimasu-engulid"
-  region               = "asia-northeast1"
+  project              = google_project.itadakimasu.project_id
+  region               = var.region
   root_password        = null # sensitive
   settings {
     activation_policy            = "ALWAYS"
