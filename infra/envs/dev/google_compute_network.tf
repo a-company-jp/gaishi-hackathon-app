@@ -20,9 +20,9 @@ resource "google_compute_subnetwork" "default" {
   network                          = "https://www.googleapis.com/compute/v1/projects/itadakimasu-engulid/global/networks/default"
   private_ip_google_access         = false
   private_ipv6_google_access       = "DISABLE_GOOGLE_ACCESS"
-  project                          = "itadakimasu-engulid"
+  project                          = google_project.itadakimasu.project_id
   purpose                          = "PRIVATE"
-  region                           = "asia-northeast1"
+  region                           = var.region
   reserved_internal_range          = null
   role                             = null
   send_secondary_ip_range_if_empty = null

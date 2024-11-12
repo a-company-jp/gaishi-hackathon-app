@@ -155,8 +155,8 @@ resource "google_cloud_run_v2_service" "backend" {
       connector = null
       egress    = "PRIVATE_RANGES_ONLY"
       network_interfaces {
-        network    = "default"
-        subnetwork = "default"
+        network    = google_compute_network.default.name
+        subnetwork = google_compute_subnetwork.default.name
         tags       = []
       }
     }
