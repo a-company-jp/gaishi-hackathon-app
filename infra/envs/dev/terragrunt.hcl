@@ -19,3 +19,9 @@ generate "variables" {
   if_exists = "overwrite_terragrunt"
   contents  = file("../../shared/variables.tf")
 }
+
+generate "backend" {
+  path      = "_backend.tf"
+  if_exists = "overwrite_terragrunt"
+  contents  = file("../../shared/backend.tf")
+}
