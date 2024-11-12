@@ -62,3 +62,8 @@ import {
   id = "itadakimasu-engulid"
   to = google_project.itadakimasu
 }
+
+import {
+  id = "projects/${google_project.itadakimasu.project_id}/regions/asia-northeast1/subnetworks/default"
+  to = google_compute_subnetwork.default
+}

@@ -1,5 +1,5 @@
 resource "google_dns_record_set" "ns" {
-  managed_zone = "custom-stores"
+  managed_zone = google_dns_managed_zone.default.name
   name         = "i.a.shion.pro."
   project      = google_project.itadakimasu.project_id
   rrdatas      = ["ns-cloud-a1.googledomains.com.", "ns-cloud-a2.googledomains.com.", "ns-cloud-a3.googledomains.com.", "ns-cloud-a4.googledomains.com."]
@@ -8,7 +8,7 @@ resource "google_dns_record_set" "ns" {
 }
 
 resource "google_dns_record_set" "soa" {
-  managed_zone = "custom-stores"
+  managed_zone = google_dns_managed_zone.default.name
   name         = "i.a.shion.pro."
   project      = google_project.itadakimasu.project_id
   rrdatas      = ["ns-cloud-a1.googledomains.com. cloud-dns-hostmaster.google.com. 1 21600 3600 259200 300"]
@@ -17,7 +17,7 @@ resource "google_dns_record_set" "soa" {
 }
 
 resource "google_dns_record_set" "wildcard_cname_2_store" {
-  managed_zone = "custom-stores"
+  managed_zone = google_dns_managed_zone.default.name
   name         = "*.i.a.shion.pro."
   project      = google_project.itadakimasu.project_id
   ttl          = 3600
@@ -44,10 +44,19 @@ resource "google_dns_managed_zone" "default" {
 }
 
 resource "google_dns_record_set" "store_cname" {
-  managed_zone = "custom-stores"
+  managed_zone = google_dns_managed_zone.default.name
   name         = "store.i.a.shion.pro."
   project      = google_project.itadakimasu.project_id
   rrdatas      = ["ghs.googlehosted.com."]
   ttl          = 18000
+  type         = "CNAME"
+}
+
+resource "google_dns_record_set" "acme_challenge" {
+  managed_zone = google_dns_managed_zone.default.name
+  name         = "_acme-challenge_fizlgepnyqs3zrax.i.a.shion.pro."
+  project      = google_project.itadakimasu.project_id
+  rrdatas      = ["228c606f-c1d7-471b-8454-ec124bc2e620.2.asia-northeast1.authorize.certificatemanager.goog."]
+  ttl          = 60
   type         = "CNAME"
 }
