@@ -13,3 +13,9 @@ CI/CD:
 GraphQL:
   - changed-files:
     - any-glob-to-any-file: '**/*.graphqls'
+
+Infra:
+  - changed-files:
+    - any-glob-to-any-file: 'infra/**'
+    - any-glob-to-any-file: '.github/workflows/terragrunt-apply.yml'
+    - any-glob-to-any-file: '.github/workflows/terragrunt-plan.yml'
