@@ -20,7 +20,7 @@ services:
       POSTGRES_USER: user
       POSTGRES_PASSWORD: password
     volumes:
-      - db_data:/var/lib/postgresql/data
+      - enguild_db_data:/var/lib/postgresql/data
     ports:
       - "5432:5432"
   adminer:
@@ -31,4 +31,4 @@ services:
       - 6666:8080
 
 volumes:
-  db_data:
+  enguild_db_data:
