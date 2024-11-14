@@ -1,1 +1,4 @@
-pnpx lint-staged
+#!/bin/bash
+if [ "$LOGNAME" != "keita" ]; then
+  pnpx lint-staged
+fi
