@@ -2,14 +2,15 @@ package middleware
 
 import (
 	"github.com/gin-gonic/gin"
+	"regexp"
 )
 
 type CORS struct {
-	targetHost string
+	targetHostRegex *regexp.Regexp
 }
 
 func NewCORS() CORS {
-	return CORS{targetHost: "https://yosegaki.a.shion.pro"}
+	return CORS{targetHostRegex: regexp.MustCompile(`^https://[a-z0-9\-_.]*\.i\.a\.shion\.pro$`)}
 }
 
 func (cr CORS) ConfigureCORS(rg *gin.RouterGroup) {
@@ -22,21 +23,14 @@ func (cr CORS) ConfigureCORS(rg *gin.RouterGroup) {
 }
 
 func (cr CORS) middleware() gin.HandlerFunc {
-	allowedOrigins := []string{cr.targetHost, "http://localhost:3000"}
 	return func(c *gin.Context) {
 		origin := c.Request.Header.Get("Origin")
 		if origin == "" {
 			origin = c.Request.Header.Get("Referer")
 		}
-		allowedOrigin := ""
-		for _, o := range allowedOrigins {
-			if origin == o || origin == o+"/" {
-				allowedOrigin = origin
-				break
-			}
-		}
-		if allowedOrigin == "" {
-			allowedOrigin = allowedOrigins[0]
+		allowedOrigin := "https://store.i.a.shion.pro"
+		if cr.checkHost(origin) {
+			allowedOrigin = origin
 		}
 		c.Header("Access-Control-Allow-Origin", allowedOrigin)
 		c.Header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS")
@@ -48,4 +42,14 @@ func (cr CORS) middleware() gin.HandlerFunc {
 		}
 		c.Next()
 	}
+}
+
+func (cr CORS) checkHost(origin string) bool {
+	if cr.targetHostRegex.MatchString(origin) {
+		return true
+	}
+	if origin == "http://localhost:3000" {
+		return true
+	}
+	return false
 }
