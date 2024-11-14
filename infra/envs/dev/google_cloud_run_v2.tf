@@ -64,6 +64,11 @@ resource "google_cloud_run_v2_service" "frontend" {
     tag      = null
     type     = "TRAFFIC_TARGET_ALLOCATION_TYPE_LATEST"
   }
+  lifecycle {
+    ignore_changes = [
+      template[0].labels["github_sha"]
+    ]
+  }
 }
 
 resource "google_cloud_run_v2_service" "backend" {
@@ -166,5 +171,10 @@ resource "google_cloud_run_v2_service" "backend" {
     revision = null
     tag      = null
     type     = "TRAFFIC_TARGET_ALLOCATION_TYPE_LATEST"
+  }
+  lifecycle {
+    ignore_changes = [
+      template[0].labels["github_sha"]
+    ]
   }
 }
