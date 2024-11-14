@@ -39,7 +39,12 @@ func runMigration(dbUrl string) error {
 	}
 	version, b, err := m.Version()
 	if err != nil {
-		return fmt.Errorf("failed to get version: %w", err)
+		if errors.Is(err, migrate.ErrNilVersion) {
+			log.Println("No migration version found.")
+			version = 0
+		} else {
+			return fmt.Errorf("failed to get version: %w", err)
+		}
 	}
 	log.Printf("Current version: %v\n, dirty: %v\n", version, b)
 
