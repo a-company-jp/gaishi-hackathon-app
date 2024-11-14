@@ -1,5 +1,3 @@
-import { useState } from "react";
-
 type MenuItem = {
   id: string;
   label: string;
@@ -7,11 +5,15 @@ type MenuItem = {
 
 type GenreCardProps = {
   menuItems: MenuItem[];
+  activeTab: string;
+  setActiveTab: (id: string) => void;
 };
 
-export default function GenreCard({ menuItems }: GenreCardProps) {
-  const [activeTab, setActiveTab] = useState(menuItems[0]?.id || "");
-
+export default function GenreCard({
+  menuItems,
+  activeTab,
+  setActiveTab,
+}: GenreCardProps) {
   return (
     <nav className="w-full max-w-3xl mx-auto overflow-x-auto scrollbar-hide">
       <ul className="flex border-b min-w-max px-2">
