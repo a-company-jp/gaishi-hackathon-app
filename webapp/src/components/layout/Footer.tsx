@@ -3,7 +3,7 @@ import { DollarSign, Menu } from "lucide-react";
 
 function Footer() {
   return (
-    <footer className="absolute bottom-0 w-screen p-2">
+    <footer className="absolute bottom-0 w-screen p-2 border-t">
       <div className="grid grid-cols-2">
         <button className="flex flex-col items-center">
           <Menu className="h-6 w-6" />
