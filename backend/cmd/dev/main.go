@@ -65,6 +65,13 @@ func main() {
 		log.Fatalf("failed to connect to database, err: %v", err)
 	}
 
+	if conf.Application.Server.OnProduction {
+		if err := runMigration(dbUrl); err != nil {
+			log.Fatalf("error during migration: %v", err)
+			return
+		}
+	}
+
 	var redisClient *redis.Client
 	if conf.Infrastructure.Redis.Enable {
 		log.Println("Redis is enabled")
