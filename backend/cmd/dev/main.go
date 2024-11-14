@@ -3,17 +3,14 @@ package main
 import (
 	"context"
 	"fmt"
+	"github.com/99designs/gqlgen/graphql/handler"
+	"github.com/a-company-jp/gaishi-hackathon-app/backend/graph"
 	"github.com/redis/go-redis/v9"
 	"log"
 
 	"github.com/a-company-jp/gaishi-hackathon-app/backend/middleware"
 	"github.com/a-company-jp/gaishi-hackathon-app/backend/pkg/settings"
-	"github.com/a-company-jp/gaishi-hackathon-app/backend/repository"
-	"github.com/a-company-jp/gaishi-hackathon-app/backend/service"
 
-	"github.com/a-company-jp/gaishi-hackathon-app/backend/graph"
-
-	"github.com/99designs/gqlgen/graphql/handler"
 	"github.com/99designs/gqlgen/graphql/playground"
 	"github.com/gin-gonic/gin"
 	"gorm.io/driver/postgres"
@@ -21,10 +18,10 @@ import (
 )
 
 // Defining the Graphql handler
-func graphqlHandler(userSvc service.User) gin.HandlerFunc {
+func graphqlHandler() gin.HandlerFunc {
 	// NewExecutableSchema and Config are in the generated.go file
 	// Resolver is in the resolver.go file
-	resolvers := graph.NewResolver(userSvc)
+	resolvers := graph.NewResolver()
 	h := handler.NewDefaultServer(graph.NewExecutableSchema(graph.Config{Resolvers: resolvers}))
 
 	return func(c *gin.Context) {
@@ -101,10 +98,7 @@ func implement(rg *gin.RouterGroup, db *gorm.DB) error {
 	// graphql playground
 	rg.GET("/", playgroundHandler())
 
-	userRepo := repository.NewUser()
-	userSvc := service.NewUser(db, userRepo)
-
-	rg.POST("/query", graphqlHandler(userSvc))
+	rg.POST("/query", graphqlHandler())
 
 	return nil
 }

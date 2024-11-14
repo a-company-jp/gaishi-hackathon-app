@@ -6,17 +6,14 @@ package graph
 
 import (
 	"context"
+	"fmt"
 
 	"github.com/a-company-jp/gaishi-hackathon-app/backend/graph/model"
 )
 
 // User is the resolver for the user field.
 func (r *queryResolver) User(ctx context.Context, id string) (*model.User, error) {
-	user, err := r.UserSvc.GetByID(ctx, id)
-	if err != nil {
-		return nil, err
-	}
-	return model.FormatUserResponse(user), nil
+	panic(fmt.Errorf("not implemented: User - user"))
 }
 
 // Query returns QueryResolver implementation.
