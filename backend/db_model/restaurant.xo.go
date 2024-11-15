@@ -9,6 +9,7 @@ import (
 // Restaurant represents a row from 'public.restaurants'.
 type Restaurant struct {
 	ID          int            `json:"id"`           // id
+	Hostname    string         `json:"hostname"`     // hostname
 	Name        string         `json:"name"`         // name
 	Address     sql.NullString `json:"address"`      // address
 	PhoneNumber sql.NullString `json:"phone_number"` // phone_number

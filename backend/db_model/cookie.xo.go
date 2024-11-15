@@ -11,7 +11,7 @@ import (
 // Cookie represents a row from 'public.cookies'.
 type Cookie struct {
 	ID        uuid.UUID    `json:"id"`         // id
-	AccountID int          `json:"account_id"` // account_id
+	AccountID uuid.UUID    `json:"account_id"` // account_id
 	CreatedAt sql.NullTime `json:"created_at"` // created_at
 	UpdatedAt sql.NullTime `json:"updated_at"` // updated_at
 }

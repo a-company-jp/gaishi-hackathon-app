@@ -4,12 +4,14 @@ package db_model
 
 import (
 	"database/sql"
+
+	"github.com/google/uuid"
 )
 
 // AccountsTableSelection represents a row from 'public.accounts_table_selections'.
 type AccountsTableSelection struct {
 	ID              int          `json:"id"`                // id
-	AccountID       int          `json:"account_id"`        // account_id
+	AccountID       uuid.UUID    `json:"account_id"`        // account_id
 	TableSessionsID int          `json:"table_sessions_id"` // table_sessions_id
 	UserNumber      int          `json:"user_number"`       // user_number
 	CreatedAt       sql.NullTime `json:"created_at"`        // created_at
