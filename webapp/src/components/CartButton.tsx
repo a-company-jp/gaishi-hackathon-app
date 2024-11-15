@@ -9,7 +9,7 @@ type CartButtonProps = {
 export default function CartButton({ count }: CartButtonProps) {
   return (
     <div className="relative inline-block">
-      <div className="p-3 bg-[#FFBC51] rounded-full">
+      <div className="p-3 bg-primary rounded-full">
         <ShoppingCart className="w-6 h-6 text-white" />
       </div>
       {typeof count === "number" && <NumberBadge count={count} />}
