@@ -13,6 +13,7 @@ CREATE TABLE public.restaurants
 CREATE TABLE public.tables
 (
     id            SERIAL PRIMARY KEY,
+    uuid          uuid        NOT NULL,
     restaurant_id INT         NOT NULL REFERENCES restaurants (id) ON DELETE CASCADE,
     table_number  VARCHAR(50) NOT NULL,
     capacity      INT         NOT NULL,
@@ -152,12 +153,12 @@ CREATE TABLE public.menu_category_translations
 CREATE TABLE public.ordered_items
 (
     id              SERIAL PRIMARY KEY,
-    placed_order_id INT NOT NULL REFERENCES placed_orders (id) ON DELETE CASCADE,
-    menu_item_id    INT NOT NULL REFERENCES menu_items (id) ON DELETE CASCADE,
-    quantity        INT NOT NULL,
-    price           INT NOT NULL DEFAULT 0,
+    placed_order_id INT  NOT NULL REFERENCES placed_orders (id) ON DELETE CASCADE,
+    menu_item_id    INT  NOT NULL REFERENCES menu_items (id) ON DELETE CASCADE,
+    quantity        INT  NOT NULL,
+    price           INT  NOT NULL DEFAULT 0,
     added_by_user   uuid NOT NULL REFERENCES accounts (id) ON DELETE CASCADE,
-    created_at      TIMESTAMP    DEFAULT CURRENT_TIMESTAMP,
-    updated_at      TIMESTAMP    DEFAULT CURRENT_TIMESTAMP
+    created_at      TIMESTAMP     DEFAULT CURRENT_TIMESTAMP,
+    updated_at      TIMESTAMP     DEFAULT CURRENT_TIMESTAMP
 );
 

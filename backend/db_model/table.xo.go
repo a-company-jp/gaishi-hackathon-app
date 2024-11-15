@@ -4,11 +4,14 @@ package db_model
 
 import (
 	"database/sql"
+
+	"github.com/google/uuid"
 )
 
 // Table represents a row from 'public.tables'.
 type Table struct {
 	ID           int          `json:"id"`            // id
+	UUID         uuid.UUID    `json:"uuid"`          // uuid
 	RestaurantID int          `json:"restaurant_id"` // restaurant_id
 	TableNumber  string       `json:"table_number"`  // table_number
 	Capacity     int          `json:"capacity"`      // capacity
