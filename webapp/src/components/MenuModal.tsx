@@ -30,7 +30,7 @@ function MenuModal({
 }: MenuModalProps) {
   return (
     <Dialog open={isOpen} onOpenChange={onOpenChange}>
-      <DialogContent>
+      <DialogContent className="w-3/4">
         <DialogHeader>
           <DialogTitle>{selectedItem?.name}</DialogTitle>
         </DialogHeader>
