@@ -114,6 +114,7 @@ type ComplexityRoot struct {
 		MenuCategories      func(childComplexity int, restaurantID string) int
 		MenuItems           func(childComplexity int, restaurantID string) int
 		MenuItemsByCategory func(childComplexity int, restaurantID string, categoryID string) int
+		MyCuuid             func(childComplexity int) int
 		Order               func(childComplexity int, orderID string) int
 		Restaurant          func(childComplexity int, id string) int
 		TableSession        func(childComplexity int, tableSession string) int
@@ -168,6 +169,7 @@ type MutationResolver interface {
 	PlaceOrder(ctx context.Context, orderID string) (*bool, error)
 }
 type QueryResolver interface {
+	MyCuuid(ctx context.Context) (string, error)
 	HealthCheck(ctx context.Context) (*string, error)
 	Restaurant(ctx context.Context, id string) (*model.Restaurant, error)
 	TableSession(ctx context.Context, tableSession string) (*model.TableSession, error)
@@ -539,6 +541,13 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.Query.MenuItemsByCategory(childComplexity, args["restaurantId"].(string), args["categoryId"].(string)), true
 
+	case "Query.myCUUID":
+		if e.complexity.Query.MyCuuid == nil {
+			break
+		}
+
+		return e.complexity.Query.MyCuuid(childComplexity), true
+
 	case "Query.order":
 		if e.complexity.Query.Order == nil {
 			break
@@ -876,6 +885,7 @@ func (ec *executionContext) introspectType(name string) (*introspection.Type, er
 var sources = []*ast.Source{
 	{Name: "../../graphql/model.graphqls", Input: ``, BuiltIn: false},
 	{Name: "../../graphql/schema.graphqls", Input: `type Query {
+  myCUUID: String!
   healthCheck: String
   restaurant(id: ID!): Restaurant
   tableSession(tableSession: ID!): TableSession
@@ -3319,6 +3329,50 @@ func (ec *executionContext) fieldContext_PlacedOrder_totalPrice(_ context.Contex
 		IsResolver: false,
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
 			return nil, errors.New("field of type Int does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Query_myCUUID(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Query_myCUUID(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return ec.resolvers.Query().MyCuuid(rctx)
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(string)
+	fc.Result = res
+	return ec.marshalNString2string(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Query_myCUUID(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Query",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: true,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type String does not have child fields")
 		},
 	}
 	return fc, nil
@@ -7456,6 +7510,28 @@ func (ec *executionContext) _Query(ctx context.Context, sel ast.SelectionSet) gr
 		switch field.Name {
 		case "__typename":
 			out.Values[i] = graphql.MarshalString("Query")
+		case "myCUUID":
+			field := field
+
+			innerFunc := func(ctx context.Context, fs *graphql.FieldSet) (res graphql.Marshaler) {
+				defer func() {
+					if r := recover(); r != nil {
+						ec.Error(ctx, ec.Recover(ctx, r))
+					}
+				}()
+				res = ec._Query_myCUUID(ctx, field)
+				if res == graphql.Null {
+					atomic.AddUint32(&fs.Invalids, 1)
+				}
+				return res
+			}
+
+			rrm := func(ctx context.Context) graphql.Marshaler {
+				return ec.OperationContext.RootResolverMiddleware(ctx,
+					func(ctx context.Context) graphql.Marshaler { return innerFunc(ctx, out) })
+			}
+
+			out.Concurrently(i, func(ctx context.Context) graphql.Marshaler { return rrm(innerCtx) })
 		case "healthCheck":
 			field := field
 
