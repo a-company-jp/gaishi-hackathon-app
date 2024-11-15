@@ -9,7 +9,6 @@ on:
 env:
   NEXT_PUBLIC_BACKEND_URL: ${{ vars.NEXT_PUBLIC_BACKEND_URL }}
   NEXT_PUBLIC_GRAPHQL_SERVER_URL: ${{ vars.NEXT_PUBLIC_GRAPHQL_SERVER_URL }}
-  NODE_ENV: production
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
@@ -32,6 +31,8 @@ jobs:
         run: pnpm install
       - name: Build
         run: pnpm run build
+        env:
+          NODE_ENV: production
       - name: Login to Google Cloud
         id: auth
         uses: google-github-actions/auth@v2
