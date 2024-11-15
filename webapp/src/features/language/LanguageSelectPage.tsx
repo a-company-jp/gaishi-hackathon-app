@@ -59,7 +59,7 @@ function LanguageSelectPage() {
         ))}
       </ul>
       <div className="flex justify-center items-center p-10">
-        <Button className="w-40 h-12 bg-white border border-gray-200 text-md font-bold bg-black text-white">
+        <Button className="w-40 h-12 bg-white border border-gray-200 text-md font-bold bg-zinc-800 text-white">
           <span>{nextButtonText[selectedLanguage]}</span>
         </Button>
       </div>
