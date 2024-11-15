@@ -121,7 +121,7 @@ function MenuPage() {
       />
 
       <div className="fixed bottom-20 right-4">
-        <CartButton count={cartCount} />
+        <CartButton count={cartCount} size={"lg"} />
       </div>
     </div>
   );
