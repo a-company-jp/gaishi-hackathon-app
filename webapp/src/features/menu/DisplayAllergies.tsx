@@ -8,6 +8,8 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
+import { AllergenButton } from "@/components/AllergenButton";
+import { useState } from "react";
 
 type Allergy = {
   id: string;
@@ -19,6 +21,16 @@ type Props = {
 };
 
 function DisplayAllergies({ allergies }: Props) {
+  const [selectedAllergies, setSelectedAllergies] = useState<string[]>(
+    allergies.map((a) => a.id)
+  );
+
+  const toggleAllergy = (id: string) => {
+    setSelectedAllergies((prev) =>
+      prev.includes(id) ? prev.filter((a) => a !== id) : [...prev, id]
+    );
+  };
+
   return (
     <div className="p-3 flex flex-col items-center gap-1">
       <p className="text-sm">あなたのアレルギー食材</p>
@@ -45,6 +57,18 @@ function DisplayAllergies({ allergies }: Props) {
               あなたのアレルギー食材について確認と編集が可能です。
             </DialogDescription>
           </DialogHeader>
+          <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-4">
+            {allergies.map((allergy) => (
+              <AllergenButton
+                key={allergy.id}
+                src={`/foods/${allergy.id}.png`}
+                alt={allergy.name}
+                label={allergy.name}
+                selected={selectedAllergies.includes(allergy.id)}
+                onClick={() => toggleAllergy(allergy.id)}
+              />
+            ))}
+          </div>
         </DialogContent>
       </Dialog>
     </div>

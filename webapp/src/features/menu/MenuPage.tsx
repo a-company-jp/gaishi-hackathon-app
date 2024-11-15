@@ -253,20 +253,36 @@ const menuItems = [
 
 const allergies = [
   {
+    id: "beef",
+    name: "牛肉",
+  },
+  {
+    id: "crab",
+    name: "かに",
+  },
+  {
     id: "egg",
-    name: "卵",
+    name: "たまご",
+  },
+  {
+    id: "fish",
+    name: "魚介",
+  },
+  {
+    id: "kiwi",
+    name: "キウイ",
   },
   {
     id: "peanuts",
     name: "ピーナッツ",
   },
   {
-    id: "soba",
-    name: "蕎麦",
-  },
-  {
     id: "shrimp",
     name: "えび",
+  },
+  {
+    id: "soba",
+    name: "そば",
   },
 ];
 
