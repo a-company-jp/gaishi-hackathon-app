@@ -1,11 +1,16 @@
-import React from "react";
+export function generateStaticParams() {
+  return [{ id: "1" }, { id: "2" }, { id: "3" }];
+}
 
-function Page() {
+export default async function Page({
+  params,
+}: {
+  params: Promise<{ id: string }>;
+}) {
+  const { id } = await params;
   return (
     <>
-      <div>Implement me!!</div>
+      <div>Implement me!! ID: {id}</div>
     </>
   );
 }
-
-export default Page;
