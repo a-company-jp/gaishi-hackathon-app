@@ -56,26 +56,22 @@ const menuItems = [
 function MenuPage() {
   return (
     <div className="flex flex-col h-full w-full">
-      <Header />
-      <ScrollArea className="flex-1">
-        <div className="p-4 space-y-4">
-          {menuItems.map((item, index) => (
-            <div key={index} className="bg-white rounded-lg shadow">
-              <div className="p-4">
-                <h2 className="text-lg font-semibold">{item.name}</h2>
-                <p className="text-gray-600">{item.price}円</p>
-                <Button className="mt-2 bg-yellow-400 hover:bg-yellow-500 text-gray-800">
-                  カートに入れる
-                </Button>
-              </div>
+      <div className="p-4 space-y-4">
+        {menuItems.map((item, index) => (
+          <div key={index} className="bg-white rounded-lg shadow">
+            <div className="p-4">
+              <h2 className="text-lg font-semibold">{item.name}</h2>
+              <p className="text-gray-600">{item.price}円</p>
+              <Button className="mt-2 bg-yellow-400 hover:bg-yellow-500 text-gray-800">
+                カートに入れる
+              </Button>
             </div>
-          ))}
-        </div>
-      </ScrollArea>
+          </div>
+        ))}
+      </div>
       <div className="fixed bottom-20 right-4">
         <CartButton count={10} />
       </div>
-      <Footer />
     </div>
   );
 }
