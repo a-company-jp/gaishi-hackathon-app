@@ -86,7 +86,7 @@ type ComplexityRoot struct {
 	Mutation struct {
 		AddItemToCart        func(childComplexity int, orderID string, menuItemID string, quantity int, sessionUserID string) int
 		CompleteTableSession func(childComplexity int, tableSessionID string, sessionUserID string) int
-		JoinTableSession     func(childComplexity int, tableID string) int
+		JoinTableSession     func(childComplexity int, tableUUID string) int
 		PlaceOrder           func(childComplexity int, orderID string) int
 		RemoveItemFromCart   func(childComplexity int, orderID string, orderItemID string, sessionUserID string) int
 		SetUserAllergies     func(childComplexity int, sessionUserID string, allergenIds []string) int
@@ -154,14 +154,13 @@ type ComplexityRoot struct {
 
 	TableSessionUser struct {
 		Allergies    func(childComplexity int) int
-		ID           func(childComplexity int) int
 		TableSession func(childComplexity int) int
 		UserNumber   func(childComplexity int) int
 	}
 }
 
 type MutationResolver interface {
-	JoinTableSession(ctx context.Context, tableID string) (*model.TableSessionUser, error)
+	JoinTableSession(ctx context.Context, tableUUID string) (*model.TableSessionUser, error)
 	CompleteTableSession(ctx context.Context, tableSessionID string, sessionUserID string) (*bool, error)
 	SetUserAllergies(ctx context.Context, sessionUserID string, allergenIds []string) (*model.TableSessionUser, error)
 	AddItemToCart(ctx context.Context, orderID string, menuItemID string, quantity int, sessionUserID string) (*model.Cart, error)
@@ -378,7 +377,7 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 			return 0, false
 		}
 
-		return e.complexity.Mutation.JoinTableSession(childComplexity, args["tableId"].(string)), true
+		return e.complexity.Mutation.JoinTableSession(childComplexity, args["tableUUID"].(string)), true
 
 	case "Mutation.placeOrder":
 		if e.complexity.Mutation.PlaceOrder == nil {
@@ -741,13 +740,6 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.TableSessionUser.Allergies(childComplexity), true
 
-	case "TableSessionUser.id":
-		if e.complexity.TableSessionUser.ID == nil {
-			break
-		}
-
-		return e.complexity.TableSessionUser.ID(childComplexity), true
-
 	case "TableSessionUser.tableSession":
 		if e.complexity.TableSessionUser.TableSession == nil {
 			break
@@ -899,7 +891,7 @@ var sources = []*ast.Source{
 
 type Mutation {
   # joinTableSession: QRコードを読み取り、
-  joinTableSession(tableId: ID!): TableSessionUser
+  joinTableSession(tableUUID: ID!): TableSessionUser
   # completeTableSession: 清算を行う
   completeTableSession(tableSessionId: ID!, sessionUserId: ID!): Boolean
   # setUserAllergies: ユーザーのアレルギー情報を設定する
@@ -943,7 +935,6 @@ type Table {
 }
 
 type TableSessionUser {
-  id: ID!
   tableSession: TableSession!
   userNumber: Int!
   allergies: [Allergen!]!
@@ -1127,19 +1118,19 @@ func (ec *executionContext) field_Mutation_completeTableSession_argsSessionUserI
 func (ec *executionContext) field_Mutation_joinTableSession_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
 	var err error
 	args := map[string]interface{}{}
-	arg0, err := ec.field_Mutation_joinTableSession_argsTableID(ctx, rawArgs)
+	arg0, err := ec.field_Mutation_joinTableSession_argsTableUUID(ctx, rawArgs)
 	if err != nil {
 		return nil, err
 	}
-	args["tableId"] = arg0
+	args["tableUUID"] = arg0
 	return args, nil
 }
-func (ec *executionContext) field_Mutation_joinTableSession_argsTableID(
+func (ec *executionContext) field_Mutation_joinTableSession_argsTableUUID(
 	ctx context.Context,
 	rawArgs map[string]interface{},
 ) (string, error) {
-	ctx = graphql.WithPathContext(ctx, graphql.NewPathWithField("tableId"))
-	if tmp, ok := rawArgs["tableId"]; ok {
+	ctx = graphql.WithPathContext(ctx, graphql.NewPathWithField("tableUUID"))
+	if tmp, ok := rawArgs["tableUUID"]; ok {
 		return ec.unmarshalNID2string(ctx, tmp)
 	}
 
@@ -2051,8 +2042,6 @@ func (ec *executionContext) fieldContext_CartItem_addedBy(_ context.Context, fie
 		IsResolver: false,
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
 			switch field.Name {
-			case "id":
-				return ec.fieldContext_TableSessionUser_id(ctx, field)
 			case "tableSession":
 				return ec.fieldContext_TableSessionUser_tableSession(ctx, field)
 			case "userNumber":
@@ -2544,7 +2533,7 @@ func (ec *executionContext) _Mutation_joinTableSession(ctx context.Context, fiel
 	}()
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return ec.resolvers.Mutation().JoinTableSession(rctx, fc.Args["tableId"].(string))
+		return ec.resolvers.Mutation().JoinTableSession(rctx, fc.Args["tableUUID"].(string))
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -2566,8 +2555,6 @@ func (ec *executionContext) fieldContext_Mutation_joinTableSession(ctx context.C
 		IsResolver: true,
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
 			switch field.Name {
-			case "id":
-				return ec.fieldContext_TableSessionUser_id(ctx, field)
 			case "tableSession":
 				return ec.fieldContext_TableSessionUser_tableSession(ctx, field)
 			case "userNumber":
@@ -2680,8 +2667,6 @@ func (ec *executionContext) fieldContext_Mutation_setUserAllergies(ctx context.C
 		IsResolver: true,
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
 			switch field.Name {
-			case "id":
-				return ec.fieldContext_TableSessionUser_id(ctx, field)
 			case "tableSession":
 				return ec.fieldContext_TableSessionUser_tableSession(ctx, field)
 			case "userNumber":
@@ -3113,8 +3098,6 @@ func (ec *executionContext) fieldContext_OrderedItem_addedBy(_ context.Context, 
 		IsResolver: false,
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
 			switch field.Name {
-			case "id":
-				return ec.fieldContext_TableSessionUser_id(ctx, field)
 			case "tableSession":
 				return ec.fieldContext_TableSessionUser_tableSession(ctx, field)
 			case "userNumber":
@@ -5062,50 +5045,6 @@ func (ec *executionContext) fieldContext_TableSession_isActive(_ context.Context
 		IsResolver: false,
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
 			return nil, errors.New("field of type Boolean does not have child fields")
-		},
-	}
-	return fc, nil
-}
-
-func (ec *executionContext) _TableSessionUser_id(ctx context.Context, field graphql.CollectedField, obj *model.TableSessionUser) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_TableSessionUser_id(ctx, field)
-	if err != nil {
-		return graphql.Null
-	}
-	ctx = graphql.WithFieldContext(ctx, fc)
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
-		ctx = rctx // use context from middleware stack in children
-		return obj.ID, nil
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		if !graphql.HasFieldError(ctx, fc) {
-			ec.Errorf(ctx, "must not be null")
-		}
-		return graphql.Null
-	}
-	res := resTmp.(string)
-	fc.Result = res
-	return ec.marshalNID2string(ctx, field.Selections, res)
-}
-
-func (ec *executionContext) fieldContext_TableSessionUser_id(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "TableSessionUser",
-		Field:      field,
-		IsMethod:   false,
-		IsResolver: false,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return nil, errors.New("field of type ID does not have child fields")
 		},
 	}
 	return fc, nil
@@ -7959,11 +7898,6 @@ func (ec *executionContext) _TableSessionUser(ctx context.Context, sel ast.Selec
 		switch field.Name {
 		case "__typename":
 			out.Values[i] = graphql.MarshalString("TableSessionUser")
-		case "id":
-			out.Values[i] = ec._TableSessionUser_id(ctx, field, obj)
-			if out.Values[i] == graphql.Null {
-				out.Invalids++
-			}
 		case "tableSession":
 			out.Values[i] = ec._TableSessionUser_tableSession(ctx, field, obj)
 			if out.Values[i] == graphql.Null {

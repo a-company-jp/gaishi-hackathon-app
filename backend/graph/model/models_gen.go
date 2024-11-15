@@ -89,7 +89,6 @@ type TableSession struct {
 }
 
 type TableSessionUser struct {
-	ID           string        `json:"id"`
 	TableSession *TableSession `json:"tableSession"`
 	UserNumber   int           `json:"userNumber"`
 	Allergies    []*Allergen   `json:"allergies"`
