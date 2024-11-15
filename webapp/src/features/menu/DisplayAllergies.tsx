@@ -39,7 +39,7 @@ const mockAllergies: Allergy[] = [
 
 function DisplayAllergies({ allergies }: Props) {
   return (
-    <div className="p-4 flex flex-col items-center gap-1">
+    <div className="p-3 flex flex-col items-center gap-1">
       <p className="text-sm">あなたのアレルギー食材</p>
       <Dialog>
         <DialogTrigger asChild>

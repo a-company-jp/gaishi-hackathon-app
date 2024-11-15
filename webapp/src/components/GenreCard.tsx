@@ -23,7 +23,7 @@ export default function GenreCard({
               onClick={() => setActiveTab(item.id)}
               className={`flex-1 py-2 px-1 text-[11px] sm:text-xs font-medium transition-colors duration-200 tracking-[0.2em] whitespace-nowrap ${
                 activeTab === item.id
-                  ? "text-Black-500 border-b-2 border-orange-500 font-black"
+                  ? "text-Black-500 border-b-2 border-orange-500 font-extrabold"
                   : "text-gray-500 hover:text-gray-700"
               }`}
             >
