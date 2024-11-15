@@ -1,5 +1,9 @@
 import React from "react";
 
+export const metadata = {
+  title: "Title - CHANGE ME!!!",
+};
+
 function Page() {
   return (
     <>
