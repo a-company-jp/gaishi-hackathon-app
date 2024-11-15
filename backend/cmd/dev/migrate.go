@@ -48,7 +48,7 @@ func runMigration(dbUrl string) error {
 	}
 	log.Printf("Current version: %v\n, dirty: %v\n", version, b)
 
-	if *configMigration.Version == 0 || *configMigration.Force == 0 {
+	if (configMigration.Version != nil && *configMigration.Version == 0) || (configMigration.Force != nil && *configMigration.Force == 0) {
 		//	drop all tables
 		log.Println("Dropping all tables...")
 		if err := m.Drop(); err != nil {
@@ -65,6 +65,9 @@ func runMigration(dbUrl string) error {
 		}
 		log.Println("Force Migration done.")
 		return nil
+	}
+	if configMigration.Version == nil {
+		return errors.New("version key is missing")
 	}
 	log.Printf("Migrating to version: %v\n", *configMigration.Version)
 	if err := m.Migrate(*configMigration.Version); err != nil {
