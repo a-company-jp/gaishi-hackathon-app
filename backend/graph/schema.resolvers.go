@@ -47,12 +47,12 @@ func (r *mutationResolver) JoinTableSession(ctx context.Context, tableUUID strin
 				Table:       nil,
 				StartTime:   session.CreatedAt.Time.String(),
 				EndTime:     nil,
-				TotalUsers:  0,
+				TotalUsers:  len(users),
 				Cart:        nil,
 				PlacedOrder: nil,
 				IsActive:    false,
 			},
-			UserNumber: len(users),
+			UserNumber: session.UserNumber,
 			Allergies:  nil,
 		}, nil
 	}
