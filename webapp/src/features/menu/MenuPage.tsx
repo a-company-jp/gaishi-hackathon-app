@@ -331,7 +331,7 @@ function MenuPage() {
       <div className="p-4 space-y-4">
         {menuItems
           .filter((item) => item.genreId === activeGenre)
-          .map((item, index) => (
+          .map((item) => (
             <MenuCard
               key={item.id}
               id={item.id}
