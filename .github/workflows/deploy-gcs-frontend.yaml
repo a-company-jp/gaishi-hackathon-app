@@ -56,6 +56,7 @@ jobs:
         uses: 'google-github-actions/upload-cloud-storage@v2'
         with:
           path: 'webapp/build'
+          parent: false
           destination: 'itadakimasu-frontend'
           headers: |-
-            cache-control: 'no-store'
+            cache-control: no-store
