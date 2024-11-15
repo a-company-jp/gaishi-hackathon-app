@@ -1,12 +1,13 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-import Router from "next/router";
+import { useRouter } from "next/navigation";
 
 const tablePath = /^\/order\/table\/.+/g;
 const menuDetailPath = /^\/order\/menu\/.+/g;
 
 const Custom404: React.FC = () => {
+  const router = useRouter();
   const [isNotFound, setIsNotFound] = useState(false);
 
   useEffect(() => {
@@ -18,14 +19,7 @@ const Custom404: React.FC = () => {
       if (id) {
         // `id` を `localStorage` に保存
         localStorage.setItem("tableId", id);
-        Router.replace(
-          {
-            pathname: "/order/start",
-            query: {}, // クエリパラメータは使用しない
-          },
-          undefined,
-          { shallow: true }
-        );
+        router.push("/order/start");
         return;
       }
     }
@@ -34,12 +28,12 @@ const Custom404: React.FC = () => {
       if (id) {
         // `id` を `localStorage` に保存
         localStorage.setItem("menuId", id);
-        Router.replace(pathName);
+        router.push(pathName);
         return;
       }
     }
     setIsNotFound(true);
-  }, []);
+  }, [router]);
   if (isNotFound) return <h1>404 - Page Not Found</h1>;
   return null;
 };
