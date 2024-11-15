@@ -1,4 +1,6 @@
-import React from "react";
+"use client";
+
+import React, { useState } from "react";
 import { Button } from "@/components/ui/button";
 import CartButton from "@/components/CartButton";
 
@@ -51,6 +53,11 @@ const menuItems = [
 ];
 
 function MenuPage() {
+  const [cartCount, setCartCount] = useState(0);
+
+  const handleAddToCart = () => {
+    setCartCount((prevCount) => prevCount + 1);
+  };
   return (
     <div className="flex flex-col w-full pb-16">
       <div className="p-4 space-y-4">
@@ -59,7 +66,10 @@ function MenuPage() {
             <div className="p-4">
               <h2 className="text-lg font-semibold">{item.name}</h2>
               <p className="text-gray-600">{item.price}円</p>
-              <Button className="mt-2 bg-yellow-400 hover:bg-yellow-500 text-gray-800">
+              <Button
+                className="mt-2 bg-yellow-400 hover:bg-yellow-500 text-gray-800"
+                onClick={handleAddToCart}
+              >
                 カートに入れる
               </Button>
             </div>
@@ -67,7 +77,7 @@ function MenuPage() {
         ))}
       </div>
       <div className="fixed bottom-20 right-4">
-        <CartButton count={10} />
+        <CartButton count={cartCount} />
       </div>
     </div>
   );
