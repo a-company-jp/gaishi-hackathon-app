@@ -88,7 +88,7 @@ export type MutationCompleteTableSessionArgs = {
 };
 
 export type MutationJoinTableSessionArgs = {
-  tableId: Scalars["ID"]["input"];
+  tableUUID: Scalars["ID"]["input"];
 };
 
 export type MutationPlaceOrderArgs = {
@@ -205,7 +205,6 @@ export type TableSession = {
 
 export type TableSessionUser = {
   allergies: Array<Allergen>;
-  id: Scalars["ID"]["output"];
   tableSession: TableSession;
   userNumber: Scalars["Int"]["output"];
 };
