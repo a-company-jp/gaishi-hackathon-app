@@ -4,6 +4,7 @@ import React, { useState } from "react";
 import { Button } from "@/components/ui/button";
 import CartButton from "@/components/CartButton";
 import MenuModal from "@/components/MenuModal";
+import DisplayAllergies from "@/features/menu/DisplayAllergies";
 
 const menuItems = [
   {
@@ -54,6 +55,7 @@ function MenuPage() {
 
   return (
     <div className="flex flex-col w-full pb-16">
+      <DisplayAllergies allergies={[]} />
       <div className="p-4 space-y-4">
         {menuItems.map((item, index) => (
           <div key={index} className="bg-white rounded-lg shadow">
