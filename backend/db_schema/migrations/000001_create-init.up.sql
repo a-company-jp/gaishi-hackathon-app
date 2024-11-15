@@ -2,11 +2,13 @@
 CREATE TABLE public.restaurants
 (
     id           SERIAL PRIMARY KEY,
+    hostname     VARCHAR(255) NOT NULL,
     name         VARCHAR(255) NOT NULL,
     address      VARCHAR(255),
     phone_number VARCHAR(20),
     created_at   TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    updated_at   TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    updated_at   TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    UNIQUE (hostname)
 );
 
 -- 2. tables テーブルの作成
@@ -131,7 +133,7 @@ CREATE TABLE public.menu_category_translations
     UNIQUE (menu_category_id, language_code)
 );
 
--- 14. order_items テーブルの作成
+-- 14. ordered_items テーブルの作成
 CREATE TABLE public.ordered_items
 (
     id              SERIAL PRIMARY KEY,
@@ -145,7 +147,7 @@ CREATE TABLE public.ordered_items
 
 CREATE TABLE public.accounts
 (
-    id           SERIAL PRIMARY KEY,
+    id           uuid PRIMARY KEY NOT NULL,
     firebase_uid VARCHAR(255),
     created_at   TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at   TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
@@ -154,19 +156,19 @@ CREATE TABLE public.accounts
 
 CREATE TABLE public.cookies
 (
-    id         uuid PRIMARY KEY DEFAULT gen_random_uuid(),
-    account_id INT NOT NULL REFERENCES accounts (id),
-    created_at TIMESTAMP        DEFAULT CURRENT_TIMESTAMP,
-    updated_at TIMESTAMP        DEFAULT CURRENT_TIMESTAMP
+    id         uuid PRIMARY KEY NOT NULL,
+    account_id uuid             NOT NULL REFERENCES accounts (id),
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
 CREATE TABLE public.accounts_table_selections
 (
     id                SERIAL PRIMARY KEY,
-    account_id        INT NOT NULL REFERENCES accounts (id) ON DELETE CASCADE,
+    account_id        uuid NOT NULL REFERENCES accounts (id) ON DELETE CASCADE,
     table_sessions_id INT NOT NULL REFERENCES table_sessions (id) ON DELETE CASCADE,
     user_number       INT NOT NULL,
     created_at        TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at        TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    UNIQUE (account_id, table_sessions_id, user_number)
+    UNIQUE (account_id, table_sessions_id)
 )
