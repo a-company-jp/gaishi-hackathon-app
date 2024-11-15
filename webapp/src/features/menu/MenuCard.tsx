@@ -19,7 +19,7 @@ function MenuCard({ id, name, price, imgUrl }: Props) {
         />
         <div className="mt-2 row-span-3">
           <p className="font-semibold">{name}</p>
-          <div className="flex items-end justify-between">
+          <div className="mt-2 flex items-end justify-between">
             <p>
               ￥<span className="text-2xl font-extrabold">{price}</span>
             </p>
