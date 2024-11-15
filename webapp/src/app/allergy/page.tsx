@@ -1,9 +1,9 @@
-import Allergy from "@/features/allergy/allergy";
+import AllergenSelectPage from "@/features/allergy/AllergenSelectPage";
 
 export const metadata = {
   title: "Title - CHANGE ME!!!",
 };
 
 export default function Page() {
-  return <Allergy />;
+  return <AllergenSelectPage />;
 }

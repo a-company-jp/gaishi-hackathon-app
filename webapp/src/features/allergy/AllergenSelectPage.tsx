@@ -4,7 +4,7 @@ import { useState } from "react";
 import { AllergenButton } from "@/components/AllergenButton";
 import { Button } from "@/components/ui/button";
 
-export default function Allergy() {
+export default function AllergenSelectPage() {
   const [selectedAllergens, setSelectedAllergens] = useState<number[]>([]);
 
   const toggleAllergen = (index: number) => {
