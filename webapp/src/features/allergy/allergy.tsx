@@ -1,14 +1,14 @@
 "use client";
 
 import { useState } from "react";
-import { AllergyIcon } from "@/components/AllergyIcon";
+import { AllergenButton } from "@/components/AllergenButton";
 import { Button } from "@/components/ui/button";
 
 export default function Allergy() {
-  const [selectedItems, setSelectedItems] = useState<number[]>([]);
+  const [selectedAllergens, setSelectedAllergens] = useState<number[]>([]);
 
-  const toggleItem = (index: number) => {
-    setSelectedItems((prev) =>
+  const toggleAllergen = (index: number) => {
+    setSelectedAllergens((prev) =>
       prev.includes(index) ? prev.filter((i) => i !== index) : [...prev, index]
     );
   };
@@ -63,30 +63,26 @@ export default function Allergy() {
 
   return (
     <div className="flex flex-col min-h-screen bg-white">
-      <header className="p-4">
-        <div className="flex items-center justify-center gap-2">
-          <span className="text-sm">アレルギー情報の登録</span>
-        </div>
-      </header>
+      <span className="text-lg text-center py-8">アレルギー情報の登録</span>
 
-      <main className="flex-1 p-6">
+      <div className="flex justify-center">
         <div className="grid grid-cols-3 gap-4">
           {items.map((item, index) => (
-            <AllergyIcon
+            <AllergenButton
               key={index}
               {...item}
-              selected={selectedItems.includes(index)}
-              onClick={() => toggleItem(index)}
+              selected={selectedAllergens.includes(index)}
+              onClick={() => toggleAllergen(index)}
             />
           ))}
         </div>
+      </div>
 
-        <div className="flex justify-center mt-8">
-          <Button className="bg-zinc-800 text-white hover:bg-zinc-700">
-            注文を開始する
-          </Button>
-        </div>
-      </main>
+      <div className="flex justify-center py-8">
+        <Button className="bg-zinc-800 text-white hover:bg-zinc-700">
+          注文を開始する
+        </Button>
+      </div>
     </div>
   );
 }
