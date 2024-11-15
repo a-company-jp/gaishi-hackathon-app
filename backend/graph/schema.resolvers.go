@@ -41,6 +41,11 @@ func (r *mutationResolver) PlaceOrder(ctx context.Context, orderID string) (*boo
 	panic(fmt.Errorf("not implemented: PlaceOrder - placeOrder"))
 }
 
+// HealthCheck is the resolver for the healthCheck field.
+func (r *queryResolver) HealthCheck(ctx context.Context) (*string, error) {
+	panic(fmt.Errorf("not implemented: HealthCheck - healthCheck"))
+}
+
 // Restaurant is the resolver for the restaurant field.
 func (r *queryResolver) Restaurant(ctx context.Context, id string) (*model.Restaurant, error) {
 	panic(fmt.Errorf("not implemented: Restaurant - restaurant"))
