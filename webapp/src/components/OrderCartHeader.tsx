@@ -2,7 +2,7 @@ import { ArrowLeft } from "lucide-react";
 import Link from "next/link";
 import CartButton from "@/components/CartButton";
 
-const OrderHeader = () => {
+const OrderCartHeader = () => {
   return (
     <header className="flex items-center justify-between p-4 border-b">
       <Link
@@ -17,4 +17,4 @@ const OrderHeader = () => {
   );
 };
 
-export default OrderHeader;
+export default OrderCartHeader;
