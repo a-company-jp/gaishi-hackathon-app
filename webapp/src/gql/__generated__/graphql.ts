@@ -216,6 +216,14 @@ export type HealthCheckQueryQuery = {
   myCUUID: string;
 };
 
+export type JoinTableSessionMutationVariables = Exact<{
+  tableUUID: Scalars["ID"]["input"];
+}>;
+
+export type JoinTableSessionMutation = {
+  joinTableSession: { tableSession: { id: string } } | null;
+};
+
 export const HealthCheckQueryDocument = {
   kind: "Document",
   definitions: [
@@ -235,4 +243,64 @@ export const HealthCheckQueryDocument = {
 } as unknown as DocumentNode<
   HealthCheckQueryQuery,
   HealthCheckQueryQueryVariables
+>;
+export const JoinTableSessionDocument = {
+  kind: "Document",
+  definitions: [
+    {
+      kind: "OperationDefinition",
+      operation: "mutation",
+      name: { kind: "Name", value: "JoinTableSession" },
+      variableDefinitions: [
+        {
+          kind: "VariableDefinition",
+          variable: {
+            kind: "Variable",
+            name: { kind: "Name", value: "tableUUID" },
+          },
+          type: {
+            kind: "NonNullType",
+            type: { kind: "NamedType", name: { kind: "Name", value: "ID" } },
+          },
+        },
+      ],
+      selectionSet: {
+        kind: "SelectionSet",
+        selections: [
+          {
+            kind: "Field",
+            name: { kind: "Name", value: "joinTableSession" },
+            arguments: [
+              {
+                kind: "Argument",
+                name: { kind: "Name", value: "tableUUID" },
+                value: {
+                  kind: "Variable",
+                  name: { kind: "Name", value: "tableUUID" },
+                },
+              },
+            ],
+            selectionSet: {
+              kind: "SelectionSet",
+              selections: [
+                {
+                  kind: "Field",
+                  name: { kind: "Name", value: "tableSession" },
+                  selectionSet: {
+                    kind: "SelectionSet",
+                    selections: [
+                      { kind: "Field", name: { kind: "Name", value: "id" } },
+                    ],
+                  },
+                },
+              ],
+            },
+          },
+        ],
+      },
+    },
+  ],
+} as unknown as DocumentNode<
+  JoinTableSessionMutation,
+  JoinTableSessionMutationVariables
 >;
