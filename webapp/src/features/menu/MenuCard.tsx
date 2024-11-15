@@ -6,9 +6,18 @@ type Props = {
   name: string;
   price: number;
   imgUrl: string;
+  setSelectedItemId: (id: string) => void;
+  setIsModalOpen: (open: boolean) => void;
 };
 
-function MenuCard({ id, name, price, imgUrl }: Props) {
+function MenuCard({
+  id,
+  name,
+  price,
+  imgUrl,
+  setSelectedItemId,
+  setIsModalOpen,
+}: Props) {
   return (
     <div className="bg-white rounded-lg shadow">
       <div className="p-4">
@@ -23,7 +32,13 @@ function MenuCard({ id, name, price, imgUrl }: Props) {
             <p>
               ￥<span className="text-2xl font-extrabold">{price}</span>
             </p>
-            <Button className="bg-yellow-400 hover:bg-yellow-500 text-gray-800">
+            <Button
+              className="bg-yellow-400 hover:bg-yellow-500 text-gray-800"
+              onClick={() => {
+                setSelectedItemId(id);
+                setIsModalOpen(true);
+              }}
+            >
               カートに入れる
             </Button>
           </div>

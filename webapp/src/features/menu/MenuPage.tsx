@@ -308,21 +308,14 @@ const allergies = [
 function MenuPage() {
   const [cartCount, setCartCount] = useState(0);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [selectedItem, setSelectedItem] = useState<
-    (typeof menuItems)[0] | null
-  >(null);
+  const [selectedItemId, setSelectedItemId] = useState("");
   const [quantity, setQuantity] = useState(1);
   const [activeGenre, setActiveGenre] = useState("ddddd");
-
-  const handleOpenModal = (item: (typeof menuItems)[0]) => {
-    setSelectedItem(item);
-    setQuantity(1);
-    setIsModalOpen(true);
-  };
 
   const handleAddToCart = () => {
     setCartCount((prevCount) => prevCount + quantity);
     setIsModalOpen(false);
+    setQuantity(1);
   };
 
   return (
@@ -345,6 +338,8 @@ function MenuPage() {
               name={item.name}
               price={item.price}
               imgUrl={item.image}
+              setSelectedItemId={setSelectedItemId}
+              setIsModalOpen={setIsModalOpen}
             />
           ))}
       </div>
@@ -352,7 +347,9 @@ function MenuPage() {
       <MenuModal
         isOpen={isModalOpen}
         onOpenChange={setIsModalOpen}
-        selectedItem={selectedItem}
+        selectedItem={
+          menuItems.find((item) => item.id === selectedItemId) ?? null
+        }
         quantity={quantity}
         onQuantityChange={setQuantity}
         onAddToCart={handleAddToCart}
