@@ -255,34 +255,42 @@ const allergies = [
   {
     id: "beef",
     name: "牛肉",
+    selected: false,
   },
   {
     id: "crab",
     name: "かに",
+    selected: true,
   },
   {
     id: "egg",
     name: "たまご",
+    selected: false,
   },
   {
     id: "fish",
     name: "魚介",
+    selected: false,
   },
   {
     id: "kiwi",
     name: "キウイ",
+    selected: false,
   },
   {
     id: "peanuts",
     name: "ピーナッツ",
+    selected: true,
   },
   {
     id: "shrimp",
     name: "えび",
+    selected: false,
   },
   {
     id: "soba",
     name: "そば",
+    selected: true,
   },
 ];
 
