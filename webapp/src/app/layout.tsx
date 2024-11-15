@@ -3,7 +3,6 @@
 import localFont from "next/font/local";
 import "./globals.css";
 import { ApolloProvider } from "@/components/provider/ApolloProvider";
-import Header from "@/components/layout/Header";
 import { Provider } from "react-redux";
 import { store } from "@/redux/store";
 

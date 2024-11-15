@@ -18,25 +18,6 @@ type Props = {
   allergies: Allergy[];
 };
 
-const mockAllergies: Allergy[] = [
-  {
-    id: "egg",
-    name: "卵",
-  },
-  {
-    id: "peanuts",
-    name: "ピーナッツ",
-  },
-  {
-    id: "soba",
-    name: "蕎麦",
-  },
-  {
-    id: "shrimp",
-    name: "えび",
-  },
-];
-
 function DisplayAllergies({ allergies }: Props) {
   return (
     <div className="p-3 flex flex-col items-center gap-1">
@@ -44,7 +25,7 @@ function DisplayAllergies({ allergies }: Props) {
       <Dialog>
         <DialogTrigger asChild>
           <div className="w-3/4 p-4 rounded-lg shadow-inner flex items-center justify-center gap-2 hover:bg-gray-200">
-            {mockAllergies.map((allergy) => {
+            {allergies.map((allergy) => {
               return (
                 <Image
                   key={allergy.id}

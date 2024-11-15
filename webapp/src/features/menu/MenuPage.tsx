@@ -251,6 +251,25 @@ const menuItems = [
   },
 ];
 
+const allergies = [
+  {
+    id: "egg",
+    name: "卵",
+  },
+  {
+    id: "peanuts",
+    name: "ピーナッツ",
+  },
+  {
+    id: "soba",
+    name: "蕎麦",
+  },
+  {
+    id: "shrimp",
+    name: "えび",
+  },
+];
+
 function MenuPage() {
   const [cartCount, setCartCount] = useState(0);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -274,7 +293,7 @@ function MenuPage() {
   return (
     <div className="flex flex-col w-full pb-16">
       <div className="sticky top-0 bg-white">
-        <DisplayAllergies allergies={[]} />
+        <DisplayAllergies allergies={allergies} />
         <GenreCard
           menuItems={genres}
           activeTab={activeGenre}
