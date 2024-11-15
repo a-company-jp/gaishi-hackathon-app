@@ -11,7 +11,7 @@ type MenuItem struct {
 	ID           int           `json:"id"`            // id
 	RestaurantID int           `json:"restaurant_id"` // restaurant_id
 	CategoryID   sql.NullInt64 `json:"category_id"`   // category_id
-	Price        float64       `json:"price"`         // price
+	Price        int           `json:"price"`         // price
 	Available    sql.NullBool  `json:"available"`     // available
 	CreatedAt    sql.NullTime  `json:"created_at"`    // created_at
 	UpdatedAt    sql.NullTime  `json:"updated_at"`    // updated_at
