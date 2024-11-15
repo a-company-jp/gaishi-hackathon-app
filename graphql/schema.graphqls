@@ -1,9 +1,112 @@
-input NewUserInput {
-  username: String!
-  email: String!
-  password: String!
+type Query {
+  restaurant(id: ID!): Restaurant
+  tableSession(tableSession: ID!): TableSession
+  menuItems(restaurantId: ID!): [MenuItem!]!
+  menuItemsByCategory(restaurantId: ID!, categoryId: ID!): [MenuItem!]!
+  menuCategories(restaurantId: ID!): [MenuCategory!]!
+  allergens: [Allergen!]!
+  cart(tableSessionID: ID!): Cart
+  order(orderId: ID!): OrderedItem
 }
 
-type Query {
-  user(id: ID!): User!
+type Mutation {
+  # joinTableSession: QRコードを読み取り、
+  joinTableSession(tableSessionId: ID!): TableSessionUser
+  # completeTableSession: 清算を行う
+  completeTableSession(tableSessionId: ID!, sessionUserId: ID!): Boolean
+  # setUserAllergies: ユーザーのアレルギー情報を設定する
+  setUserAllergies(sessionUserId: ID!, allergenIds: [ID!]!): TableSessionUser
+
+  addItemToCart(orderId: ID!, menuItemId: ID!, quantity: Int!, sessionUserId: ID!): Cart
+  removeItemFromCart(orderId: ID!, orderItemId: ID!, sessionUserId: ID!): Cart
+  placeOrder(orderId: ID!): Boolean
+}
+
+type Subscription {
+  cartUpdated(tableSessionId: ID!): Cart
+  orderUpdated(orderId: ID!): OrderedItem
+}
+
+type Restaurant {
+  id: ID!
+  name: String!
+  address: String
+  phoneNumber: String
+  menuCategories: [MenuCategory!]!
+  menuItems: [MenuItem!]!
+}
+
+type TableSession {
+  id: ID!                # 推測困難なランダムなID
+  table: Table!
+  startTime: String!
+  endTime: String
+  totalUsers: Int!
+  cart: Cart!
+  placedOrder: PlacedOrder
+  isActive: Boolean!
+}
+
+type Table {
+  id: ID!
+  restaurant: Restaurant!
+  tableNumber: String!
+  capacity: Int!
+}
+
+type TableSessionUser {
+  id: ID!
+  tableSession: TableSession!
+  userNumber: Int!
+  allergies: [Allergen!]!
+}
+
+type Allergen {
+  id: ID!
+  name: String!
+}
+
+type MenuCategory {
+  id: ID!
+  name: String!
+  menuItems: [MenuItem!]!
+}
+
+type MenuItem {
+  id: ID!
+  category: MenuCategory
+  price: Int!
+  available: Boolean!
+  name: String!
+  description: String
+  allergens: [Allergen!]!
+}
+
+type Cart {
+  id: ID!
+  tableSession: TableSession!
+  items: [CartItem!]!
+  totalCartPrice: Int!
+}
+
+type CartItem {
+  id: ID!
+  menuItem: MenuItem!
+  quantity: Int!
+  addedBy: TableSessionUser!
+}
+
+type PlacedOrder {
+  id: ID!
+  tableSession: TableSession!
+  items: [OrderedItem!]!
+  totalPrice: Int!
+}
+
+type OrderedItem {
+  id: ID!
+  menuItem: MenuItem!
+  quantity: Int!
+  price: Int!
+  addedBy: TableSessionUser!
 }
