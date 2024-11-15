@@ -4,6 +4,8 @@ package db_model
 
 import (
 	"database/sql"
+
+	"github.com/google/uuid"
 )
 
 // OrderedItem represents a row from 'public.ordered_items'.
@@ -13,6 +15,7 @@ type OrderedItem struct {
 	MenuItemID    int          `json:"menu_item_id"`    // menu_item_id
 	Quantity      int          `json:"quantity"`        // quantity
 	Price         int          `json:"price"`           // price
+	AddedByUser   uuid.UUID    `json:"added_by_user"`   // added_by_user
 	CreatedAt     sql.NullTime `json:"created_at"`      // created_at
 	UpdatedAt     sql.NullTime `json:"updated_at"`      // updated_at
 }
