@@ -1,5 +1,3 @@
-"use client";
-
 import OrderListHeader from "@/components/OrderListHeader";
 import OrderListItem from "@/components/OrderListItem";
 import OrderListFooter from "@/components/OrderListFooter";
