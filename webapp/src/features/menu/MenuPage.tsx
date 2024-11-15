@@ -52,7 +52,7 @@ const menuItems = [
 
 function MenuPage() {
   return (
-    <div className="flex flex-col h-full w-full">
+    <div className="flex flex-col w-full pb-16">
       <div className="p-4 space-y-4">
         {menuItems.map((item, index) => (
           <div key={index} className="bg-white rounded-lg shadow">
