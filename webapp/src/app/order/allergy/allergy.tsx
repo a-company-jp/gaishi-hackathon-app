@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import Image from "next/image";
+import { AllergyIcon } from "@/components/AllergyIcon";
 import { Button } from "@/components/ui/button";
 
 export default function Allergy() {
@@ -15,102 +15,48 @@ export default function Allergy() {
 
   const items = [
     {
-      icon: (
-        <Image
-          src="/foods/icon_110670_256.png"
-          alt="魚類"
-          width={40}
-          height={40}
-        />
-      ),
+      src: "/foods/fish.png",
+      alt: "魚類",
       label: "魚類",
     },
     {
-      icon: (
-        <Image
-          src="/foods/icon_130420_256.png"
-          alt="たまご"
-          width={40}
-          height={40}
-        />
-      ),
+      src: "/foods/egg.png",
+      alt: "たまご",
       label: "たまご",
     },
     {
-      icon: (
-        <Image
-          src="/foods/icon_146880_256.png"
-          alt="オレンジ"
-          width={40}
-          height={40}
-        />
-      ),
+      src: "/foods/orange.png",
+      alt: "オレンジ",
       label: "オレンジ",
     },
     {
-      icon: (
-        <Image
-          src="/foods/icon_148240_256.png"
-          alt="かに"
-          width={40}
-          height={40}
-        />
-      ),
+      src: "/foods/crab.png",
+      alt: "かに",
       label: "かに",
     },
     {
-      icon: (
-        <Image
-          src="/foods/icon_148990_256.png"
-          alt="ビーフ"
-          width={40}
-          height={40}
-        />
-      ),
+      src: "/foods/beef.png",
+      alt: "ビーフ",
       label: "ビーフ",
     },
     {
-      icon: (
-        <Image
-          src="/foods/icon_155750_256.png"
-          alt="キウイ"
-          width={40}
-          height={40}
-        />
-      ),
+      src: "/foods/kiwi.png",
+      alt: "キウイ",
       label: "キウイ",
     },
     {
-      icon: (
-        <Image
-          src="/foods/icon_161540_256.png"
-          alt="えび"
-          width={40}
-          height={40}
-        />
-      ),
+      src: "/foods/shrimp.png",
+      alt: "えび",
       label: "えび",
     },
     {
-      icon: (
-        <Image
-          src="/foods/icon_161600_256.png"
-          alt="そば"
-          width={40}
-          height={40}
-        />
-      ),
+      src: "/foods/soba.png",
+      alt: "そば",
       label: "そば",
     },
     {
-      icon: (
-        <Image
-          src="/foods/icon_161630_256.png"
-          alt="ピーナッツ"
-          width={40}
-          height={40}
-        />
-      ),
+      src: "/foods/peanuts.png",
+      alt: "ピーナッツ",
       label: "ピーナッツ",
     },
   ];
@@ -126,18 +72,12 @@ export default function Allergy() {
       <main className="flex-1 p-6">
         <div className="grid grid-cols-3 gap-4">
           {items.map((item, index) => (
-            <div
+            <AllergyIcon
               key={index}
-              className={`flex flex-col items-center gap-2 p-4 border rounded-lg cursor-pointer transition-colors duration-200 ${
-                selectedItems.includes(index)
-                  ? "bg-primary text-primary-foreground"
-                  : ""
-              }`}
+              {...item}
+              selected={selectedItems.includes(index)}
               onClick={() => toggleItem(index)}
-            >
-              {item.icon}
-              <span className="text-xs text-center">{item.label}</span>
-            </div>
+            />
           ))}
         </div>
 
