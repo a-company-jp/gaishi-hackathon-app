@@ -3,6 +3,7 @@
 import React, { useState } from "react";
 import { Button } from "@/components/ui/button";
 import CartButton from "@/components/CartButton";
+import MenuModal from "@/components/MenuModal";
 
 const menuItems = [
   {
@@ -30,34 +31,27 @@ const menuItems = [
     price: 1000,
     image: "/placeholder.svg?height=150&width=300",
   },
-  {
-    name: "ベジタリアンパスタ",
-    price: 1000,
-    image: "/placeholder.svg?height=150&width=300",
-  },
-  {
-    name: "ベジタリアンパスタ",
-    price: 1000,
-    image: "/placeholder.svg?height=150&width=300",
-  },
-  {
-    name: "ベジタリアンパスタ",
-    price: 1000,
-    image: "/placeholder.svg?height=150&width=300",
-  },
-  {
-    name: "ベジタリアンパスタ",
-    price: 1000,
-    image: "/placeholder.svg?height=150&width=300",
-  },
 ];
 
 function MenuPage() {
   const [cartCount, setCartCount] = useState(0);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [selectedItem, setSelectedItem] = useState<
+    (typeof menuItems)[0] | null
+  >(null);
+  const [quantity, setQuantity] = useState(1);
+
+  const handleOpenModal = (item: (typeof menuItems)[0]) => {
+    setSelectedItem(item);
+    setQuantity(1);
+    setIsModalOpen(true);
+  };
 
   const handleAddToCart = () => {
-    setCartCount((prevCount) => prevCount + 1);
+    setCartCount((prevCount) => prevCount + quantity);
+    setIsModalOpen(false);
   };
+
   return (
     <div className="flex flex-col w-full pb-16">
       <div className="p-4 space-y-4">
@@ -68,7 +62,7 @@ function MenuPage() {
               <p className="text-gray-600">{item.price}円</p>
               <Button
                 className="mt-2 bg-yellow-400 hover:bg-yellow-500 text-gray-800"
-                onClick={handleAddToCart}
+                onClick={() => handleOpenModal(item)}
               >
                 カートに入れる
               </Button>
@@ -76,6 +70,16 @@ function MenuPage() {
           </div>
         ))}
       </div>
+
+      <MenuModal
+        isOpen={isModalOpen}
+        onOpenChange={setIsModalOpen}
+        selectedItem={selectedItem}
+        quantity={quantity}
+        onQuantityChange={setQuantity}
+        onAddToCart={handleAddToCart}
+      />
+
       <div className="fixed bottom-20 right-4">
         <CartButton count={cartCount} />
       </div>
