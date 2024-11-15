@@ -1,4 +1,5 @@
 /* eslint-disable */
+import type { TypedDocumentNode as DocumentNode } from "@graphql-typed-document-node/core";
 export type Maybe<T> = T | null;
 export type InputMaybe<T> = Maybe<T>;
 export type Exact<T extends { [key: string]: unknown }> = {
@@ -123,6 +124,7 @@ export type PlacedOrder = {
 export type Query = {
   allergens: Array<Allergen>;
   cart: Maybe<Cart>;
+  healthCheck: Maybe<Scalars["String"]["output"]>;
   menuCategories: Array<MenuCategory>;
   menuItems: Array<MenuItem>;
   menuItemsByCategory: Array<MenuItem>;
@@ -206,3 +208,27 @@ export type TableSessionUser = {
   tableSession: TableSession;
   userNumber: Scalars["Int"]["output"];
 };
+
+export type HealthCheckQueryQueryVariables = Exact<{ [key: string]: never }>;
+
+export type HealthCheckQueryQuery = { healthCheck: string | null };
+
+export const HealthCheckQueryDocument = {
+  kind: "Document",
+  definitions: [
+    {
+      kind: "OperationDefinition",
+      operation: "query",
+      name: { kind: "Name", value: "HealthCheckQuery" },
+      selectionSet: {
+        kind: "SelectionSet",
+        selections: [
+          { kind: "Field", name: { kind: "Name", value: "healthCheck" } },
+        ],
+      },
+    },
+  ],
+} as unknown as DocumentNode<
+  HealthCheckQueryQuery,
+  HealthCheckQueryQueryVariables
+>;
