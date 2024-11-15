@@ -90,7 +90,7 @@ func main() {
 	apiV1 := engine.Group("/api/v1")
 	middleware.NewCORS().ConfigureCORS(apiV1)
 
-	if err := implement(apiV1, db); err != nil {
+	if err := implement(apiV1, redisClient, db); err != nil {
 		log.Fatalf("Failed to start server... %v", err)
 		return
 	}
@@ -100,11 +100,11 @@ func main() {
 	}
 }
 
-func implement(rg *gin.RouterGroup, db *gorm.DB) error {
+func implement(rg *gin.RouterGroup, redisC *redis.Client, dbC *gorm.DB) error {
 	// graphql playground
 	rg.GET("/", playgroundHandler())
-
+	ci := middleware.NewCookieIssuer(redisC, dbC)
+	ci.Configure(rg)
 	rg.POST("/query", graphqlHandler())
-
 	return nil
 }

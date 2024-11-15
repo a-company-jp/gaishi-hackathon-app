@@ -128,6 +128,7 @@ export type Query = {
   menuCategories: Array<MenuCategory>;
   menuItems: Array<MenuItem>;
   menuItemsByCategory: Array<MenuItem>;
+  myCUUID: Scalars["String"]["output"];
   order: Maybe<OrderedItem>;
   restaurant: Maybe<Restaurant>;
   tableSession: Maybe<TableSession>;
@@ -211,7 +212,10 @@ export type TableSessionUser = {
 
 export type HealthCheckQueryQueryVariables = Exact<{ [key: string]: never }>;
 
-export type HealthCheckQueryQuery = { healthCheck: string | null };
+export type HealthCheckQueryQuery = {
+  healthCheck: string | null;
+  myCUUID: string;
+};
 
 export const HealthCheckQueryDocument = {
   kind: "Document",
@@ -224,6 +228,7 @@ export const HealthCheckQueryDocument = {
         kind: "SelectionSet",
         selections: [
           { kind: "Field", name: { kind: "Name", value: "healthCheck" } },
+          { kind: "Field", name: { kind: "Name", value: "myCUUID" } },
         ],
       },
     },

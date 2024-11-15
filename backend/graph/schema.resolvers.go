@@ -10,6 +10,7 @@ import (
 	"time"
 
 	"github.com/a-company-jp/gaishi-hackathon-app/backend/graph/model"
+	"github.com/a-company-jp/gaishi-hackathon-app/backend/middleware"
 )
 
 // JoinTableSession is the resolver for the joinTableSession field.
@@ -40,6 +41,19 @@ func (r *mutationResolver) RemoveItemFromCart(ctx context.Context, orderID strin
 // PlaceOrder is the resolver for the placeOrder field.
 func (r *mutationResolver) PlaceOrder(ctx context.Context, orderID string) (*bool, error) {
 	panic(fmt.Errorf("not implemented: PlaceOrder - placeOrder"))
+}
+
+// MyCuuid is the resolver for the myCUUID field.
+func (r *queryResolver) MyCuuid(ctx context.Context) (string, error) {
+	v := ctx.Value(middleware.CTX_COOKIE_UUID)
+	if v == nil {
+		return "", fmt.Errorf("no cookie found")
+	}
+	cuuid, ok := v.(string)
+	if !ok {
+		return "", fmt.Errorf("invalid cookie value")
+	}
+	return cuuid, nil
 }
 
 // HealthCheck is the resolver for the healthCheck field.

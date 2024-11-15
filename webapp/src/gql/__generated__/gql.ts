@@ -14,7 +14,7 @@ import type { TypedDocumentNode as DocumentNode } from "@graphql-typed-document-
  * Learn more about it here: https://the-guild.dev/graphql/codegen/plugins/presets/preset-client#reducing-bundle-size
  */
 const documents = {
-  "\n  query HealthCheckQuery { healthCheck }\n  ":
+  "\n  query HealthCheckQuery { healthCheck, myCUUID }\n  ":
     types.HealthCheckQueryDocument,
 };
 
@@ -36,8 +36,8 @@ export function gql(source: string): unknown;
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function gql(
-  source: "\n  query HealthCheckQuery { healthCheck }\n  "
-): (typeof documents)["\n  query HealthCheckQuery { healthCheck }\n  "];
+  source: "\n  query HealthCheckQuery { healthCheck, myCUUID }\n  "
+): (typeof documents)["\n  query HealthCheckQuery { healthCheck, myCUUID }\n  "];
 
 export function gql(source: string) {
   return (documents as any)[source] ?? {};

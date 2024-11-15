@@ -7,7 +7,7 @@ import { RootState } from "@/redux/store";
 
 export default function Health() {
   const Query = gql(`
-  query HealthCheckQuery { healthCheck }
+  query HealthCheckQuery { healthCheck, myCUUID }
   `);
   const tenantId = useSelector((state: RootState) => state.tenantId.id);
 
@@ -16,6 +16,7 @@ export default function Health() {
   return (
     <div>
       <h1>Health: {data?.healthCheck}</h1>
+      <h2>MyCUUID: {data?.myCUUID}</h2>
       <h2>Tenant ID: {tenantId}</h2>
     </div>
   );
