@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import CartButton from "@/components/CartButton";
 import MenuModal from "@/components/MenuModal";
 import DisplayAllergies from "@/features/menu/DisplayAllergies";
+import GenreCard from "@/components/GenreCard";
 
 const menuItems = [
   {
@@ -34,6 +35,37 @@ const menuItems = [
   },
 ];
 
+const genres = [
+  {
+    id: "aaaaa",
+    label: "限定",
+  },
+  {
+    id: "bbbbb",
+    label: "おすすめ",
+  },
+  {
+    id: "ccccc",
+    label: "単品",
+  },
+  {
+    id: "ddddd",
+    label: "セット",
+  },
+  {
+    id: "eeeee",
+    label: "ドリンク",
+  },
+  {
+    id: "fffff",
+    label: "デザート",
+  },
+  {
+    id: "ggggg",
+    label: "物販",
+  },
+];
+
 function MenuPage() {
   const [cartCount, setCartCount] = useState(0);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -41,6 +73,7 @@ function MenuPage() {
     (typeof menuItems)[0] | null
   >(null);
   const [quantity, setQuantity] = useState(1);
+  const [activeGenre, setActiveGenre] = useState("ddddd");
 
   const handleOpenModal = (item: (typeof menuItems)[0]) => {
     setSelectedItem(item);
@@ -56,6 +89,11 @@ function MenuPage() {
   return (
     <div className="flex flex-col w-full pb-16">
       <DisplayAllergies allergies={[]} />
+      <GenreCard
+        menuItems={genres}
+        activeTab={activeGenre}
+        setActiveTab={setActiveGenre}
+      />
       <div className="p-4 space-y-4">
         {menuItems.map((item, index) => (
           <div key={index} className="bg-white rounded-lg shadow">
