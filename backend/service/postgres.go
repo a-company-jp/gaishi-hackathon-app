@@ -1,6 +1,7 @@
 package service
 
 import (
+	"database/sql"
 	"errors"
 	"time"
 
@@ -122,6 +123,66 @@ func (s *PostgresService) CompleteTableSession(tableSessionID int, sessionUserID
 		return err
 	}
 	return nil
+}
+
+func (s *PostgresService) GetActiveTableSessionByTableID(tid int) (*db_model.TableSession, error) {
+	var session db_model.TableSession
+	err := s.dbC.Where("table_id = ? AND is_active = true", tid).First(&session).Error
+	if err != nil {
+		return nil, err
+	}
+	return &session, nil
+}
+
+func (s *PostgresService) GetActiveTableSessionByTableUUID(tuuid uuid.UUID) (*db_model.TableSession, error) {
+	type TargetSchema struct {
+		TableSession db_model.TableSession
+		Table        db_model.Table
+	}
+	var session TargetSchema
+	err := s.dbC.Where("table.uuid = ? AND is_active = true", tuuid).First(&session).Error
+	if err != nil {
+		return nil, err
+	}
+	return &session.TableSession, nil
+}
+
+func (s *PostgresService) ListAccountsByTableSessionID(tableSessionID int) ([]*db_model.Account, error) {
+	var accounts []*db_model.Account
+	err := s.dbC.Table("accounts").
+		Joins("INNER JOIN table_session_users ON accounts.id = table_session_users.account_id").
+		Where("table_session_users.table_session_id = ?", tableSessionID).
+		Find(&accounts).Error
+	if err != nil {
+		return nil, err
+	}
+	return accounts, nil
+}
+
+func (s *PostgresService) CreateTableSession(tuuid uuid.UUID) (*db_model.TableSession, error) {
+	table, err := s.GetTableByUUID(tuuid)
+	if err != nil {
+		return nil, err
+	}
+
+	session := db_model.TableSession{
+		TableID:   table.ID,
+		StartTime: sql.NullTime{Time: time.Now(), Valid: true},
+		IsActive:  sql.NullBool{Bool: true, Valid: true},
+	}
+	if err := s.dbC.Create(&session).Error; err != nil {
+		return nil, err
+	}
+	return &session, nil
+}
+
+func (s *PostgresService) GetTableByUUID(tuuid uuid.UUID) (*db_model.Table, error) {
+	var table db_model.Table
+	err := s.dbC.Where("uuid = ?", tuuid).First(&table).Error
+	if err != nil {
+		return nil, err
+	}
+	return &table, nil
 }
 
 // GetTableSession retrieves a table session by ID
