@@ -141,15 +141,6 @@ export default function Allergy() {
           ))}
         </div>
 
-        {/* {selectedItems.length > 0 && (
-          <div className="mt-6 p-4 bg-gray-50 rounded-lg">
-            <p className="text-sm text-gray-600">
-              選択中:{" "}
-              {selectedItems.map((index) => items[index].label).join("、")}
-            </p>
-          </div>
-        )} */}
-
         <div className="flex justify-center mt-8">
           <Button className="bg-zinc-800 text-white hover:bg-zinc-700">
             注文を開始する
