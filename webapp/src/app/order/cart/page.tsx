@@ -1,15 +1,9 @@
-import React from "react";
+import OrderCartPage from "@/features/order-cart/OrderCartPage";
 
 export const metadata = {
-  title: "Title - CHANGE ME!!!",
+  title: "Cart",
 };
 
-function Page() {
-  return (
-    <>
-      <div>Implement me!!</div>
-    </>
-  );
+export default function Page() {
+  return <OrderCartPage />;
 }
-
-export default Page;
