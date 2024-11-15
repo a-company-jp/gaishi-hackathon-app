@@ -31,117 +31,204 @@ export type Scalars = {
   Float: { input: number; output: number };
 };
 
-export type NewUserInput = {
-  email: Scalars["String"]["input"];
-  password: Scalars["String"]["input"];
-  username: Scalars["String"]["input"];
+export type Allergen = {
+  id: Scalars["ID"]["output"];
+  name: Scalars["String"]["output"];
+};
+
+export type Cart = {
+  id: Scalars["ID"]["output"];
+  items: Array<CartItem>;
+  tableSession: TableSession;
+  totalCartPrice: Scalars["Int"]["output"];
+};
+
+export type CartItem = {
+  addedBy: TableSessionUser;
+  id: Scalars["ID"]["output"];
+  menuItem: MenuItem;
+  quantity: Scalars["Int"]["output"];
+};
+
+export type MenuCategory = {
+  id: Scalars["ID"]["output"];
+  menuItems: Array<MenuItem>;
+  name: Scalars["String"]["output"];
+};
+
+export type MenuItem = {
+  allergens: Array<Allergen>;
+  available: Scalars["Boolean"]["output"];
+  category: Maybe<MenuCategory>;
+  description: Maybe<Scalars["String"]["output"]>;
+  id: Scalars["ID"]["output"];
+  name: Scalars["String"]["output"];
+  price: Scalars["Int"]["output"];
+};
+
+export type Mutation = {
+  addItemToCart: Maybe<Cart>;
+  completeTableSession: Maybe<Scalars["Boolean"]["output"]>;
+  joinTableSession: Maybe<TableSessionUser>;
+  placeOrder: Maybe<Scalars["Boolean"]["output"]>;
+  removeItemFromCart: Maybe<Cart>;
+  setUserAllergies: Maybe<TableSessionUser>;
+};
+
+export type MutationAddItemToCartArgs = {
+  menuItemId: Scalars["ID"]["input"];
+  orderId: Scalars["ID"]["input"];
+  quantity: Scalars["Int"]["input"];
+  sessionUserId: Scalars["ID"]["input"];
+};
+
+export type MutationCompleteTableSessionArgs = {
+  sessionUserId: Scalars["ID"]["input"];
+  tableSessionId: Scalars["ID"]["input"];
+};
+
+export type MutationJoinTableSessionArgs = {
+  tableSessionId: Scalars["ID"]["input"];
+};
+
+export type MutationPlaceOrderArgs = {
+  orderId: Scalars["ID"]["input"];
+};
+
+export type MutationRemoveItemFromCartArgs = {
+  orderId: Scalars["ID"]["input"];
+  orderItemId: Scalars["ID"]["input"];
+  sessionUserId: Scalars["ID"]["input"];
+};
+
+export type MutationSetUserAllergiesArgs = {
+  allergenIds: Array<Scalars["ID"]["input"]>;
+  sessionUserId: Scalars["ID"]["input"];
+};
+
+export type OrderedItem = {
+  addedBy: TableSessionUser;
+  id: Scalars["ID"]["output"];
+  menuItem: MenuItem;
+  price: Scalars["Int"]["output"];
+  quantity: Scalars["Int"]["output"];
+};
+
+export type PlacedOrder = {
+  id: Scalars["ID"]["output"];
+  items: Array<OrderedItem>;
+  tableSession: TableSession;
+  totalPrice: Scalars["Int"]["output"];
 };
 
 export type Query = {
-  user: User;
+  allergens: Array<Allergen>;
+  cart: Maybe<Cart>;
+  healthCheck: Maybe<Scalars["String"]["output"]>;
+  menuCategories: Array<MenuCategory>;
+  menuItems: Array<MenuItem>;
+  menuItemsByCategory: Array<MenuItem>;
+  order: Maybe<OrderedItem>;
+  restaurant: Maybe<Restaurant>;
+  tableSession: Maybe<TableSession>;
 };
 
-export type QueryUserArgs = {
+export type QueryCartArgs = {
+  tableSessionID: Scalars["ID"]["input"];
+};
+
+export type QueryMenuCategoriesArgs = {
+  restaurantId: Scalars["ID"]["input"];
+};
+
+export type QueryMenuItemsArgs = {
+  restaurantId: Scalars["ID"]["input"];
+};
+
+export type QueryMenuItemsByCategoryArgs = {
+  categoryId: Scalars["ID"]["input"];
+  restaurantId: Scalars["ID"]["input"];
+};
+
+export type QueryOrderArgs = {
+  orderId: Scalars["ID"]["input"];
+};
+
+export type QueryRestaurantArgs = {
   id: Scalars["ID"]["input"];
 };
 
-export type User = {
-  created_at: Scalars["String"]["output"];
-  email: Scalars["String"]["output"];
-  followers: Array<User>;
-  following: Array<User>;
+export type QueryTableSessionArgs = {
+  tableSession: Scalars["ID"]["input"];
+};
+
+export type Restaurant = {
+  address: Maybe<Scalars["String"]["output"]>;
   id: Scalars["ID"]["output"];
-  username: Scalars["String"]["output"];
+  menuCategories: Array<MenuCategory>;
+  menuItems: Array<MenuItem>;
+  name: Scalars["String"]["output"];
+  phoneNumber: Maybe<Scalars["String"]["output"]>;
 };
 
-export type GetMockPageQueryVariables = Exact<{
-  id: Scalars["ID"]["input"];
-}>;
+export type Subscription = {
+  cartUpdated: Maybe<Cart>;
+  orderUpdated: Maybe<OrderedItem>;
+};
 
-export type GetMockPageQuery = { user: { username: string; email: string } };
+export type SubscriptionCartUpdatedArgs = {
+  tableSessionId: Scalars["ID"]["input"];
+};
 
-export type MockFragmentFragment = { username: string; email: string };
+export type SubscriptionOrderUpdatedArgs = {
+  orderId: Scalars["ID"]["input"];
+};
 
-export const MockFragmentFragmentDoc = {
-  kind: "Document",
-  definitions: [
-    {
-      kind: "FragmentDefinition",
-      name: { kind: "Name", value: "MockFragment" },
-      typeCondition: {
-        kind: "NamedType",
-        name: { kind: "Name", value: "User" },
-      },
-      selectionSet: {
-        kind: "SelectionSet",
-        selections: [
-          { kind: "Field", name: { kind: "Name", value: "username" } },
-          { kind: "Field", name: { kind: "Name", value: "email" } },
-        ],
-      },
-    },
-  ],
-} as unknown as DocumentNode<MockFragmentFragment, unknown>;
-export const GetMockPageDocument = {
+export type Table = {
+  capacity: Scalars["Int"]["output"];
+  id: Scalars["ID"]["output"];
+  restaurant: Restaurant;
+  tableNumber: Scalars["String"]["output"];
+};
+
+export type TableSession = {
+  cart: Cart;
+  endTime: Maybe<Scalars["String"]["output"]>;
+  id: Scalars["ID"]["output"];
+  isActive: Scalars["Boolean"]["output"];
+  placedOrder: Maybe<PlacedOrder>;
+  startTime: Scalars["String"]["output"];
+  table: Table;
+  totalUsers: Scalars["Int"]["output"];
+};
+
+export type TableSessionUser = {
+  allergies: Array<Allergen>;
+  id: Scalars["ID"]["output"];
+  tableSession: TableSession;
+  userNumber: Scalars["Int"]["output"];
+};
+
+export type HealthCheckQueryQueryVariables = Exact<{ [key: string]: never }>;
+
+export type HealthCheckQueryQuery = { healthCheck: string | null };
+
+export const HealthCheckQueryDocument = {
   kind: "Document",
   definitions: [
     {
       kind: "OperationDefinition",
       operation: "query",
-      name: { kind: "Name", value: "GetMockPage" },
-      variableDefinitions: [
-        {
-          kind: "VariableDefinition",
-          variable: { kind: "Variable", name: { kind: "Name", value: "id" } },
-          type: {
-            kind: "NonNullType",
-            type: { kind: "NamedType", name: { kind: "Name", value: "ID" } },
-          },
-        },
-      ],
+      name: { kind: "Name", value: "HealthCheckQuery" },
       selectionSet: {
         kind: "SelectionSet",
         selections: [
-          {
-            kind: "Field",
-            name: { kind: "Name", value: "user" },
-            arguments: [
-              {
-                kind: "Argument",
-                name: { kind: "Name", value: "id" },
-                value: {
-                  kind: "Variable",
-                  name: { kind: "Name", value: "id" },
-                },
-              },
-            ],
-            selectionSet: {
-              kind: "SelectionSet",
-              selections: [
-                {
-                  kind: "FragmentSpread",
-                  name: { kind: "Name", value: "MockFragment" },
-                },
-              ],
-            },
-          },
-        ],
-      },
-    },
-    {
-      kind: "FragmentDefinition",
-      name: { kind: "Name", value: "MockFragment" },
-      typeCondition: {
-        kind: "NamedType",
-        name: { kind: "Name", value: "User" },
-      },
-      selectionSet: {
-        kind: "SelectionSet",
-        selections: [
-          { kind: "Field", name: { kind: "Name", value: "username" } },
-          { kind: "Field", name: { kind: "Name", value: "email" } },
+          { kind: "Field", name: { kind: "Name", value: "healthCheck" } },
         ],
       },
     },
   ],
-} as unknown as DocumentNode<GetMockPageQuery, GetMockPageQueryVariables>;
+} as unknown as DocumentNode<
+  HealthCheckQueryQuery,
+  HealthCheckQueryQueryVariables
+>;

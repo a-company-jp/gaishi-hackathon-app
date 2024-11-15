@@ -1,0 +1,77 @@
+name: Deploy to GCS - Frontend
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - '.github/workflows/deploy-gcs-frontend.yaml'
+      - 'webapp/**'
+  pull_request:
+    branches:
+      - main
+    paths:
+      - '.github/workflows/deploy-gcs-frontend.yaml'
+env:
+  NEXT_PUBLIC_BACKEND_URL: ${{ vars.NEXT_PUBLIC_BACKEND_URL }}
+  NEXT_PUBLIC_GRAPHQL_SERVER_URL: ${{ vars.NEXT_PUBLIC_GRAPHQL_SERVER_URL }}
+jobs:
+  build-and-deploy-gcs:
+    runs-on: ubuntu-latest
+    concurrency:
+      group: ${{ github.workflow }}-deploy
+    permissions:
+      contents: 'read'
+      id-token: 'write'
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      - name: Set up PNPM
+        uses: pnpm/action-setup@v4
+      - uses: pnpm/action-setup@v4
+        name: Setup pnpm
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: 'pnpm'
+      - name: Install dependencies
+        run: pnpm install
+      - name: Build
+        run: pnpm run build
+        env:
+          NODE_ENV: production
+      - name: Login to Google Cloud
+        id: auth
+        uses: google-github-actions/auth@v2
+        with:
+          token_format: access_token
+          workload_identity_provider: 'projects/236289982072/locations/global/workloadIdentityPools/gh-pool/providers/provider-github'
+          service_account: 'gh-actions@itadakimasu-engulid.iam.gserviceaccount.com'
+      - id: 'upload-file'
+        uses: 'google-github-actions/upload-cloud-storage@v2'
+        with:
+          path: 'webapp/build'
+          parent: false
+          destination: 'itadakimasu-frontend'
+          headers: |-
+            cache-control: no-store
+  delete-old-files:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: 'read'
+      id-token: 'write'
+    steps:
+      - name: Login to Google Cloud
+        id: auth
+        uses: google-github-actions/auth@v2
+        with:
+          token_format: access_token
+          workload_identity_provider: 'projects/236289982072/locations/global/workloadIdentityPools/gh-pool/providers/provider-github'
+          service_account: 'gh-actions@itadakimasu-engulid.iam.gserviceaccount.com'
+      - name: Set up Cloud SDK
+        uses: 'google-github-actions/setup-gcloud@v2'
+        with:
+          version: '>= 363.0.0'
+      - name: Clean up old files
+        continue-on-error: true
+        run: gsutil -m rm -r "gs://itadakimasu-frontend/**"

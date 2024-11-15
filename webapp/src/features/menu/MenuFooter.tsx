@@ -1,9 +1,9 @@
 import React from "react";
 import { DollarSign, Menu } from "lucide-react";
 
-function Footer() {
+function MenuFooter() {
   return (
-    <footer className="h-16 w-screen border-t">
+    <footer className="fixed bottom-0 bg-white h-16 w-screen border-t">
       <div className="h-full grid grid-cols-2">
         <button className="items-center">
           <div className="flex flex-col items-center">
@@ -22,4 +22,4 @@ function Footer() {
   );
 }
 
-export default Footer;
+export default MenuFooter;
