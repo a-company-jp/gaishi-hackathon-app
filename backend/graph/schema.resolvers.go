@@ -7,6 +7,7 @@ package graph
 import (
 	"context"
 	"fmt"
+	"time"
 
 	"github.com/a-company-jp/gaishi-hackathon-app/backend/graph/model"
 )
@@ -43,7 +44,12 @@ func (r *mutationResolver) PlaceOrder(ctx context.Context, orderID string) (*boo
 
 // HealthCheck is the resolver for the healthCheck field.
 func (r *queryResolver) HealthCheck(ctx context.Context) (*string, error) {
-	panic(fmt.Errorf("not implemented: HealthCheck - healthCheck"))
+	now := time.Now()
+	out := fmt.Sprintf(
+		"hi there!! you got request from server at %s",
+		now.Format("2006-01-02 15:04:05"),
+	)
+	return &out, nil
 }
 
 // Restaurant is the resolver for the restaurant field.
