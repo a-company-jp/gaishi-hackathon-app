@@ -1,5 +1,5 @@
 import React from "react";
-import { DollarSign, Menu } from "lucide-react";
+import { History, Menu } from "lucide-react";
 
 function MenuFooter() {
   return (
@@ -13,8 +13,8 @@ function MenuFooter() {
         </button>
         <button className="items-center">
           <div className="flex flex-col items-center">
-            <DollarSign className="h-6 w-6" />
-            <span className="text-xs mt-1">お会計</span>
+            <History className="h-6 w-6" />
+            <span className="text-xs mt-1">注文履歴</span>
           </div>
         </button>
       </div>
