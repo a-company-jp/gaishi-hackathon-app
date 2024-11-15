@@ -1,0 +1,6 @@
+{
+  "orderMode": {
+    "registerAllergy": "注册过敏信息后开始",
+    "startOrder": "直接开始订购"
+  }
+}
