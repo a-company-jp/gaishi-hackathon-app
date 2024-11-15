@@ -3,7 +3,6 @@ package middleware
 import (
 	"context"
 	"database/sql"
-	"errors"
 	"fmt"
 	"github.com/a-company-jp/gaishi-hackathon-app/backend/db_model"
 	"github.com/gin-gonic/gin"
@@ -43,23 +42,7 @@ func (ci CookieIssuer) middleware() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		var cuuid, auuid string
 		cookie, err := c.Request.Cookie(cookieName)
-		if err != nil {
-			if !errors.Is(err, http.ErrNoCookie) {
-				c.AbortWithStatus(http.StatusInternalServerError)
-				log.Fatalf("failed to get cookie: %v\n", err)
-				return
-			}
-			auuid, cuuid = ci.issue(c)
-			cookie = &http.Cookie{
-				Name:     cookieName,
-				Value:    cuuid,
-				Path:     "/",
-				Secure:   true,
-				HttpOnly: true,
-				SameSite: http.SameSiteStrictMode,
-			}
-			http.SetCookie(c.Writer, cookie)
-		} else {
+		if err == nil {
 			ucuuid, err := uuid.Parse(cookie.Value)
 			if err != nil {
 				c.AbortWithStatus(http.StatusInternalServerError)
@@ -68,16 +51,30 @@ func (ci CookieIssuer) middleware() gin.HandlerFunc {
 			}
 			cuuid = ucuuid.String()
 			auuid, cuuid = ci.QueryAccountID(c.Request.Context(), cuuid)
+		} else {
+
+			auuid, cuuid = ci.issue(c)
 		}
+		cookie = &http.Cookie{
+			Name:     cookieName,
+			Value:    cuuid,
+			Path:     "/",
+			Secure:   true,
+			HttpOnly: true,
+			SameSite: http.SameSiteStrictMode,
+		}
+		http.SetCookie(c.Writer, cookie)
 		c.Set(CTX_ACCOUNT_UUID, auuid)
 		c.Set(CTX_COOKIE_UUID, cuuid)
 		ctx := context.WithValue(c.Request.Context(), CTX_COOKIE_UUID, cuuid)
+		ctx = context.WithValue(ctx, CTX_ACCOUNT_UUID, auuid)
 		c.Request = c.Request.WithContext(ctx)
 		c.Next()
 	}
 }
 
 func (ci CookieIssuer) issue(ctx context.Context) (auuid, cuuid string) {
+	log.Println("issue cookie")
 	newCUUID := uuid.New()
 	newAUUID := uuid.New()
 	newAccount := &db_model.Account{
