@@ -18,10 +18,10 @@ import (
 )
 
 // Defining the Graphql handler
-func graphqlHandler() gin.HandlerFunc {
+func graphqlHandler(redisC *redis.Client, dbC *gorm.DB) gin.HandlerFunc {
 	// NewExecutableSchema and Config are in the generated.go file
 	// Resolver is in the resolver.go file
-	resolvers := graph.NewResolver()
+	resolvers := graph.NewResolver(redisC, dbC)
 	h := handler.NewDefaultServer(graph.NewExecutableSchema(graph.Config{Resolvers: resolvers}))
 
 	return func(c *gin.Context) {
@@ -105,6 +105,6 @@ func implement(rg *gin.RouterGroup, redisC *redis.Client, dbC *gorm.DB) error {
 	rg.GET("/", playgroundHandler())
 	ci := middleware.NewCookieIssuer(redisC, dbC)
 	ci.Configure(rg)
-	rg.POST("/query", graphqlHandler())
+	rg.POST("/query", graphqlHandler(redisC, dbC))
 	return nil
 }
