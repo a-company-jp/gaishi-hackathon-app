@@ -2,20 +2,95 @@
 
 package model
 
-type NewUserInput struct {
-	Username string `json:"username"`
-	Email    string `json:"email"`
-	Password string `json:"password"`
+type Allergen struct {
+	ID   string `json:"id"`
+	Name string `json:"name"`
+}
+
+type Cart struct {
+	ID             string        `json:"id"`
+	TableSession   *TableSession `json:"tableSession"`
+	Items          []*CartItem   `json:"items"`
+	TotalCartPrice int           `json:"totalCartPrice"`
+}
+
+type CartItem struct {
+	ID       string            `json:"id"`
+	MenuItem *MenuItem         `json:"menuItem"`
+	Quantity int               `json:"quantity"`
+	AddedBy  *TableSessionUser `json:"addedBy"`
+}
+
+type MenuCategory struct {
+	ID        string      `json:"id"`
+	Name      string      `json:"name"`
+	MenuItems []*MenuItem `json:"menuItems"`
+}
+
+type MenuItem struct {
+	ID          string        `json:"id"`
+	Category    *MenuCategory `json:"category,omitempty"`
+	Price       int           `json:"price"`
+	Available   bool          `json:"available"`
+	Name        string        `json:"name"`
+	Description *string       `json:"description,omitempty"`
+	Allergens   []*Allergen   `json:"allergens"`
+}
+
+type Mutation struct {
+}
+
+type OrderedItem struct {
+	ID       string            `json:"id"`
+	MenuItem *MenuItem         `json:"menuItem"`
+	Quantity int               `json:"quantity"`
+	Price    int               `json:"price"`
+	AddedBy  *TableSessionUser `json:"addedBy"`
+}
+
+type PlacedOrder struct {
+	ID           string         `json:"id"`
+	TableSession *TableSession  `json:"tableSession"`
+	Items        []*OrderedItem `json:"items"`
+	TotalPrice   int            `json:"totalPrice"`
 }
 
 type Query struct {
 }
 
-type User struct {
-	ID        string  `json:"id"`
-	Username  string  `json:"username"`
-	Email     string  `json:"email"`
-	CreatedAt string  `json:"created_at"`
-	Followers []*User `json:"followers"`
-	Following []*User `json:"following"`
+type Restaurant struct {
+	ID             string          `json:"id"`
+	Name           string          `json:"name"`
+	Address        *string         `json:"address,omitempty"`
+	PhoneNumber    *string         `json:"phoneNumber,omitempty"`
+	MenuCategories []*MenuCategory `json:"menuCategories"`
+	MenuItems      []*MenuItem     `json:"menuItems"`
+}
+
+type Subscription struct {
+}
+
+type Table struct {
+	ID          string      `json:"id"`
+	Restaurant  *Restaurant `json:"restaurant"`
+	TableNumber string      `json:"tableNumber"`
+	Capacity    int         `json:"capacity"`
+}
+
+type TableSession struct {
+	ID          string       `json:"id"`
+	Table       *Table       `json:"table"`
+	StartTime   string       `json:"startTime"`
+	EndTime     *string      `json:"endTime,omitempty"`
+	TotalUsers  int          `json:"totalUsers"`
+	Cart        *Cart        `json:"cart"`
+	PlacedOrder *PlacedOrder `json:"placedOrder,omitempty"`
+	IsActive    bool         `json:"isActive"`
+}
+
+type TableSessionUser struct {
+	ID           string        `json:"id"`
+	TableSession *TableSession `json:"tableSession"`
+	UserNumber   int           `json:"userNumber"`
+	Allergies    []*Allergen   `json:"allergies"`
 }

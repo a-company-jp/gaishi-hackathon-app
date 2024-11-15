@@ -11,12 +11,95 @@ import (
 	"github.com/a-company-jp/gaishi-hackathon-app/backend/graph/model"
 )
 
-// User is the resolver for the user field.
-func (r *queryResolver) User(ctx context.Context, id string) (*model.User, error) {
-	panic(fmt.Errorf("not implemented: User - user"))
+// JoinTableSession is the resolver for the joinTableSession field.
+func (r *mutationResolver) JoinTableSession(ctx context.Context, tableSessionID string) (*model.TableSessionUser, error) {
+	panic(fmt.Errorf("not implemented: JoinTableSession - joinTableSession"))
 }
+
+// CompleteTableSession is the resolver for the completeTableSession field.
+func (r *mutationResolver) CompleteTableSession(ctx context.Context, tableSessionID string, sessionUserID string) (*bool, error) {
+	panic(fmt.Errorf("not implemented: CompleteTableSession - completeTableSession"))
+}
+
+// SetUserAllergies is the resolver for the setUserAllergies field.
+func (r *mutationResolver) SetUserAllergies(ctx context.Context, sessionUserID string, allergenIds []string) (*model.TableSessionUser, error) {
+	panic(fmt.Errorf("not implemented: SetUserAllergies - setUserAllergies"))
+}
+
+// AddItemToCart is the resolver for the addItemToCart field.
+func (r *mutationResolver) AddItemToCart(ctx context.Context, orderID string, menuItemID string, quantity int, sessionUserID string) (*model.Cart, error) {
+	panic(fmt.Errorf("not implemented: AddItemToCart - addItemToCart"))
+}
+
+// RemoveItemFromCart is the resolver for the removeItemFromCart field.
+func (r *mutationResolver) RemoveItemFromCart(ctx context.Context, orderID string, orderItemID string, sessionUserID string) (*model.Cart, error) {
+	panic(fmt.Errorf("not implemented: RemoveItemFromCart - removeItemFromCart"))
+}
+
+// PlaceOrder is the resolver for the placeOrder field.
+func (r *mutationResolver) PlaceOrder(ctx context.Context, orderID string) (*bool, error) {
+	panic(fmt.Errorf("not implemented: PlaceOrder - placeOrder"))
+}
+
+// Restaurant is the resolver for the restaurant field.
+func (r *queryResolver) Restaurant(ctx context.Context, id string) (*model.Restaurant, error) {
+	panic(fmt.Errorf("not implemented: Restaurant - restaurant"))
+}
+
+// TableSession is the resolver for the tableSession field.
+func (r *queryResolver) TableSession(ctx context.Context, tableSession string) (*model.TableSession, error) {
+	panic(fmt.Errorf("not implemented: TableSession - tableSession"))
+}
+
+// MenuItems is the resolver for the menuItems field.
+func (r *queryResolver) MenuItems(ctx context.Context, restaurantID string) ([]*model.MenuItem, error) {
+	panic(fmt.Errorf("not implemented: MenuItems - menuItems"))
+}
+
+// MenuItemsByCategory is the resolver for the menuItemsByCategory field.
+func (r *queryResolver) MenuItemsByCategory(ctx context.Context, restaurantID string, categoryID string) ([]*model.MenuItem, error) {
+	panic(fmt.Errorf("not implemented: MenuItemsByCategory - menuItemsByCategory"))
+}
+
+// MenuCategories is the resolver for the menuCategories field.
+func (r *queryResolver) MenuCategories(ctx context.Context, restaurantID string) ([]*model.MenuCategory, error) {
+	panic(fmt.Errorf("not implemented: MenuCategories - menuCategories"))
+}
+
+// Allergens is the resolver for the allergens field.
+func (r *queryResolver) Allergens(ctx context.Context) ([]*model.Allergen, error) {
+	panic(fmt.Errorf("not implemented: Allergens - allergens"))
+}
+
+// Cart is the resolver for the cart field.
+func (r *queryResolver) Cart(ctx context.Context, tableSessionID string) (*model.Cart, error) {
+	panic(fmt.Errorf("not implemented: Cart - cart"))
+}
+
+// Order is the resolver for the order field.
+func (r *queryResolver) Order(ctx context.Context, orderID string) (*model.OrderedItem, error) {
+	panic(fmt.Errorf("not implemented: Order - order"))
+}
+
+// CartUpdated is the resolver for the cartUpdated field.
+func (r *subscriptionResolver) CartUpdated(ctx context.Context, tableSessionID string) (<-chan *model.Cart, error) {
+	panic(fmt.Errorf("not implemented: CartUpdated - cartUpdated"))
+}
+
+// OrderUpdated is the resolver for the orderUpdated field.
+func (r *subscriptionResolver) OrderUpdated(ctx context.Context, orderID string) (<-chan *model.OrderedItem, error) {
+	panic(fmt.Errorf("not implemented: OrderUpdated - orderUpdated"))
+}
+
+// Mutation returns MutationResolver implementation.
+func (r *Resolver) Mutation() MutationResolver { return &mutationResolver{r} }
 
 // Query returns QueryResolver implementation.
 func (r *Resolver) Query() QueryResolver { return &queryResolver{r} }
 
+// Subscription returns SubscriptionResolver implementation.
+func (r *Resolver) Subscription() SubscriptionResolver { return &subscriptionResolver{r} }
+
+type mutationResolver struct{ *Resolver }
 type queryResolver struct{ *Resolver }
+type subscriptionResolver struct{ *Resolver }
