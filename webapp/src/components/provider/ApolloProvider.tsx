@@ -17,7 +17,8 @@ const createClient = () => {
   // NOTE: SSR時にApolloの内部で実行されるfetch()リクエストがキャッシュを使用するため,
   // Render時にHydration errorが発生してしまうので, link.fetchOptions.cacheを"no-store"に設定する
   const httpLink = new HttpLink({
-    uri: `/api/v1/query`,
+    // add http://localhost:8080 if dev mode
+    uri: `${process.env.NEXT_PUBLIC_GRAPHQL_SERVER_URL}/api/v1/query`,
     credentials: "include",
     fetchOptions: {
       cache: "no-store",
