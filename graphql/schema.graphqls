@@ -1,4 +1,5 @@
 type Query {
+  healthCheck: String
   restaurant(id: ID!): Restaurant
   tableSession(tableSession: ID!): TableSession
   menuItems(restaurantId: ID!): [MenuItem!]!
