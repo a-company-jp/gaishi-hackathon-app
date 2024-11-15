@@ -6,6 +6,7 @@ const nextConfig: NextConfig = {
   images: {
     unoptimized: true, // Image optimization is disabled in static builds
   },
+  trailingSlash: true,
   distDir: "build",
 };
 
