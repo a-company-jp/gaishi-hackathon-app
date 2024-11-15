@@ -3,6 +3,7 @@ import { Button } from "@/components/ui/button";
 import {
   Dialog,
   DialogContent,
+  DialogDescription,
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
@@ -33,6 +34,7 @@ function MenuModal({
       <DialogContent className="w-3/4">
         <DialogHeader>
           <DialogTitle>{selectedItem?.name}</DialogTitle>
+          <DialogDescription>個数を選択してください。</DialogDescription>
         </DialogHeader>
         <div className="flex items-center justify-center gap-4 py-4">
           <Button
