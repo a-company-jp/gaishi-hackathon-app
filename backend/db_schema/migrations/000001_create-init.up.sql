@@ -156,6 +156,7 @@ CREATE TABLE public.ordered_items
     menu_item_id    INT NOT NULL REFERENCES menu_items (id) ON DELETE CASCADE,
     quantity        INT NOT NULL,
     price           INT NOT NULL DEFAULT 0,
+    added_by_user   uuid NOT NULL REFERENCES accounts (id) ON DELETE CASCADE,
     created_at      TIMESTAMP    DEFAULT CURRENT_TIMESTAMP,
     updated_at      TIMESTAMP    DEFAULT CURRENT_TIMESTAMP
 );
