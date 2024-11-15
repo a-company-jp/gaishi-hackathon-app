@@ -86,7 +86,7 @@ type ComplexityRoot struct {
 	Mutation struct {
 		AddItemToCart        func(childComplexity int, orderID string, menuItemID string, quantity int, sessionUserID string) int
 		CompleteTableSession func(childComplexity int, tableSessionID string, sessionUserID string) int
-		JoinTableSession     func(childComplexity int, tableSessionID string) int
+		JoinTableSession     func(childComplexity int, tableID string) int
 		PlaceOrder           func(childComplexity int, orderID string) int
 		RemoveItemFromCart   func(childComplexity int, orderID string, orderItemID string, sessionUserID string) int
 		SetUserAllergies     func(childComplexity int, sessionUserID string, allergenIds []string) int
@@ -161,7 +161,7 @@ type ComplexityRoot struct {
 }
 
 type MutationResolver interface {
-	JoinTableSession(ctx context.Context, tableSessionID string) (*model.TableSessionUser, error)
+	JoinTableSession(ctx context.Context, tableID string) (*model.TableSessionUser, error)
 	CompleteTableSession(ctx context.Context, tableSessionID string, sessionUserID string) (*bool, error)
 	SetUserAllergies(ctx context.Context, sessionUserID string, allergenIds []string) (*model.TableSessionUser, error)
 	AddItemToCart(ctx context.Context, orderID string, menuItemID string, quantity int, sessionUserID string) (*model.Cart, error)
@@ -378,7 +378,7 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 			return 0, false
 		}
 
-		return e.complexity.Mutation.JoinTableSession(childComplexity, args["tableSessionId"].(string)), true
+		return e.complexity.Mutation.JoinTableSession(childComplexity, args["tableId"].(string)), true
 
 	case "Mutation.placeOrder":
 		if e.complexity.Mutation.PlaceOrder == nil {
@@ -899,7 +899,7 @@ var sources = []*ast.Source{
 
 type Mutation {
   # joinTableSession: QRコードを読み取り、
-  joinTableSession(tableSessionId: ID!): TableSessionUser
+  joinTableSession(tableId: ID!): TableSessionUser
   # completeTableSession: 清算を行う
   completeTableSession(tableSessionId: ID!, sessionUserId: ID!): Boolean
   # setUserAllergies: ユーザーのアレルギー情報を設定する
@@ -1127,19 +1127,19 @@ func (ec *executionContext) field_Mutation_completeTableSession_argsSessionUserI
 func (ec *executionContext) field_Mutation_joinTableSession_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
 	var err error
 	args := map[string]interface{}{}
-	arg0, err := ec.field_Mutation_joinTableSession_argsTableSessionID(ctx, rawArgs)
+	arg0, err := ec.field_Mutation_joinTableSession_argsTableID(ctx, rawArgs)
 	if err != nil {
 		return nil, err
 	}
-	args["tableSessionId"] = arg0
+	args["tableId"] = arg0
 	return args, nil
 }
-func (ec *executionContext) field_Mutation_joinTableSession_argsTableSessionID(
+func (ec *executionContext) field_Mutation_joinTableSession_argsTableID(
 	ctx context.Context,
 	rawArgs map[string]interface{},
 ) (string, error) {
-	ctx = graphql.WithPathContext(ctx, graphql.NewPathWithField("tableSessionId"))
-	if tmp, ok := rawArgs["tableSessionId"]; ok {
+	ctx = graphql.WithPathContext(ctx, graphql.NewPathWithField("tableId"))
+	if tmp, ok := rawArgs["tableId"]; ok {
 		return ec.unmarshalNID2string(ctx, tmp)
 	}
 
@@ -2544,7 +2544,7 @@ func (ec *executionContext) _Mutation_joinTableSession(ctx context.Context, fiel
 	}()
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return ec.resolvers.Mutation().JoinTableSession(rctx, fc.Args["tableSessionId"].(string))
+		return ec.resolvers.Mutation().JoinTableSession(rctx, fc.Args["tableId"].(string))
 	})
 	if err != nil {
 		ec.Error(ctx, err)

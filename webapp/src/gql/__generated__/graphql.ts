@@ -88,7 +88,7 @@ export type MutationCompleteTableSessionArgs = {
 };
 
 export type MutationJoinTableSessionArgs = {
-  tableSessionId: Scalars["ID"]["input"];
+  tableId: Scalars["ID"]["input"];
 };
 
 export type MutationPlaceOrderArgs = {
