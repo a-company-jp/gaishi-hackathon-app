@@ -2,7 +2,7 @@
 
 import React, { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import { useMutation, useQuery } from "@apollo/client";
+import { useMutation } from "@apollo/client";
 import { gql } from "@/gql/__generated__";
 
 const tablePath = /^\/order\/table\/.+/g;
@@ -12,7 +12,6 @@ const Custom404: React.FC = () => {
   const router = useRouter();
   const [isNotFound, setIsNotFound] = useState(false);
   // get table id from url
-
 
   const JOIN_TABLE_SESSION = gql(`
           mutation JoinTableSession($tableUUID: ID!) {
@@ -32,14 +31,13 @@ const Custom404: React.FC = () => {
       const id = pathName.split("/order/table/")[1]; // id を抽出
       if (id) {
         const id = window.location.pathname.split("/order/table/")[1];
-        joinTableSession({ variables: { tableUUID: id } })
-          .then((res) => {
-            if (res.data?.joinTableSession?.tableSession?.id) {
-              router.push("/order/start");
-              return;
-            }
-            setIsNotFound(true);
-          });
+        joinTableSession({ variables: { tableUUID: id } }).then((res) => {
+          if (res.data?.joinTableSession?.tableSession?.id) {
+            router.push("/order/start");
+            return;
+          }
+          setIsNotFound(true);
+        });
       }
     }
     if (pathName.match(menuDetailPath)) {
