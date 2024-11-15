@@ -1,7 +1,4 @@
 import React from "react";
-import Footer from "@/components/layout/Footer";
-import Header from "@/components/layout/Header";
-import { ScrollArea } from "@/components/ui/scroll-area";
 import { Button } from "@/components/ui/button";
 import CartButton from "@/components/CartButton";
 
