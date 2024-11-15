@@ -15,8 +15,9 @@ import (
 )
 
 const (
-	cookieName      = "user-identifier"
-	CTX_COOKIE_UUID = "cookie-uuid"
+	cookieName       = "user-identifier"
+	CTX_COOKIE_UUID  = "cookie-uuid"
+	CTX_ACCOUNT_UUID = "account-uuid"
 )
 
 type CookieIssuer struct {
@@ -40,7 +41,7 @@ func (ci CookieIssuer) Configure(rg *gin.RouterGroup) {
 
 func (ci CookieIssuer) middleware() gin.HandlerFunc {
 	return func(c *gin.Context) {
-		var cuuid string
+		var cuuid, auuid string
 		cookie, err := c.Request.Cookie(cookieName)
 		if err != nil {
 			if !errors.Is(err, http.ErrNoCookie) {
@@ -48,7 +49,7 @@ func (ci CookieIssuer) middleware() gin.HandlerFunc {
 				log.Fatalf("failed to get cookie: %v\n", err)
 				return
 			}
-			cuuid = ci.issue(c).String()
+			auuid, cuuid = ci.issue(c)
 			cookie = &http.Cookie{
 				Name:     cookieName,
 				Value:    cuuid,
@@ -66,7 +67,9 @@ func (ci CookieIssuer) middleware() gin.HandlerFunc {
 				return
 			}
 			cuuid = ucuuid.String()
+			auuid, cuuid = ci.QueryAccountID(c.Request.Context(), cuuid)
 		}
+		c.Set(CTX_ACCOUNT_UUID, auuid)
 		c.Set(CTX_COOKIE_UUID, cuuid)
 		ctx := context.WithValue(c.Request.Context(), CTX_COOKIE_UUID, cuuid)
 		c.Request = c.Request.WithContext(ctx)
@@ -74,10 +77,11 @@ func (ci CookieIssuer) middleware() gin.HandlerFunc {
 	}
 }
 
-func (ci CookieIssuer) issue(ctx context.Context) uuid.UUID {
+func (ci CookieIssuer) issue(ctx context.Context) (auuid, cuuid string) {
 	newCUUID := uuid.New()
+	newAUUID := uuid.New()
 	newAccount := &db_model.Account{
-		ID:          uuid.New(),
+		ID:          newAUUID,
 		FirebaseUID: sql.NullString{},
 	}
 	newCookie := &db_model.Cookie{
@@ -91,5 +95,19 @@ func (ci CookieIssuer) issue(ctx context.Context) uuid.UUID {
 		ci.dbC.Create(newAccount)
 		ci.dbC.Create(newCookie)
 	}(newAccount, newCookie)
-	return newCUUID
+	return newAUUID.String(), newCUUID.String()
+}
+
+func (ci CookieIssuer) QueryAccountID(ctx context.Context, cuuidIn string) (auuid, cuuid string) {
+	if ci.redisC != nil {
+		aid, err := ci.redisC.Get(ctx, fmt.Sprintf("ses2aID-%s", cuuidIn)).Result()
+		if err == nil {
+			return aid, cuuidIn
+		}
+	}
+	var cookie db_model.Cookie
+	if err := ci.dbC.Where("id = ?", cuuidIn).First(&cookie).Error; err == nil {
+		return cookie.AccountID.String(), cuuidIn
+	}
+	return ci.issue(ctx)
 }

@@ -13,7 +13,7 @@ type Query {
 
 type Mutation {
   # joinTableSession: QRコードを読み取り、
-  joinTableSession(tableSessionId: ID!): TableSessionUser
+  joinTableSession(tableUUID: ID!): TableSessionUser
   # completeTableSession: 清算を行う
   completeTableSession(tableSessionId: ID!, sessionUserId: ID!): Boolean
   # setUserAllergies: ユーザーのアレルギー情報を設定する
@@ -57,7 +57,6 @@ type Table {
 }
 
 type TableSessionUser {
-  id: ID!
   tableSession: TableSession!
   userNumber: Int!
   allergies: [Allergen!]!

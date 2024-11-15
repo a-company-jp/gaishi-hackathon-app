@@ -7,15 +7,73 @@ package graph
 import (
 	"context"
 	"fmt"
+	"strconv"
 	"time"
 
 	"github.com/a-company-jp/gaishi-hackathon-app/backend/graph/model"
 	"github.com/a-company-jp/gaishi-hackathon-app/backend/middleware"
+	"github.com/google/uuid"
 )
 
 // JoinTableSession is the resolver for the joinTableSession field.
-func (r *mutationResolver) JoinTableSession(ctx context.Context, tableSessionID string) (*model.TableSessionUser, error) {
-	panic(fmt.Errorf("not implemented: JoinTableSession - joinTableSession"))
+func (r *mutationResolver) JoinTableSession(ctx context.Context, tableUUID string) (*model.TableSessionUser, error) {
+	auuid := uuid.MustParse(ctx.Value(middleware.CTX_ACCOUNT_UUID).(string))
+
+	tuuid, err := uuid.Parse(tableUUID)
+	if err != nil {
+		return nil, fmt.Errorf("invalid table uuid")
+	}
+
+	tab, err := r.PostgresSvc.GetTableByUUID(tuuid)
+	if err != nil {
+		return nil, err
+	}
+
+	tableSession, err := r.PostgresSvc.GetActiveTableSessionByTableID(tab.ID)
+	if err == nil {
+		// 既存のセッションに参加
+		session, err := r.PostgresSvc.JoinTableSession(tableSession.ID, auuid)
+		if err != nil {
+			return nil, err
+		}
+
+		users, err := r.PostgresSvc.ListAccountsByTableSessionID(tableSession.ID)
+		if err != nil {
+			return nil, err
+		}
+		return &model.TableSessionUser{
+			TableSession: &model.TableSession{
+				ID:          strconv.Itoa(session.ID),
+				Table:       nil,
+				StartTime:   session.CreatedAt.Time.String(),
+				EndTime:     nil,
+				TotalUsers:  0,
+				Cart:        nil,
+				PlacedOrder: nil,
+				IsActive:    false,
+			},
+			UserNumber: len(users),
+			Allergies:  nil,
+		}, nil
+	}
+	newTableSession, err := r.PostgresSvc.CreateTableSession(tuuid)
+	if err != nil {
+		return nil, fmt.Errorf("failed to create table session")
+	}
+	_, err = r.PostgresSvc.JoinTableSession(newTableSession.ID, auuid)
+	if err != nil {
+		return nil, err
+	}
+	return &model.TableSessionUser{
+		TableSession: &model.TableSession{
+			ID:         strconv.Itoa(newTableSession.ID),
+			Table:      nil,
+			StartTime:  newTableSession.CreatedAt.Time.String(),
+			EndTime:    nil,
+			TotalUsers: 0,
+			Cart:       nil,
+		},
+	}, nil
 }
 
 // CompleteTableSession is the resolver for the completeTableSession field.
