@@ -48,6 +48,16 @@ func runMigration(dbUrl string) error {
 	}
 	log.Printf("Current version: %v\n, dirty: %v\n", version, b)
 
+	if *configMigration.Version == 0 || *configMigration.Force == 0 {
+		//	drop all tables
+		log.Println("Dropping all tables...")
+		if err := m.Drop(); err != nil {
+			return fmt.Errorf("failed to drop all tables: %w", err)
+		}
+		log.Println("All tables dropped.")
+		return nil
+	}
+
 	if configMigration.Force != nil {
 		log.Printf("Forcing version: %v\n", *configMigration.Force)
 		if err := m.Force(int(*configMigration.Force)); err != nil {
