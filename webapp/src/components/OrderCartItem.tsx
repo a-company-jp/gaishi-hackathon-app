@@ -10,9 +10,10 @@ interface OrderItem {
 
 interface OrderCartItemProps {
   item: OrderItem;
+  onRemove: (itemId: string) => void;
 }
 
-const OrderCartItem = ({ item }: OrderCartItemProps) => (
+const OrderCartItem = ({ item, onRemove }: OrderCartItemProps) => (
   <li className="flex items-center space-x-4 py-4 px-4 border-b-2 border-gray-400">
     <Image
       src={item.image}
@@ -23,9 +24,12 @@ const OrderCartItem = ({ item }: OrderCartItemProps) => (
     />
     <div className="flex-grow">
       <h2 className="font-semibold text-lg">{item.name}</h2>
-      <p className="text-gray-600">{item.price.toLocaleString()}円</p>
+      <p className="text-gray-800">{item.price.toLocaleString()}円</p>
     </div>
-    <button className="text-gray-400 hover:text-gray-600 p-2 hover:bg-gray-100 rounded-full transition-colors">
+    <button
+      onClick={() => onRemove(item.id)}
+      className="text-gray-400 hover:text-gray-600 p-2 hover:bg-gray-100 rounded-full transition-colors"
+    >
       <X className="h-5 w-5" />
     </button>
   </li>

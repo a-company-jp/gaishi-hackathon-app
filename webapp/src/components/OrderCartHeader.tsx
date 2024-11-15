@@ -11,8 +11,11 @@ const OrderCartHeader = () => {
       >
         <ArrowLeft className="h-6 w-6" />
       </Link>
-      <h1 className="text-lg font-semibold">注文カート</h1>
-      <CartButton />
+      <div className="flex items-center gap-2">
+        <h1 className="text-xl font-bold">注文カート</h1>
+        <CartButton size="sm" />
+      </div>
+      <div className="w-10" />
     </header>
   );
 };
