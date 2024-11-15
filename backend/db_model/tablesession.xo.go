@@ -6,12 +6,13 @@ import (
 	"database/sql"
 )
 
-// TableVisit represents a row from 'public.table_visits'.
-type TableVisit struct {
+// TableSession represents a row from 'public.table_sessions'.
+type TableSession struct {
 	ID        int          `json:"id"`         // id
 	TableID   int          `json:"table_id"`   // table_id
 	StartTime sql.NullTime `json:"start_time"` // start_time
 	EndTime   sql.NullTime `json:"end_time"`   // end_time
+	IsActive  sql.NullBool `json:"is_active"`  // is_active
 	CreatedAt sql.NullTime `json:"created_at"` // created_at
 	UpdatedAt sql.NullTime `json:"updated_at"` // updated_at
 }
