@@ -247,15 +247,20 @@ export type GetMenuItemsQuery = {
   }>;
 };
 
-export type AddItemMutationMutationVariables = Exact<{
-  orderId: Scalars["ID"]["input"];
-  menuItemId: Scalars["ID"]["input"];
-  quantity: Scalars["Int"]["input"];
-  sessionUserId: Scalars["ID"]["input"];
+export type GetCartQueryQueryVariables = Exact<{
+  tableSessionID: Scalars["ID"]["input"];
 }>;
 
-export type AddItemMutationMutation = {
-  addItemToCart: { items: Array<{ id: string }> } | null;
+export type GetCartQueryQuery = {
+  cart: {
+    id: string;
+    totalCartPrice: number;
+    items: Array<{
+      id: string;
+      quantity: number;
+      menuItem: { id: string; name: string; price: number };
+    }>;
+  } | null;
 };
 
 export const HealthCheckQueryDocument = {
@@ -497,52 +502,19 @@ export const GetMenuItemsDocument = {
     },
   ],
 } as unknown as DocumentNode<GetMenuItemsQuery, GetMenuItemsQueryVariables>;
-export const AddItemMutationDocument = {
+export const GetCartQueryDocument = {
   kind: "Document",
   definitions: [
     {
       kind: "OperationDefinition",
-      operation: "mutation",
-      name: { kind: "Name", value: "AddItemMutation" },
+      operation: "query",
+      name: { kind: "Name", value: "GetCartQuery" },
       variableDefinitions: [
         {
           kind: "VariableDefinition",
           variable: {
             kind: "Variable",
-            name: { kind: "Name", value: "orderId" },
-          },
-          type: {
-            kind: "NonNullType",
-            type: { kind: "NamedType", name: { kind: "Name", value: "ID" } },
-          },
-        },
-        {
-          kind: "VariableDefinition",
-          variable: {
-            kind: "Variable",
-            name: { kind: "Name", value: "menuItemId" },
-          },
-          type: {
-            kind: "NonNullType",
-            type: { kind: "NamedType", name: { kind: "Name", value: "ID" } },
-          },
-        },
-        {
-          kind: "VariableDefinition",
-          variable: {
-            kind: "Variable",
-            name: { kind: "Name", value: "quantity" },
-          },
-          type: {
-            kind: "NonNullType",
-            type: { kind: "NamedType", name: { kind: "Name", value: "Int" } },
-          },
-        },
-        {
-          kind: "VariableDefinition",
-          variable: {
-            kind: "Variable",
-            name: { kind: "Name", value: "sessionUserId" },
+            name: { kind: "Name", value: "tableSessionID" },
           },
           type: {
             kind: "NonNullType",
@@ -555,44 +527,21 @@ export const AddItemMutationDocument = {
         selections: [
           {
             kind: "Field",
-            name: { kind: "Name", value: "addItemToCart" },
+            name: { kind: "Name", value: "cart" },
             arguments: [
               {
                 kind: "Argument",
-                name: { kind: "Name", value: "orderId" },
+                name: { kind: "Name", value: "tableSessionID" },
                 value: {
                   kind: "Variable",
-                  name: { kind: "Name", value: "orderId" },
-                },
-              },
-              {
-                kind: "Argument",
-                name: { kind: "Name", value: "menuItemId" },
-                value: {
-                  kind: "Variable",
-                  name: { kind: "Name", value: "menuItemId" },
-                },
-              },
-              {
-                kind: "Argument",
-                name: { kind: "Name", value: "quantity" },
-                value: {
-                  kind: "Variable",
-                  name: { kind: "Name", value: "quantity" },
-                },
-              },
-              {
-                kind: "Argument",
-                name: { kind: "Name", value: "sessionUserId" },
-                value: {
-                  kind: "Variable",
-                  name: { kind: "Name", value: "sessionUserId" },
+                  name: { kind: "Name", value: "tableSessionID" },
                 },
               },
             ],
             selectionSet: {
               kind: "SelectionSet",
               selections: [
+                { kind: "Field", name: { kind: "Name", value: "id" } },
                 {
                   kind: "Field",
                   name: { kind: "Name", value: "items" },
@@ -600,8 +549,37 @@ export const AddItemMutationDocument = {
                     kind: "SelectionSet",
                     selections: [
                       { kind: "Field", name: { kind: "Name", value: "id" } },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "menuItem" },
+                        selectionSet: {
+                          kind: "SelectionSet",
+                          selections: [
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "id" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "name" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "price" },
+                            },
+                          ],
+                        },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "quantity" },
+                      },
                     ],
                   },
+                },
+                {
+                  kind: "Field",
+                  name: { kind: "Name", value: "totalCartPrice" },
                 },
               ],
             },
@@ -610,7 +588,4 @@ export const AddItemMutationDocument = {
       },
     },
   ],
-} as unknown as DocumentNode<
-  AddItemMutationMutation,
-  AddItemMutationMutationVariables
->;
+} as unknown as DocumentNode<GetCartQueryQuery, GetCartQueryQueryVariables>;
