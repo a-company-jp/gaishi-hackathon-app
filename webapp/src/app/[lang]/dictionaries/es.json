@@ -17,5 +17,13 @@
       "soba": "Alforfón",
       "peanuts": "Cacahuates"
     }
+  },
+  "order": {
+    "menu": {
+      "addToCart": "Añadir al carrito",
+      "yourAllergies": "Tus alérgenos",
+      "allergenList": "Lista de alérgenos",
+      "allergenListDescription": "Puede verificar y editar sus alérgenos."
+    }
   }
 }

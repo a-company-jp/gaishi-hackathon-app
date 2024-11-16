@@ -17,5 +17,13 @@
       "soba": "そば",
       "peanuts": "ピーナッツ"
     }
+  },
+  "order": {
+    "menu": {
+      "addToCart": "カートに入れる",
+      "yourAllergies": "あなたのアレルギー食材",
+      "allergenList": "アレルギー食材リスト",
+      "allergenListDescription": "あなたのアレルギー食材について確認と編集が可能です。"
+    }
   }
 }

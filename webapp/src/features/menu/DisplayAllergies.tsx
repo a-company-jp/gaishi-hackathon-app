@@ -10,6 +10,7 @@ import {
 } from "@/components/ui/dialog";
 import { AllergenButton } from "@/components/AllergenButton";
 import { useState } from "react";
+import { Dictionary } from "@/app/types/dictionary";
 
 type Allergy = {
   id: string;
@@ -19,9 +20,10 @@ type Allergy = {
 
 type Props = {
   allergies: Allergy[];
+  dict: Dictionary;
 };
 
-function DisplayAllergies({ allergies }: Props) {
+function DisplayAllergies({ allergies, dict }: Props) {
   // 初期選択状態を保持する不変のステート
   const initialSelectedAllergies = allergies
     .filter((a) => a.selected)
@@ -40,7 +42,7 @@ function DisplayAllergies({ allergies }: Props) {
 
   return (
     <div className="p-3 flex flex-col items-center gap-1">
-      <p className="text-sm">あなたのアレルギー食材</p>
+      <p className="text-sm">{dict.order.menu.yourAllergies}</p>
       <Dialog>
         <DialogTrigger asChild>
           <div className="w-3/4 p-4 rounded-lg shadow-inner flex items-center justify-center gap-2 hover:bg-gray-200">
@@ -61,9 +63,9 @@ function DisplayAllergies({ allergies }: Props) {
         </DialogTrigger>
         <DialogContent className="w-3/4">
           <DialogHeader>
-            <DialogTitle>アレルギー食材リスト</DialogTitle>
+            <DialogTitle>{dict.order.menu.allergenList}</DialogTitle>
             <DialogDescription>
-              あなたのアレルギー食材について確認と編集が可能です。
+              {dict.order.menu.allergenListDescription}
             </DialogDescription>
           </DialogHeader>
           <div className="grid grid-cols-3 gap-4 sm:grid-cols-3 md:grid-cols-4">

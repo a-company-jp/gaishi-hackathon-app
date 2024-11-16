@@ -18,4 +18,12 @@ export type Dictionary = {
       peanuts: string;
     };
   };
+  order: {
+    menu: {
+      addToCart: string;
+      yourAllergies: string;
+      allergenList: string;
+      allergenListDescription: string;
+    };
+  };
 };

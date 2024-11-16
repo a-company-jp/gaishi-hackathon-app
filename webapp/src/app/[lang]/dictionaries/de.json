@@ -17,5 +17,13 @@
       "soba": "Buchweizen",
       "peanuts": "Erdnüsse"
     }
+  },
+  "order": {
+    "menu": {
+      "addToCart": "In den Warenkorb",
+      "yourAllergies": "Ihre Allergene",
+      "allergenList": "Allergenliste",
+      "allergenListDescription": "Sie können Ihre Allergene überprüfen und bearbeiten."
+    }
   }
 }

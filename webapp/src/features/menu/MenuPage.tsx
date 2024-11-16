@@ -108,7 +108,7 @@ function MenuPage({ lang, dict }: MenuPageProps) {
   return (
     <div className="flex flex-col w-full pb-16">
       <div className="sticky top-0 bg-white">
-        <DisplayAllergies allergies={allergies} />
+        <DisplayAllergies allergies={allergies} dict={dict} />
         <GenreCard
           menuItems={sampleGenres[lang]}
           activeTab={activeGenre}

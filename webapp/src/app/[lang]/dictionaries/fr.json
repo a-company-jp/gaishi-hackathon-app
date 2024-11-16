@@ -17,5 +17,13 @@
       "soba": "Sarrasin",
       "peanuts": "Cacahuètes"
     }
+  },
+  "order": {
+    "menu": {
+      "addToCart": "Ajouter au panier",
+      "yourAllergies": "Vos allergènes",
+      "allergenList": "Liste des allergènes",
+      "allergenListDescription": "Vous pouvez vérifier et modifier vos allergènes."
+    }
   }
 }

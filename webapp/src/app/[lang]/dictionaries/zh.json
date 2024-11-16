@@ -17,5 +17,13 @@
       "soba": "荞麦",
       "peanuts": "花生"
     }
+  },
+  "order": {
+    "menu": {
+      "addToCart": "加入购物车",
+      "yourAllergies": "您的过敏原",
+      "allergenList": "过敏原列表",
+      "allergenListDescription": "您可以检查和编辑您的过敏原。"
+    }
   }
 }
