@@ -153,13 +153,12 @@ func (r *queryResolver) TableSession(ctx context.Context) (*model.TableSession, 
 }
 
 // MenuItems is the resolver for the menuItems field.
-func (r *queryResolver) MenuItems(ctx context.Context) ([]*model.MenuItem, error) {
+func (r *queryResolver) MenuItems(ctx context.Context, lang *string) ([]*model.MenuItem, error) {
 	restID := ctx.Value(middleware.CTX_RESTAURANT_ID).(int)
-	rest, err := r.PostgresSvc.GetRestaurant(restID)
-	if err != nil {
-		return nil, fmt.Errorf("failed to get restaurant, %w", err)
+	if lang == nil {
+		*lang = ctx.Value(middleware.CTX_LANGUAGE).(string)
 	}
-	items, err := r.PostgresSvc.GetMenuItems(rest.ID, "ja")
+	items, err := r.PostgresSvc.GetMenuItems(restID, *lang)
 	if err != nil {
 		return nil, err
 	}
@@ -167,27 +166,39 @@ func (r *queryResolver) MenuItems(ctx context.Context) ([]*model.MenuItem, error
 }
 
 // MenuItemsByCategory is the resolver for the menuItemsByCategory field.
-func (r *queryResolver) MenuItemsByCategory(ctx context.Context, categoryID string) ([]*model.MenuItem, error) {
+func (r *queryResolver) MenuItemsByCategory(ctx context.Context, lang *string, categoryID string) ([]*model.MenuItem, error) {
 	panic(fmt.Errorf("not implemented: MenuItemsByCategory - menuItemsByCategory"))
 }
 
 // MenuCategories is the resolver for the menuCategories field.
-func (r *queryResolver) MenuCategories(ctx context.Context, restaurantID string) ([]*model.MenuCategory, error) {
-	panic(fmt.Errorf("not implemented: MenuCategories - menuCategories"))
+func (r *queryResolver) MenuCategories(ctx context.Context, lang *string, restaurantID string) ([]*model.MenuCategory, error) {
+	restID := ctx.Value(middleware.CTX_RESTAURANT_ID).(int)
+	categories, err := r.PostgresSvc.GetMenuCategories(restID)
+	if err != nil {
+		return nil, err
+	}
+	return categories, nil
 }
 
 // Allergens is the resolver for the allergens field.
-func (r *queryResolver) Allergens(ctx context.Context) ([]*model.Allergen, error) {
-	panic(fmt.Errorf("not implemented: Allergens - allergens"))
+func (r *queryResolver) Allergens(ctx context.Context, lang *string) ([]*model.Allergen, error) {
+	if lang == nil {
+		*lang = ctx.Value(middleware.CTX_LANGUAGE).(string)
+	}
+	allergens, err := r.PostgresSvc.GetAllAllergens(*lang)
+	if err != nil {
+		return nil, err
+	}
+	return allergens, nil
 }
 
 // Cart is the resolver for the cart field.
-func (r *queryResolver) Cart(ctx context.Context) (*model.Cart, error) {
+func (r *queryResolver) Cart(ctx context.Context, lang *string) (*model.Cart, error) {
 	panic(fmt.Errorf("not implemented: Cart - cart"))
 }
 
 // Order is the resolver for the order field.
-func (r *queryResolver) Order(ctx context.Context) (*model.OrderedItem, error) {
+func (r *queryResolver) Order(ctx context.Context, lang *string) (*model.OrderedItem, error) {
 	panic(fmt.Errorf("not implemented: Order - order"))
 }
 
