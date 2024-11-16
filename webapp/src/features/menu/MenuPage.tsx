@@ -334,8 +334,8 @@ const allergies = [
 ];
 
 const MenuItemsQuery = gql(`
-  query GetMenuItems($restaurantId: ID!) {
-    menuItems(restaurantId: $restaurantId) {
+  query GetMenuItems {
+    menuItems {
       id
       name
       price

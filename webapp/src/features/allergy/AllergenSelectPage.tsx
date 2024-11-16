@@ -9,8 +9,8 @@ import { useMutation } from "@apollo/client";
 import { useRouter } from "next/navigation";
 
 const SetAllergiesMutation = gql(`
-  mutation SetAllergiesMutation($sessionUserId: ID!, $allergenIds: [ID!]!) {
-    setUserAllergies (sessionUserId: $sessionUserId, allergenIds: $allergenIds) {
+  mutation SetAllergiesMutation($allergenIds: [ID!]!) {
+    setUserAllergies (allergenIds: $allergenIds) {
       tableSession {
         id
       }
