@@ -66,6 +66,9 @@ func (ci CookieIssuer) middleware() gin.HandlerFunc {
 		c.Set(CTX_COOKIE_UUID, cuuid)
 		ctx := context.WithValue(c.Request.Context(), CTX_COOKIE_UUID, cuuid)
 		ctx = context.WithValue(ctx, CTX_ACCOUNT_UUID, auuid)
+		ctx = context.WithValue(ctx, CTX_RESTAURANT_HOSTNAME, restHost)
+		ctx = context.WithValue(ctx, CTX_RESTAURANT_ID, id)
+		ctx = context.WithValue(ctx, CTX_LANGUAGE, lang)
 		c.Request = c.Request.WithContext(ctx)
 		c.Next()
 	}
