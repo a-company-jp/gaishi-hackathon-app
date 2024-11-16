@@ -6,6 +6,10 @@ import MenuModal from "@/components/MenuModal";
 import DisplayAllergies from "@/features/menu/DisplayAllergies";
 import GenreCard from "@/components/GenreCard";
 import MenuCard from "@/features/menu/MenuCard";
+import { gql } from "@/gql/__generated__";
+import { useMutation, useQuery } from "@apollo/client";
+import { useSelector } from "react-redux";
+import { RootState } from "@/redux/store";
 
 const genres = [
   {
@@ -329,12 +333,46 @@ const allergies = [
   },
 ];
 
+const MenuItemsQuery = gql(`
+  query GetMenuItems($restaurantId: ID!) {
+    menuItems(restaurantId: $restaurantId) {
+      id
+      name
+      price
+      category {
+        id
+      }
+      allergens {
+        id
+        name
+      }
+    }
+  }
+`);
+
+const AllergensQuery = gql(`
+  query GetAllergens {
+    allergens {
+      id
+      name
+    }
+  }
+`);
+
 function MenuPage() {
   const [cartCount, setCartCount] = useState(0);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedItemId, setSelectedItemId] = useState("");
   const [quantity, setQuantity] = useState(1);
   const [activeGenre, setActiveGenre] = useState("ddddd");
+  const tenantId = useSelector((state: RootState) => state.tenantId.id);
+  // const { loading, error, data } = useQuery(MenuItemsQuery, {
+  //   variables: { restaurantId: tenantId },
+  // });
+  //
+  // if (loading) return "Loading...";
+  // if (error) return `Error! ${error.message}`;
+  // console.log(data);
 
   const handleAddToCart = () => {
     setCartCount((prevCount) => prevCount + quantity);
@@ -364,6 +402,8 @@ function MenuPage() {
               imgUrl={item.image}
               setSelectedItemId={setSelectedItemId}
               setIsModalOpen={setIsModalOpen}
+              disabled={false}
+              // disabled={true} // アレルギーのフィルタ対象であればtrue
             />
           ))}
       </div>

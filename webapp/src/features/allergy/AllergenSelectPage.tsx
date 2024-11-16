@@ -4,14 +4,38 @@ import { useState } from "react";
 import { AllergenButton } from "@/components/AllergenButton";
 import { Button } from "@/components/ui/button";
 import { Dictionary } from "@/app/types/dictionary";
+import { gql } from "@/gql/__generated__";
+import { useMutation } from "@apollo/client";
+import { useRouter } from "next/navigation";
+
+const SetAllergiesMutation = gql(`
+  mutation SetAllergiesMutation($sessionUserId: ID!, $allergenIds: [ID!]!) {
+    setUserAllergies (sessionUserId: $sessionUserId, allergenIds: $allergenIds) {
+      tableSession {
+        id
+      }
+    }
+  }
+`);
 
 export default function AllergenSelectPage({ dict }: { dict: Dictionary }) {
+  const [setAllergies] = useMutation(SetAllergiesMutation);
+  const router = useRouter();
   const [selectedAllergens, setSelectedAllergens] = useState<number[]>([]);
 
   const toggleAllergen = (index: number) => {
     setSelectedAllergens((prev) =>
       prev.includes(index) ? prev.filter((i) => i !== index) : [...prev, index]
     );
+  };
+
+  const onClick = async () => {
+    try {
+      // await setAllergies();
+      router.push("/order");
+    } catch (e) {
+      console.error(e);
+    }
   };
 
   const items = [
@@ -82,7 +106,10 @@ export default function AllergenSelectPage({ dict }: { dict: Dictionary }) {
       </div>
 
       <div className="flex justify-center py-8">
-        <Button className="bg-zinc-800 text-white hover:bg-zinc-700">
+        <Button
+          onClick={onClick}
+          className="bg-zinc-800 text-white hover:bg-zinc-700"
+        >
           {dict.allergy.startOrder}
         </Button>
       </div>

@@ -224,6 +224,51 @@ export type JoinTableSessionMutation = {
   joinTableSession: { tableSession: { id: string } } | null;
 };
 
+export type SetAllergiesMutationMutationVariables = Exact<{
+  sessionUserId: Scalars["ID"]["input"];
+  allergenIds: Array<Scalars["ID"]["input"]> | Scalars["ID"]["input"];
+}>;
+
+export type SetAllergiesMutationMutation = {
+  setUserAllergies: { tableSession: { id: string } } | null;
+};
+
+export type GetMenuItemsQueryVariables = Exact<{
+  restaurantId: Scalars["ID"]["input"];
+}>;
+
+export type GetMenuItemsQuery = {
+  menuItems: Array<{
+    id: string;
+    name: string;
+    price: number;
+    category: { id: string } | null;
+    allergens: Array<{ id: string; name: string }>;
+  }>;
+};
+
+export type GetAllergensQueryVariables = Exact<{ [key: string]: never }>;
+
+export type GetAllergensQuery = {
+  allergens: Array<{ id: string; name: string }>;
+};
+
+export type GetCartQueryQueryVariables = Exact<{
+  tableSessionID: Scalars["ID"]["input"];
+}>;
+
+export type GetCartQueryQuery = {
+  cart: {
+    id: string;
+    totalCartPrice: number;
+    items: Array<{
+      id: string;
+      quantity: number;
+      menuItem: { id: string; name: string; price: number };
+    }>;
+  } | null;
+};
+
 export const HealthCheckQueryDocument = {
   kind: "Document",
   definitions: [
@@ -304,3 +349,275 @@ export const JoinTableSessionDocument = {
   JoinTableSessionMutation,
   JoinTableSessionMutationVariables
 >;
+export const SetAllergiesMutationDocument = {
+  kind: "Document",
+  definitions: [
+    {
+      kind: "OperationDefinition",
+      operation: "mutation",
+      name: { kind: "Name", value: "SetAllergiesMutation" },
+      variableDefinitions: [
+        {
+          kind: "VariableDefinition",
+          variable: {
+            kind: "Variable",
+            name: { kind: "Name", value: "sessionUserId" },
+          },
+          type: {
+            kind: "NonNullType",
+            type: { kind: "NamedType", name: { kind: "Name", value: "ID" } },
+          },
+        },
+        {
+          kind: "VariableDefinition",
+          variable: {
+            kind: "Variable",
+            name: { kind: "Name", value: "allergenIds" },
+          },
+          type: {
+            kind: "NonNullType",
+            type: {
+              kind: "ListType",
+              type: {
+                kind: "NonNullType",
+                type: {
+                  kind: "NamedType",
+                  name: { kind: "Name", value: "ID" },
+                },
+              },
+            },
+          },
+        },
+      ],
+      selectionSet: {
+        kind: "SelectionSet",
+        selections: [
+          {
+            kind: "Field",
+            name: { kind: "Name", value: "setUserAllergies" },
+            arguments: [
+              {
+                kind: "Argument",
+                name: { kind: "Name", value: "sessionUserId" },
+                value: {
+                  kind: "Variable",
+                  name: { kind: "Name", value: "sessionUserId" },
+                },
+              },
+              {
+                kind: "Argument",
+                name: { kind: "Name", value: "allergenIds" },
+                value: {
+                  kind: "Variable",
+                  name: { kind: "Name", value: "allergenIds" },
+                },
+              },
+            ],
+            selectionSet: {
+              kind: "SelectionSet",
+              selections: [
+                {
+                  kind: "Field",
+                  name: { kind: "Name", value: "tableSession" },
+                  selectionSet: {
+                    kind: "SelectionSet",
+                    selections: [
+                      { kind: "Field", name: { kind: "Name", value: "id" } },
+                    ],
+                  },
+                },
+              ],
+            },
+          },
+        ],
+      },
+    },
+  ],
+} as unknown as DocumentNode<
+  SetAllergiesMutationMutation,
+  SetAllergiesMutationMutationVariables
+>;
+export const GetMenuItemsDocument = {
+  kind: "Document",
+  definitions: [
+    {
+      kind: "OperationDefinition",
+      operation: "query",
+      name: { kind: "Name", value: "GetMenuItems" },
+      variableDefinitions: [
+        {
+          kind: "VariableDefinition",
+          variable: {
+            kind: "Variable",
+            name: { kind: "Name", value: "restaurantId" },
+          },
+          type: {
+            kind: "NonNullType",
+            type: { kind: "NamedType", name: { kind: "Name", value: "ID" } },
+          },
+        },
+      ],
+      selectionSet: {
+        kind: "SelectionSet",
+        selections: [
+          {
+            kind: "Field",
+            name: { kind: "Name", value: "menuItems" },
+            arguments: [
+              {
+                kind: "Argument",
+                name: { kind: "Name", value: "restaurantId" },
+                value: {
+                  kind: "Variable",
+                  name: { kind: "Name", value: "restaurantId" },
+                },
+              },
+            ],
+            selectionSet: {
+              kind: "SelectionSet",
+              selections: [
+                { kind: "Field", name: { kind: "Name", value: "id" } },
+                { kind: "Field", name: { kind: "Name", value: "name" } },
+                { kind: "Field", name: { kind: "Name", value: "price" } },
+                {
+                  kind: "Field",
+                  name: { kind: "Name", value: "category" },
+                  selectionSet: {
+                    kind: "SelectionSet",
+                    selections: [
+                      { kind: "Field", name: { kind: "Name", value: "id" } },
+                    ],
+                  },
+                },
+                {
+                  kind: "Field",
+                  name: { kind: "Name", value: "allergens" },
+                  selectionSet: {
+                    kind: "SelectionSet",
+                    selections: [
+                      { kind: "Field", name: { kind: "Name", value: "id" } },
+                      { kind: "Field", name: { kind: "Name", value: "name" } },
+                    ],
+                  },
+                },
+              ],
+            },
+          },
+        ],
+      },
+    },
+  ],
+} as unknown as DocumentNode<GetMenuItemsQuery, GetMenuItemsQueryVariables>;
+export const GetAllergensDocument = {
+  kind: "Document",
+  definitions: [
+    {
+      kind: "OperationDefinition",
+      operation: "query",
+      name: { kind: "Name", value: "GetAllergens" },
+      selectionSet: {
+        kind: "SelectionSet",
+        selections: [
+          {
+            kind: "Field",
+            name: { kind: "Name", value: "allergens" },
+            selectionSet: {
+              kind: "SelectionSet",
+              selections: [
+                { kind: "Field", name: { kind: "Name", value: "id" } },
+                { kind: "Field", name: { kind: "Name", value: "name" } },
+              ],
+            },
+          },
+        ],
+      },
+    },
+  ],
+} as unknown as DocumentNode<GetAllergensQuery, GetAllergensQueryVariables>;
+export const GetCartQueryDocument = {
+  kind: "Document",
+  definitions: [
+    {
+      kind: "OperationDefinition",
+      operation: "query",
+      name: { kind: "Name", value: "GetCartQuery" },
+      variableDefinitions: [
+        {
+          kind: "VariableDefinition",
+          variable: {
+            kind: "Variable",
+            name: { kind: "Name", value: "tableSessionID" },
+          },
+          type: {
+            kind: "NonNullType",
+            type: { kind: "NamedType", name: { kind: "Name", value: "ID" } },
+          },
+        },
+      ],
+      selectionSet: {
+        kind: "SelectionSet",
+        selections: [
+          {
+            kind: "Field",
+            name: { kind: "Name", value: "cart" },
+            arguments: [
+              {
+                kind: "Argument",
+                name: { kind: "Name", value: "tableSessionID" },
+                value: {
+                  kind: "Variable",
+                  name: { kind: "Name", value: "tableSessionID" },
+                },
+              },
+            ],
+            selectionSet: {
+              kind: "SelectionSet",
+              selections: [
+                { kind: "Field", name: { kind: "Name", value: "id" } },
+                {
+                  kind: "Field",
+                  name: { kind: "Name", value: "items" },
+                  selectionSet: {
+                    kind: "SelectionSet",
+                    selections: [
+                      { kind: "Field", name: { kind: "Name", value: "id" } },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "menuItem" },
+                        selectionSet: {
+                          kind: "SelectionSet",
+                          selections: [
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "id" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "name" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "price" },
+                            },
+                          ],
+                        },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "quantity" },
+                      },
+                    ],
+                  },
+                },
+                {
+                  kind: "Field",
+                  name: { kind: "Name", value: "totalCartPrice" },
+                },
+              ],
+            },
+          },
+        ],
+      },
+    },
+  ],
+} as unknown as DocumentNode<GetCartQueryQuery, GetCartQueryQueryVariables>;

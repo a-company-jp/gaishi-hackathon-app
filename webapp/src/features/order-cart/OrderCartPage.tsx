@@ -4,6 +4,7 @@ import { useState } from "react";
 import OrderHeader from "@/components/OrderCartHeader";
 import OrderCartItem from "@/components/OrderCartItem";
 import OrderCartFooter from "@/components/OrderCartFooter";
+import { gql } from "@/gql/__generated__";
 
 interface OrderItem {
   id: string;
@@ -11,6 +12,24 @@ interface OrderItem {
   price: number;
   image: string;
 }
+
+const GetCartQuery = gql(`
+  query GetCartQuery($tableSessionID: ID!) {
+    cart (tableSessionID: $tableSessionID) {
+      id
+      items {
+        id
+        menuItem {
+           id
+           name
+           price
+        }
+        quantity
+      }
+      totalCartPrice
+    }
+  }
+`);
 
 const OrderCartPage = () => {
   const [orderItems, setOrderItems] = useState<OrderItem[]>([
