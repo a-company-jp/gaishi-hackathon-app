@@ -145,7 +145,7 @@ function MenuPage({ lang, dict }: MenuPageProps) {
         onAddToCart={handleAddToCart}
       />
 
-      <div className="fixed bottom-20 right-4">
+      <div className="fixed bottom-4 right-4">
         <CartButton count={cartCount} size={"lg"} />
       </div>
     </div>
