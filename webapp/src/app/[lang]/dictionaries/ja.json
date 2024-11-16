@@ -2,5 +2,20 @@
   "orderMode": {
     "registerAllergy": "アレルギー情報を登録して始める",
     "startOrder": "そのまま注文を始める"
+  },
+  "allergy": {
+    "registration": "アレルギー情報の登録",
+    "startOrder": "注文を開始する",
+    "allergen": {
+      "fish": "魚",
+      "egg": "たまご",
+      "orange": "オレンジ",
+      "crab": "かに",
+      "beef": "ビーフ",
+      "kiwi": "キウイ",
+      "shrimp": "えび",
+      "soba": "そば",
+      "peanuts": "ピーナッツ"
+    }
   }
 }

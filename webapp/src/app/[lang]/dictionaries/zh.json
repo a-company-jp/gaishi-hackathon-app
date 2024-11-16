@@ -2,5 +2,20 @@
   "orderMode": {
     "registerAllergy": "注册过敏信息后开始",
     "startOrder": "直接开始订购"
+  },
+  "allergy": {
+    "registration": "过敏信息注册",
+    "startOrder": "开始订购",
+    "allergen": {
+      "fish": "鱼",
+      "egg": "鸡蛋",
+      "orange": "橙子",
+      "crab": "螃蟹",
+      "beef": "牛肉",
+      "kiwi": "猕猴桃",
+      "shrimp": "虾",
+      "soba": "荞麦",
+      "peanuts": "花生"
+    }
   }
 }
