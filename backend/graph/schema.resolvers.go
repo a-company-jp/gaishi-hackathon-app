@@ -155,11 +155,10 @@ func (r *queryResolver) TableSession(ctx context.Context) (*model.TableSession, 
 // MenuItems is the resolver for the menuItems field.
 func (r *queryResolver) MenuItems(ctx context.Context, lang *string) ([]*model.MenuItem, error) {
 	restID := ctx.Value(middleware.CTX_RESTAURANT_ID).(int)
-	rest, err := r.PostgresSvc.GetRestaurant(restID)
-	if err != nil {
-		return nil, fmt.Errorf("failed to get restaurant, %w", err)
+	if lang == nil {
+		*lang = ctx.Value(middleware.CTX_LANGUAGE).(string)
 	}
-	items, err := r.PostgresSvc.GetMenuItems(rest.ID, "ja")
+	items, err := r.PostgresSvc.GetMenuItems(restID, *lang)
 	if err != nil {
 		return nil, err
 	}
@@ -183,7 +182,10 @@ func (r *queryResolver) MenuCategories(ctx context.Context, lang *string, restau
 
 // Allergens is the resolver for the allergens field.
 func (r *queryResolver) Allergens(ctx context.Context, lang *string) ([]*model.Allergen, error) {
-	allergens, err := r.PostgresSvc.GetAllAllergens("ja")
+	if lang == nil {
+		*lang = ctx.Value(middleware.CTX_LANGUAGE).(string)
+	}
+	allergens, err := r.PostgresSvc.GetAllAllergens(*lang)
 	if err != nil {
 		return nil, err
 	}

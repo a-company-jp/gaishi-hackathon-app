@@ -12,6 +12,7 @@ import (
 	"log"
 	"net/http"
 	"regexp"
+	"strings"
 )
 
 const (
@@ -20,6 +21,7 @@ const (
 	CTX_ACCOUNT_UUID        = "account-uuid"
 	CTX_RESTAURANT_HOSTNAME = "rest-host"
 	CTX_RESTAURANT_ID       = "rest-id"
+	CTX_LANGUAGE            = "language"
 )
 
 type CookieIssuer struct {
@@ -58,6 +60,8 @@ func (ci CookieIssuer) middleware() gin.HandlerFunc {
 		}
 		c.Set(CTX_RESTAURANT_ID, id)
 		auuid, cuuid := ci.processCookie(c)
+		lang := getDefaultLanguage(c)
+		c.Set(CTX_LANGUAGE, lang)
 		c.Set(CTX_ACCOUNT_UUID, auuid)
 		c.Set(CTX_COOKIE_UUID, cuuid)
 		ctx := context.WithValue(c.Request.Context(), CTX_COOKIE_UUID, cuuid)
@@ -155,4 +159,20 @@ func (ci CookieIssuer) resolveRestaurantID(ctx context.Context, restHost string)
 		ci.redisC.Set(ctx, fmt.Sprintf("restHost-ID:%s", restHost), restaurant.ID, 0)
 	}
 	return restaurant.ID, nil
+}
+
+func getDefaultLanguage(c *gin.Context) string {
+	acceptLanguage := c.Request.Header.Get("Accept-Language")
+	if acceptLanguage == "" {
+		return "en" // デフォルト言語
+	}
+	languages := strings.Split(acceptLanguage, ",")
+	if len(languages) > 0 {
+		lang := strings.Split(languages[0], ";")[0]
+		lang = strings.TrimSpace(lang)
+		if len(lang) >= 2 {
+			return lang[:2]
+		}
+	}
+	return "en" // フォールバック
 }
