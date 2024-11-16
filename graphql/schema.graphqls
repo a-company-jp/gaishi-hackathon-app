@@ -1,14 +1,14 @@
 type Query {
   myCUUID: String!
   healthCheck: String
-  restaurant(id: ID!): Restaurant
-  tableSession(tableSession: ID!): TableSession
-  menuItems(restaurantId: ID!): [MenuItem!]!
-  menuItemsByCategory(restaurantId: ID!, categoryId: ID!): [MenuItem!]!
+  restaurant: Restaurant
+  tableSession: TableSession
+  menuItems: [MenuItem!]!
+  menuItemsByCategory(categoryId: ID!): [MenuItem!]!
   menuCategories(restaurantId: ID!): [MenuCategory!]!
   allergens: [Allergen!]!
-  cart(tableSessionID: ID!): Cart
-  order(orderId: ID!): OrderedItem
+  cart: Cart
+  order: OrderedItem
 }
 
 type Mutation {
@@ -17,16 +17,16 @@ type Mutation {
   # completeTableSession: 清算を行う
   completeTableSession(tableSessionId: ID!, sessionUserId: ID!): Boolean
   # setUserAllergies: ユーザーのアレルギー情報を設定する
-  setUserAllergies(sessionUserId: ID!, allergenIds: [ID!]!): TableSessionUser
+  setUserAllergies(allergenIds: [ID!]!): TableSessionUser
 
-  addItemToCart(orderId: ID!, menuItemId: ID!, quantity: Int!, sessionUserId: ID!): Cart
-  removeItemFromCart(orderId: ID!, orderItemId: ID!, sessionUserId: ID!): Cart
+  addItemToCart(orderId: ID!, menuItemId: ID!, quantity: Int!): Cart
+  removeItemFromCart(orderId: ID!, orderItemId: ID!): Cart
   placeOrder(orderId: ID!): Boolean
 }
 
 type Subscription {
-  cartUpdated(tableSessionId: ID!): Cart
-  orderUpdated(orderId: ID!): OrderedItem
+  cartUpdated: Cart
+  orderUpdated: OrderedItem
 }
 
 type Restaurant {

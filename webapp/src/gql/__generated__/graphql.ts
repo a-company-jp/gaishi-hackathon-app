@@ -79,7 +79,6 @@ export type MutationAddItemToCartArgs = {
   menuItemId: Scalars["ID"]["input"];
   orderId: Scalars["ID"]["input"];
   quantity: Scalars["Int"]["input"];
-  sessionUserId: Scalars["ID"]["input"];
 };
 
 export type MutationCompleteTableSessionArgs = {
@@ -98,12 +97,10 @@ export type MutationPlaceOrderArgs = {
 export type MutationRemoveItemFromCartArgs = {
   orderId: Scalars["ID"]["input"];
   orderItemId: Scalars["ID"]["input"];
-  sessionUserId: Scalars["ID"]["input"];
 };
 
 export type MutationSetUserAllergiesArgs = {
   allergenIds: Array<Scalars["ID"]["input"]>;
-  sessionUserId: Scalars["ID"]["input"];
 };
 
 export type OrderedItem = {
@@ -134,33 +131,12 @@ export type Query = {
   tableSession: Maybe<TableSession>;
 };
 
-export type QueryCartArgs = {
-  tableSessionID: Scalars["ID"]["input"];
-};
-
 export type QueryMenuCategoriesArgs = {
-  restaurantId: Scalars["ID"]["input"];
-};
-
-export type QueryMenuItemsArgs = {
   restaurantId: Scalars["ID"]["input"];
 };
 
 export type QueryMenuItemsByCategoryArgs = {
   categoryId: Scalars["ID"]["input"];
-  restaurantId: Scalars["ID"]["input"];
-};
-
-export type QueryOrderArgs = {
-  orderId: Scalars["ID"]["input"];
-};
-
-export type QueryRestaurantArgs = {
-  id: Scalars["ID"]["input"];
-};
-
-export type QueryTableSessionArgs = {
-  tableSession: Scalars["ID"]["input"];
 };
 
 export type Restaurant = {
@@ -175,14 +151,6 @@ export type Restaurant = {
 export type Subscription = {
   cartUpdated: Maybe<Cart>;
   orderUpdated: Maybe<OrderedItem>;
-};
-
-export type SubscriptionCartUpdatedArgs = {
-  tableSessionId: Scalars["ID"]["input"];
-};
-
-export type SubscriptionOrderUpdatedArgs = {
-  orderId: Scalars["ID"]["input"];
 };
 
 export type Table = {
