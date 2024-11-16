@@ -126,7 +126,24 @@ func (r *queryResolver) HealthCheck(ctx context.Context) (*string, error) {
 
 // Restaurant is the resolver for the restaurant field.
 func (r *queryResolver) Restaurant(ctx context.Context, id string) (*model.Restaurant, error) {
-	panic(fmt.Errorf("not implemented: Restaurant - restaurant"))
+	restaurant, err := r.PostgresSvc.GetRestaurant(id)
+	if err != nil {
+		return nil, err
+	}
+	var addr, phone *string
+	if restaurant.Address.Valid {
+		addr = &restaurant.Address.String
+	}
+	if restaurant.PhoneNumber.Valid {
+		phone = &restaurant.PhoneNumber.String
+	}
+	return &model.Restaurant{
+		Name:        restaurant.Name,
+		Address:     addr,
+		PhoneNumber: phone,
+		//	MenuCategories: restaurant.
+		//	MenuItems:      nil,
+	}, nil
 }
 
 // TableSession is the resolver for the tableSession field.
@@ -136,7 +153,15 @@ func (r *queryResolver) TableSession(ctx context.Context, tableSession string) (
 
 // MenuItems is the resolver for the menuItems field.
 func (r *queryResolver) MenuItems(ctx context.Context, restaurantID string) ([]*model.MenuItem, error) {
-	panic(fmt.Errorf("not implemented: MenuItems - menuItems"))
+	rest, err := r.PostgresSvc.GetRestaurant(restaurantID)
+	if err != nil {
+		return nil, fmt.Errorf("failed to get restaurant, %w", err)
+	}
+	items, err := r.PostgresSvc.GetMenuItems(rest.ID, "ja")
+	if err != nil {
+		return nil, err
+	}
+	return items, nil
 }
 
 // MenuItemsByCategory is the resolver for the menuItemsByCategory field.

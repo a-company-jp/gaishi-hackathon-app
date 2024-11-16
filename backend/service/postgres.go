@@ -3,6 +3,9 @@ package service
 import (
 	"database/sql"
 	"errors"
+	"fmt"
+	"github.com/a-company-jp/gaishi-hackathon-app/backend/graph/model"
+	"sort"
 	"time"
 
 	"github.com/a-company-jp/gaishi-hackathon-app/backend/db_model"
@@ -25,20 +28,107 @@ func NewPostgresService(dbC *gorm.DB) *PostgresService {
 // GetRestaurant retrieves a restaurant by ID
 func (s *PostgresService) GetRestaurant(id string) (*db_model.Restaurant, error) {
 	var rest db_model.Restaurant
-	result := s.dbC.Preload("MenuCategories.MenuItems.Allergens").First(&rest, id)
+	result := s.dbC.First(&rest, id)
 	if result.Error != nil {
 		return nil, result.Error
 	}
 	return &rest, nil
 }
 
-// GetMenuItems retrieves menu items for a specific restaurant
-func (s *PostgresService) GetMenuItems(restaurantID string) ([]*db_model.MenuItem, error) {
-	var menuItems []*db_model.MenuItem
-	result := s.dbC.Where("restaurant_id = ?", restaurantID).Preload("Allergens").Find(&menuItems)
-	if result.Error != nil {
-		return nil, result.Error
+type MenuItemDetailed struct {
+	MenuItemID       int
+	Price            int
+	Available        bool
+	Name             string
+	Description      *string
+	MenuCategoryID   *int
+	MenuCategoryName *string
+	AllergenID       *int
+	AllergenName     *string
+}
+
+// GetMenuItems retrieves detailed menu items for a specific restaurant in the specified language
+func (s *PostgresService) GetMenuItems(restaurantID int, language string) ([]*model.MenuItem, error) {
+	var results []MenuItemDetailed
+
+	// 生のSQLクエリを使用して必要なデータを取得します
+	query := `
+        SELECT 
+            mi.id AS menu_item_id,
+            mi.price,
+            mi.available,
+            mit.name AS name,
+            mit.description,
+            mc.id AS menu_category_id,
+            mct.name AS menu_category_name,
+            a.id AS allergen_id,
+            at.name AS allergen_name
+        FROM menu_items mi
+        LEFT JOIN menu_item_translations mit 
+            ON mi.id = mit.menu_item_id AND mit.language_code = ?
+        LEFT JOIN menu_categories mc 
+            ON mi.category_id = mc.id
+        LEFT JOIN menu_category_translations mct 
+            ON mc.id = mct.menu_category_id AND mct.language_code = ?
+        LEFT JOIN menu_item_allergens mia 
+            ON mi.id = mia.menu_item_id
+        LEFT JOIN allergens a 
+            ON mia.allergen_id = a.id
+        LEFT JOIN allergen_translations at 
+            ON a.id = at.allergen_id AND at.language_code = ?
+        WHERE mi.restaurant_id = ?
+    `
+
+	// クエリを実行し、結果を取得します
+	err := s.dbC.Raw(query, language, language, language, restaurantID).Scan(&results).Error
+	if err != nil {
+		return nil, err
 	}
+
+	// 結果をマッピングするためのマップを作成します
+	menuItemMap := make(map[int]*model.MenuItem)
+
+	for _, r := range results {
+		// メニューアイテムがまだマップに存在しない場合、作成します
+		if _, exists := menuItemMap[r.MenuItemID]; !exists {
+			var category *model.MenuCategory
+			if r.MenuCategoryID != nil && r.MenuCategoryName != nil {
+				category = &model.MenuCategory{
+					ID:   fmt.Sprintf("%d", *r.MenuCategoryID),
+					Name: *r.MenuCategoryName,
+				}
+			}
+
+			menuItemMap[r.MenuItemID] = &model.MenuItem{
+				ID:          fmt.Sprintf("%d", r.MenuItemID),
+				Price:       r.Price,
+				Available:   r.Available,
+				Name:        r.Name,
+				Description: r.Description,
+				Category:    category,
+				Allergens:   []*model.Allergen{},
+			}
+		}
+
+		// アレルゲンが存在する場合、追加します
+		if r.AllergenID != nil && r.AllergenName != nil {
+			allergen := &model.Allergen{
+				ID:   fmt.Sprintf("%d", *r.AllergenID),
+				Name: *r.AllergenName,
+			}
+			menuItemMap[r.MenuItemID].Allergens = append(menuItemMap[r.MenuItemID].Allergens, allergen)
+		}
+	}
+
+	// マップをスライスに変換します
+	var menuItems []*model.MenuItem
+	for _, mi := range menuItemMap {
+		menuItems = append(menuItems, mi)
+	}
+	sort.Slice(menuItems, func(i, j int) bool {
+		return menuItems[i].ID < menuItems[j].ID
+	})
+
 	return menuItems, nil
 }
 
