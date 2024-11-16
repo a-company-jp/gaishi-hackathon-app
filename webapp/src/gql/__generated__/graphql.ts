@@ -193,7 +193,6 @@ export type JoinTableSessionMutation = {
 };
 
 export type SetAllergiesMutationMutationVariables = Exact<{
-  sessionUserId: Scalars["ID"]["input"];
   allergenIds: Array<Scalars["ID"]["input"]> | Scalars["ID"]["input"];
 }>;
 
@@ -201,9 +200,7 @@ export type SetAllergiesMutationMutation = {
   setUserAllergies: { tableSession: { id: string } } | null;
 };
 
-export type GetMenuItemsQueryVariables = Exact<{
-  restaurantId: Scalars["ID"]["input"];
-}>;
+export type GetMenuItemsQueryVariables = Exact<{ [key: string]: never }>;
 
 export type GetMenuItemsQuery = {
   menuItems: Array<{
@@ -221,9 +218,7 @@ export type GetAllergensQuery = {
   allergens: Array<{ id: string; name: string }>;
 };
 
-export type GetCartQueryQueryVariables = Exact<{
-  tableSessionID: Scalars["ID"]["input"];
-}>;
+export type GetCartQueryQueryVariables = Exact<{ [key: string]: never }>;
 
 export type GetCartQueryQuery = {
   cart: {
@@ -329,17 +324,6 @@ export const SetAllergiesMutationDocument = {
           kind: "VariableDefinition",
           variable: {
             kind: "Variable",
-            name: { kind: "Name", value: "sessionUserId" },
-          },
-          type: {
-            kind: "NonNullType",
-            type: { kind: "NamedType", name: { kind: "Name", value: "ID" } },
-          },
-        },
-        {
-          kind: "VariableDefinition",
-          variable: {
-            kind: "Variable",
             name: { kind: "Name", value: "allergenIds" },
           },
           type: {
@@ -364,14 +348,6 @@ export const SetAllergiesMutationDocument = {
             kind: "Field",
             name: { kind: "Name", value: "setUserAllergies" },
             arguments: [
-              {
-                kind: "Argument",
-                name: { kind: "Name", value: "sessionUserId" },
-                value: {
-                  kind: "Variable",
-                  name: { kind: "Name", value: "sessionUserId" },
-                },
-              },
               {
                 kind: "Argument",
                 name: { kind: "Name", value: "allergenIds" },
@@ -412,35 +388,12 @@ export const GetMenuItemsDocument = {
       kind: "OperationDefinition",
       operation: "query",
       name: { kind: "Name", value: "GetMenuItems" },
-      variableDefinitions: [
-        {
-          kind: "VariableDefinition",
-          variable: {
-            kind: "Variable",
-            name: { kind: "Name", value: "restaurantId" },
-          },
-          type: {
-            kind: "NonNullType",
-            type: { kind: "NamedType", name: { kind: "Name", value: "ID" } },
-          },
-        },
-      ],
       selectionSet: {
         kind: "SelectionSet",
         selections: [
           {
             kind: "Field",
             name: { kind: "Name", value: "menuItems" },
-            arguments: [
-              {
-                kind: "Argument",
-                name: { kind: "Name", value: "restaurantId" },
-                value: {
-                  kind: "Variable",
-                  name: { kind: "Name", value: "restaurantId" },
-                },
-              },
-            ],
             selectionSet: {
               kind: "SelectionSet",
               selections: [
@@ -509,35 +462,12 @@ export const GetCartQueryDocument = {
       kind: "OperationDefinition",
       operation: "query",
       name: { kind: "Name", value: "GetCartQuery" },
-      variableDefinitions: [
-        {
-          kind: "VariableDefinition",
-          variable: {
-            kind: "Variable",
-            name: { kind: "Name", value: "tableSessionID" },
-          },
-          type: {
-            kind: "NonNullType",
-            type: { kind: "NamedType", name: { kind: "Name", value: "ID" } },
-          },
-        },
-      ],
       selectionSet: {
         kind: "SelectionSet",
         selections: [
           {
             kind: "Field",
             name: { kind: "Name", value: "cart" },
-            arguments: [
-              {
-                kind: "Argument",
-                name: { kind: "Name", value: "tableSessionID" },
-                value: {
-                  kind: "Variable",
-                  name: { kind: "Name", value: "tableSessionID" },
-                },
-              },
-            ],
             selectionSet: {
               kind: "SelectionSet",
               selections: [

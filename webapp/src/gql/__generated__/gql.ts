@@ -18,13 +18,13 @@ const documents = {
     types.HealthCheckQueryDocument,
   "\n          mutation JoinTableSession($tableUUID: ID!) {\n            joinTableSession(tableUUID: $tableUUID){\n              tableSession {\n                id\n              }\n            }\n          }\n        ":
     types.JoinTableSessionDocument,
-  "\n  mutation SetAllergiesMutation($sessionUserId: ID!, $allergenIds: [ID!]!) {\n    setUserAllergies (sessionUserId: $sessionUserId, allergenIds: $allergenIds) {\n      tableSession {\n        id\n      }\n    }\n  }\n":
+  "\n  mutation SetAllergiesMutation($allergenIds: [ID!]!) {\n    setUserAllergies (allergenIds: $allergenIds) {\n      tableSession {\n        id\n      }\n    }\n  }\n":
     types.SetAllergiesMutationDocument,
-  "\n  query GetMenuItems($restaurantId: ID!) {\n    menuItems(restaurantId: $restaurantId) {\n      id\n      name\n      price\n      category {\n        id\n      }\n      allergens {\n        id\n        name\n      }\n    }\n  }\n":
+  "\n  query GetMenuItems {\n    menuItems {\n      id\n      name\n      price\n      category {\n        id\n      }\n      allergens {\n        id\n        name\n      }\n    }\n  }\n":
     types.GetMenuItemsDocument,
   "\n  query GetAllergens {\n    allergens {\n      id\n      name\n    }\n  }\n":
     types.GetAllergensDocument,
-  "\n  query GetCartQuery($tableSessionID: ID!) {\n    cart (tableSessionID: $tableSessionID) {\n      id\n      items {\n        id\n        menuItem {\n           id\n           name\n           price\n        }\n        quantity\n      }\n      totalCartPrice\n    }\n  }\n":
+  "\n  query GetCartQuery {\n    cart {\n      id\n      items {\n        id\n        menuItem {\n           id\n           name\n           price\n        }\n        quantity\n      }\n      totalCartPrice\n    }\n  }\n":
     types.GetCartQueryDocument,
 };
 
@@ -58,14 +58,14 @@ export function gql(
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function gql(
-  source: "\n  mutation SetAllergiesMutation($sessionUserId: ID!, $allergenIds: [ID!]!) {\n    setUserAllergies (sessionUserId: $sessionUserId, allergenIds: $allergenIds) {\n      tableSession {\n        id\n      }\n    }\n  }\n"
-): (typeof documents)["\n  mutation SetAllergiesMutation($sessionUserId: ID!, $allergenIds: [ID!]!) {\n    setUserAllergies (sessionUserId: $sessionUserId, allergenIds: $allergenIds) {\n      tableSession {\n        id\n      }\n    }\n  }\n"];
+  source: "\n  mutation SetAllergiesMutation($allergenIds: [ID!]!) {\n    setUserAllergies (allergenIds: $allergenIds) {\n      tableSession {\n        id\n      }\n    }\n  }\n"
+): (typeof documents)["\n  mutation SetAllergiesMutation($allergenIds: [ID!]!) {\n    setUserAllergies (allergenIds: $allergenIds) {\n      tableSession {\n        id\n      }\n    }\n  }\n"];
 /**
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function gql(
-  source: "\n  query GetMenuItems($restaurantId: ID!) {\n    menuItems(restaurantId: $restaurantId) {\n      id\n      name\n      price\n      category {\n        id\n      }\n      allergens {\n        id\n        name\n      }\n    }\n  }\n"
-): (typeof documents)["\n  query GetMenuItems($restaurantId: ID!) {\n    menuItems(restaurantId: $restaurantId) {\n      id\n      name\n      price\n      category {\n        id\n      }\n      allergens {\n        id\n        name\n      }\n    }\n  }\n"];
+  source: "\n  query GetMenuItems {\n    menuItems {\n      id\n      name\n      price\n      category {\n        id\n      }\n      allergens {\n        id\n        name\n      }\n    }\n  }\n"
+): (typeof documents)["\n  query GetMenuItems {\n    menuItems {\n      id\n      name\n      price\n      category {\n        id\n      }\n      allergens {\n        id\n        name\n      }\n    }\n  }\n"];
 /**
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
@@ -76,8 +76,8 @@ export function gql(
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function gql(
-  source: "\n  query GetCartQuery($tableSessionID: ID!) {\n    cart (tableSessionID: $tableSessionID) {\n      id\n      items {\n        id\n        menuItem {\n           id\n           name\n           price\n        }\n        quantity\n      }\n      totalCartPrice\n    }\n  }\n"
-): (typeof documents)["\n  query GetCartQuery($tableSessionID: ID!) {\n    cart (tableSessionID: $tableSessionID) {\n      id\n      items {\n        id\n        menuItem {\n           id\n           name\n           price\n        }\n        quantity\n      }\n      totalCartPrice\n    }\n  }\n"];
+  source: "\n  query GetCartQuery {\n    cart {\n      id\n      items {\n        id\n        menuItem {\n           id\n           name\n           price\n        }\n        quantity\n      }\n      totalCartPrice\n    }\n  }\n"
+): (typeof documents)["\n  query GetCartQuery {\n    cart {\n      id\n      items {\n        id\n        menuItem {\n           id\n           name\n           price\n        }\n        quantity\n      }\n      totalCartPrice\n    }\n  }\n"];
 
 export function gql(source: string) {
   return (documents as any)[source] ?? {};

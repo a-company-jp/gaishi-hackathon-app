@@ -14,8 +14,8 @@ interface OrderItem {
 }
 
 const GetCartQuery = gql(`
-  query GetCartQuery($tableSessionID: ID!) {
-    cart (tableSessionID: $tableSessionID) {
+  query GetCartQuery {
+    cart {
       id
       items {
         id
