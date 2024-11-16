@@ -129,6 +129,7 @@ function MenuPage({ lang, dict }: MenuPageProps) {
               setIsModalOpen={setIsModalOpen}
               disabled={false}
               // disabled={true} // アレルギーのフィルタ対象であればtrue
+              dict={dict}
             />
           ))}
       </div>
@@ -143,6 +144,7 @@ function MenuPage({ lang, dict }: MenuPageProps) {
         quantity={quantity}
         onQuantityChange={setQuantity}
         onAddToCart={handleAddToCart}
+        dict={dict}
       />
 
       <div className="fixed bottom-4 right-4">
