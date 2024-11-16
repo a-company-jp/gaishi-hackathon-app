@@ -131,12 +131,30 @@ export type Query = {
   tableSession: Maybe<TableSession>;
 };
 
+export type QueryAllergensArgs = {
+  lang: InputMaybe<Scalars["String"]["input"]>;
+};
+
+export type QueryCartArgs = {
+  lang: InputMaybe<Scalars["String"]["input"]>;
+};
+
 export type QueryMenuCategoriesArgs = {
+  lang: InputMaybe<Scalars["String"]["input"]>;
   restaurantId: Scalars["ID"]["input"];
+};
+
+export type QueryMenuItemsArgs = {
+  lang: InputMaybe<Scalars["String"]["input"]>;
 };
 
 export type QueryMenuItemsByCategoryArgs = {
   categoryId: Scalars["ID"]["input"];
+  lang: InputMaybe<Scalars["String"]["input"]>;
+};
+
+export type QueryOrderArgs = {
+  lang: InputMaybe<Scalars["String"]["input"]>;
 };
 
 export type Restaurant = {

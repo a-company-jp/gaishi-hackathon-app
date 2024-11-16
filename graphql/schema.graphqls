@@ -3,12 +3,12 @@ type Query {
   healthCheck: String
   restaurant: Restaurant
   tableSession: TableSession
-  menuItems: [MenuItem!]!
-  menuItemsByCategory(categoryId: ID!): [MenuItem!]!
-  menuCategories(restaurantId: ID!): [MenuCategory!]!
-  allergens: [Allergen!]!
-  cart: Cart
-  order: OrderedItem
+  menuItems(lang: String): [MenuItem!]!
+  menuItemsByCategory(lang: String,categoryId: ID!): [MenuItem!]!
+  menuCategories(lang: String,restaurantId: ID!): [MenuCategory!]!
+  allergens(lang: String): [Allergen!]!
+  cart(lang: String): Cart
+  order(lang: String): OrderedItem
 }
 
 type Mutation {
