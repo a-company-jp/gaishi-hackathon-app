@@ -8,6 +8,7 @@ type Props = {
   imgUrl: string;
   setSelectedItemId: (id: string) => void;
   setIsModalOpen: (open: boolean) => void;
+  disabled: boolean;
 };
 
 function MenuCard({
@@ -17,9 +18,12 @@ function MenuCard({
   imgUrl,
   setSelectedItemId,
   setIsModalOpen,
+  disabled,
 }: Props) {
   return (
-    <div className="bg-white rounded-lg shadow">
+    <div
+      className={`bg-white rounded-lg shadow ${disabled ? "bg-gray-400 opacity-40" : ""}`}
+    >
       <div className="p-4">
         <img
           src={imgUrl}
@@ -38,6 +42,7 @@ function MenuCard({
                 setSelectedItemId(id);
                 setIsModalOpen(true);
               }}
+              disabled={disabled}
             >
               カートに入れる
             </Button>

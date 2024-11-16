@@ -366,13 +366,13 @@ function MenuPage() {
   const [quantity, setQuantity] = useState(1);
   const [activeGenre, setActiveGenre] = useState("ddddd");
   const tenantId = useSelector((state: RootState) => state.tenantId.id);
-  const { loading, error, data } = useQuery(MenuItemsQuery, {
-    variables: { restaurantId: tenantId },
-  });
-
-  if (loading) return "Loading...";
-  if (error) return `Error! ${error.message}`;
-  console.log(data);
+  // const { loading, error, data } = useQuery(MenuItemsQuery, {
+  //   variables: { restaurantId: tenantId },
+  // });
+  //
+  // if (loading) return "Loading...";
+  // if (error) return `Error! ${error.message}`;
+  // console.log(data);
 
   const handleAddToCart = () => {
     setCartCount((prevCount) => prevCount + quantity);
@@ -402,6 +402,8 @@ function MenuPage() {
               imgUrl={item.image}
               setSelectedItemId={setSelectedItemId}
               setIsModalOpen={setIsModalOpen}
+              disabled={false}
+              // disabled={true} // アレルギーのフィルタ対象であればtrue
             />
           ))}
       </div>
