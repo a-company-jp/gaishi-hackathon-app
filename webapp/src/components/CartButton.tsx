@@ -22,7 +22,7 @@ export default function CartButton({ count, size = "md" }: CartButtonProps) {
     <div className="relative inline-block">
       <div
         className={`${sizeStyles.padding} bg-primary rounded-full shadow hover:bg-opacity-75`}
-        onClick={() => router.push("/order/cart")}
+        onClick={() => router.push("../order/cart")}
       >
         <ShoppingCart className={`${sizeStyles.iconSize} text-white`} />
       </div>

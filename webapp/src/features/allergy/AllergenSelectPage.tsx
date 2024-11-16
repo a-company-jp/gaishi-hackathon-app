@@ -32,7 +32,7 @@ export default function AllergenSelectPage({ dict }: { dict: Dictionary }) {
   const onClick = async () => {
     try {
       // await setAllergies();
-      router.push("/order");
+      router.push("../order");
     } catch (e) {
       console.error(e);
     }
