@@ -6,11 +6,13 @@ export const metadata = {
   title: "Title - CHANGE ME!!!",
 };
 
-export default async function Page({
-  params: { lang },
-}: {
-  params: { lang: Language };
-}) {
-  const dict = await getDictionary(lang);
+type PageProps = {
+  params: Promise<{
+    lang: Language;
+  }>;
+};
+
+export default async function Page({ params }: Awaited<PageProps>) {
+  const dict = await getDictionary((await params).lang);
   return <AllergenSelectPage dict={dict} />;
 }
