@@ -3,8 +3,9 @@
 import { useState } from "react";
 import { AllergenButton } from "@/components/AllergenButton";
 import { Button } from "@/components/ui/button";
+import { Dictionary } from "@/app/types/dictionary";
 
-export default function AllergenSelectPage() {
+export default function AllergenSelectPage({ dict }: { dict: Dictionary }) {
   const [selectedAllergens, setSelectedAllergens] = useState<number[]>([]);
 
   const toggleAllergen = (index: number) => {
@@ -16,54 +17,56 @@ export default function AllergenSelectPage() {
   const items = [
     {
       src: "/foods/fish.png",
-      alt: "魚類",
-      label: "魚類",
+      alt: dict.allergy.allergen.fish,
+      label: dict.allergy.allergen.fish,
     },
     {
       src: "/foods/egg.png",
-      alt: "たまご",
-      label: "たまご",
+      alt: dict.allergy.allergen.egg,
+      label: dict.allergy.allergen.egg,
     },
     {
       src: "/foods/orange.png",
-      alt: "オレンジ",
-      label: "オレンジ",
+      alt: dict.allergy.allergen.orange,
+      label: dict.allergy.allergen.orange,
     },
     {
       src: "/foods/crab.png",
-      alt: "かに",
-      label: "かに",
+      alt: dict.allergy.allergen.crab,
+      label: dict.allergy.allergen.crab,
     },
     {
       src: "/foods/beef.png",
-      alt: "ビーフ",
-      label: "ビーフ",
+      alt: dict.allergy.allergen.beef,
+      label: dict.allergy.allergen.beef,
     },
     {
       src: "/foods/kiwi.png",
-      alt: "キウイ",
-      label: "キウイ",
+      alt: dict.allergy.allergen.kiwi,
+      label: dict.allergy.allergen.kiwi,
     },
     {
       src: "/foods/shrimp.png",
-      alt: "えび",
-      label: "えび",
+      alt: dict.allergy.allergen.shrimp,
+      label: dict.allergy.allergen.shrimp,
     },
     {
       src: "/foods/soba.png",
-      alt: "そば",
-      label: "そば",
+      alt: dict.allergy.allergen.soba,
+      label: dict.allergy.allergen.soba,
     },
     {
       src: "/foods/peanuts.png",
-      alt: "ピーナッツ",
-      label: "ピーナッツ",
+      alt: dict.allergy.allergen.peanuts,
+      label: dict.allergy.allergen.peanuts,
     },
   ];
 
   return (
     <div className="flex flex-col min-h-screen bg-white">
-      <span className="text-lg text-center py-8">アレルギー情報の登録</span>
+      <span className="text-lg text-center py-8">
+        {dict.allergy.registration}
+      </span>
 
       <div className="flex justify-center">
         <div className="grid grid-cols-3 gap-4">
@@ -80,7 +83,7 @@ export default function AllergenSelectPage() {
 
       <div className="flex justify-center py-8">
         <Button className="bg-zinc-800 text-white hover:bg-zinc-700">
-          注文を開始する
+          {dict.allergy.startOrder}
         </Button>
       </div>
     </div>
