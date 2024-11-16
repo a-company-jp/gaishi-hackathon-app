@@ -21,6 +21,7 @@
   "order": {
     "menu": {
       "addToCart": "カートに追加",
+      "selectQuantity": "個数を選択してください。",
       "yourAllergies": "あなたのアレルギー食材",
       "allergenList": "アレルギー食材リスト",
       "allergenListDescription": "あなたのアレルギー食材について確認と編集が可能です。"

@@ -21,6 +21,7 @@
   "order": {
     "menu": {
       "addToCart": "Добавить в корзину",
+      "selectQuantity": "Пожалуйста, выберите количество.",
       "yourAllergies": "Ваши аллергены",
       "allergenList": "Список аллергенов",
       "allergenListDescription": "Вы можете проверить и отредактировать свои аллергены."
