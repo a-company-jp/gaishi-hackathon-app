@@ -7,6 +7,7 @@ package graph
 import (
 	"context"
 	"fmt"
+	"log"
 	"strconv"
 	"time"
 
@@ -156,7 +157,8 @@ func (r *queryResolver) TableSession(ctx context.Context) (*model.TableSession, 
 func (r *queryResolver) MenuItems(ctx context.Context, lang *string) ([]*model.MenuItem, error) {
 	restID := ctx.Value(middleware.CTX_RESTAURANT_ID).(int)
 	if lang == nil {
-		*lang = ctx.Value(middleware.CTX_LANGUAGE).(string)
+		l := ctx.Value(middleware.CTX_LANGUAGE).(string)
+		lang = &l
 	}
 	items, err := r.PostgresSvc.GetMenuItems(restID, *lang)
 	if err != nil {
@@ -183,7 +185,8 @@ func (r *queryResolver) MenuCategories(ctx context.Context, lang *string, restau
 // Allergens is the resolver for the allergens field.
 func (r *queryResolver) Allergens(ctx context.Context, lang *string) ([]*model.Allergen, error) {
 	if lang == nil {
-		*lang = ctx.Value(middleware.CTX_LANGUAGE).(string)
+		l := ctx.Value(middleware.CTX_LANGUAGE).(string)
+		lang = &l
 	}
 	allergens, err := r.PostgresSvc.GetAllAllergens(*lang)
 	if err != nil {
@@ -194,7 +197,18 @@ func (r *queryResolver) Allergens(ctx context.Context, lang *string) ([]*model.A
 
 // Cart is the resolver for the cart field.
 func (r *queryResolver) Cart(ctx context.Context, lang *string) (*model.Cart, error) {
-	panic(fmt.Errorf("not implemented: Cart - cart"))
+	if lang == nil {
+		log.Println("no lang")
+		log.Printf("ctx: %v", ctx.Value(middleware.CTX_LANGUAGE))
+		l := ctx.Value(middleware.CTX_LANGUAGE).(string)
+		lang = &l
+	}
+	aid := ctx.Value(middleware.CTX_ACCOUNT_UUID).(string)
+	byAID, err := r.PostgresSvc.GetCartByAID(aid)
+	if err != nil {
+		return nil, err
+	}
+	return byAID, nil
 }
 
 // Order is the resolver for the order field.
