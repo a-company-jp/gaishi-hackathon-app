@@ -4,22 +4,20 @@ import { useState } from "react";
 import { AllergenButton } from "@/components/AllergenButton";
 import { Button } from "@/components/ui/button";
 import { Dictionary } from "@/app/types/dictionary";
-import { gql } from "@/gql/__generated__";
-import { useMutation } from "@apollo/client";
 import { useRouter } from "next/navigation";
 
-const SetAllergiesMutation = gql(`
-  mutation SetAllergiesMutation($allergenIds: [ID!]!) {
-    setUserAllergies (allergenIds: $allergenIds) {
-      tableSession {
-        id
-      }
-    }
-  }
-`);
+// const SetAllergiesMutation = gql(`
+//   mutation SetAllergiesMutation($allergenIds: [ID!]!) {
+//     setUserAllergies (allergenIds: $allergenIds) {
+//       tableSession {
+//         id
+//       }
+//     }
+//   }
+// `);
 
 export default function AllergenSelectPage({ dict }: { dict: Dictionary }) {
-  const [setAllergies] = useMutation(SetAllergiesMutation);
+  // const [setAllergies] = useMutation(SetAllergiesMutation);
   const router = useRouter();
   const [selectedAllergens, setSelectedAllergens] = useState<number[]>([]);
 
@@ -32,7 +30,7 @@ export default function AllergenSelectPage({ dict }: { dict: Dictionary }) {
   const onClick = async () => {
     try {
       // await setAllergies();
-      router.push("/order");
+      router.push("../order");
     } catch (e) {
       console.error(e);
     }

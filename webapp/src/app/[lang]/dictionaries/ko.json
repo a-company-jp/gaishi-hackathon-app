@@ -17,5 +17,20 @@
       "soba": "메밀",
       "peanuts": "땅콩"
     }
+  },
+  "order": {
+    "menu": {
+      "addToCart": "장바구니에 추가",
+      "yourAllergies": "당신의 알레르기",
+      "allergenList": "알레르기 목록",
+      "allergenListDescription": "알레르기를 확인하고 편집할 수 있습니다."
+    },
+    "cart": {
+      "cart": "장바구니",
+      "confirmOrder": "주문 확인",
+      "total": "합계",
+      "cartIsEmpty": "장바구니가 비어 있습니다",
+      "thankYouForOrder": "주문해 주셔서 감사합니다!"
+    }
   }
 }

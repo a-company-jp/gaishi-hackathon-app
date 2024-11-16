@@ -18,7 +18,7 @@ export default function GenreCard({
     <nav className="w-full max-w-3xl mx-auto overflow-x-auto scrollbar-hide">
       <ul className="flex border-b min-w-max px-2">
         {menuItems.map((item) => (
-          <li key={item.id} className="flex-1 flex min-w-[80px]">
+          <li key={item.id} className="flex-1 flex px-4">
             <button
               onClick={() => setActiveTab(item.id)}
               className={`flex-1 py-2 px-1 text-[11px] sm:text-xs font-medium transition-colors duration-200 tracking-[0.2em] whitespace-nowrap ${

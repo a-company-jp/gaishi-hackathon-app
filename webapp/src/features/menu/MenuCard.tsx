@@ -1,5 +1,6 @@
 import React from "react";
 import { Button } from "@/components/ui/button";
+import Image from "next/image";
 
 type Props = {
   id: string;
@@ -25,9 +26,11 @@ function MenuCard({
       className={`bg-white rounded-lg shadow ${disabled ? "bg-gray-400 opacity-40" : ""}`}
     >
       <div className="p-4">
-        <img
+        <Image
           src={imgUrl}
           alt=""
+          width={100}
+          height={100}
           className="h-36 w-full rounded-lg object-cover"
         />
         <div className="mt-2 row-span-3">

@@ -17,5 +17,20 @@
       "soba": "Grano saraceno",
       "peanuts": "Arachidi"
     }
+  },
+  "order": {
+    "menu": {
+      "addToCart": "Aggiungi al carrello",
+      "yourAllergies": "I tuoi allergeni",
+      "allergenList": "Elenco degli allergeni",
+      "allergenListDescription": "Puoi controllare e modificare i tuoi allergeni."
+    },
+    "cart": {
+      "cart": "Carrello",
+      "confirmOrder": "Conferma ordine",
+      "total": "Totale",
+      "cartIsEmpty": "Il carrello è vuoto",
+      "thankYouForOrder": "Grazie per il tuo ordine!"
+    }
   }
 }
