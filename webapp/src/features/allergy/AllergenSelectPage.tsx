@@ -4,8 +4,21 @@ import { useState } from "react";
 import { AllergenButton } from "@/components/AllergenButton";
 import { Button } from "@/components/ui/button";
 import { Dictionary } from "@/app/types/dictionary";
+import { gql } from "@/gql/__generated__";
+import { useMutation } from "@apollo/client";
+
+const SetAllergiesMutation = gql(`
+  mutation SetAllergiesMutation($sessionUserId: ID!, $allergenIds: [ID!]!) {
+    setUserAllergies (sessionUserId: $sessionUserId, allergenIds: $allergenIds) {
+      tableSession {
+        id
+      }
+    }
+  }
+`);
 
 export default function AllergenSelectPage({ dict }: { dict: Dictionary }) {
+  const [setAllergies] = useMutation(SetAllergiesMutation);
   const [selectedAllergens, setSelectedAllergens] = useState<number[]>([]);
 
   const toggleAllergen = (index: number) => {
