@@ -24,6 +24,13 @@
       "yourAllergies": "Ihre Allergene",
       "allergenList": "Allergenliste",
       "allergenListDescription": "Sie können Ihre Allergene überprüfen und bearbeiten."
+    },
+    "cart": {
+      "cart": "Warenkorb",
+      "confirmOrder": "Bestellung bestätigen",
+      "total": "Gesamt",
+      "cartIsEmpty": "Der Warenkorb ist leer",
+      "thankYouForOrder": "Vielen Dank für Ihre Bestellung!"
     }
   }
 }

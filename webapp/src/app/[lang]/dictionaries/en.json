@@ -24,6 +24,13 @@
       "yourAllergies": "Your Allergens",
       "allergenList": "Allergen List",
       "allergenListDescription": "You can check and edit your allergens."
+    },
+    "cart": {
+      "cart": "Shopping Cart",
+      "confirmOrder": "Confirm Order",
+      "total": "Total",
+      "cartIsEmpty": "Cart is empty",
+      "thankYouForOrder": "Thank you for your order!"
     }
   }
 }

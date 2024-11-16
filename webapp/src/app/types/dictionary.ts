@@ -25,5 +25,12 @@ export type Dictionary = {
       allergenList: string;
       allergenListDescription: string;
     };
+    cart: {
+      cart: string;
+      confirmOrder: string;
+      total: string;
+      cartIsEmpty: string;
+      thankYouForOrder: string;
+    };
   };
 };

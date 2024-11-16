@@ -24,6 +24,13 @@
       "yourAllergies": "您的过敏原",
       "allergenList": "过敏原列表",
       "allergenListDescription": "您可以检查和编辑您的过敏原。"
+    },
+    "cart": {
+      "cart": "购物车",
+      "confirmOrder": "确认订单",
+      "total": "总计",
+      "cartIsEmpty": "购物车是空的",
+      "thankYouForOrder": "感谢您的订购！"
     }
   }
 }

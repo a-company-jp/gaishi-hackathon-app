@@ -24,6 +24,13 @@
       "yourAllergies": "Ваши аллергены",
       "allergenList": "Список аллергенов",
       "allergenListDescription": "Вы можете проверить и отредактировать свои аллергены."
+    },
+    "cart": {
+      "cart": "Корзина",
+      "confirmOrder": "Подтвердить заказ",
+      "total": "Итого",
+      "cartIsEmpty": "Корзина пуста",
+      "thankYouForOrder": "Спасибо за ваш заказ!"
     }
   }
 }
