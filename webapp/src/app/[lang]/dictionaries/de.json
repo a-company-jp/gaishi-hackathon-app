@@ -2,5 +2,20 @@
   "orderMode": {
     "registerAllergy": "Beginnen Sie mit der Registrierung von Allergieinformationen",
     "startOrder": "Bestellung sofort starten"
+  },
+  "allergy": {
+    "registration": "Registrierung von Allergieinformationen",
+    "startOrder": "Bestellung starten",
+    "allergen": {
+      "fish": "Fisch",
+      "egg": "Ei",
+      "orange": "Orange",
+      "crab": "Krabbe",
+      "beef": "Rindfleisch",
+      "kiwi": "Kiwi",
+      "shrimp": "Garnelen",
+      "soba": "Buchweizen",
+      "peanuts": "Erdnüsse"
+    }
   }
 }

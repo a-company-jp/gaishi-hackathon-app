@@ -2,5 +2,20 @@
   "orderMode": {
     "registerAllergy": "Comienza registrando información sobre alergias",
     "startOrder": "Comienza a ordenar de inmediato"
+  },
+  "allergy": {
+    "registration": "Registro de información sobre alergias",
+    "startOrder": "Comenzar pedido",
+    "allergen": {
+      "fish": "Pescado",
+      "egg": "Huevo",
+      "orange": "Naranja",
+      "crab": "Cangrejo",
+      "beef": "Carne de res",
+      "kiwi": "Kiwi",
+      "shrimp": "Camarón",
+      "soba": "Alforfón",
+      "peanuts": "Cacahuates"
+    }
   }
 }

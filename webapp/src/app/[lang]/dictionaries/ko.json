@@ -2,5 +2,20 @@
   "orderMode": {
     "registerAllergy": "알레르기 정보를 등록하고 시작하기",
     "startOrder": "바로 주문 시작하기"
+  },
+  "allergy": {
+    "registration": "알레르기 정보 등록",
+    "startOrder": "주문 시작",
+    "allergen": {
+      "fish": "생선",
+      "egg": "계란",
+      "orange": "오렌지",
+      "crab": "게",
+      "beef": "소고기",
+      "kiwi": "키위",
+      "shrimp": "새우",
+      "soba": "메밀",
+      "peanuts": "땅콩"
+    }
   }
 }

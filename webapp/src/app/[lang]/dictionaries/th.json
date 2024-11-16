@@ -2,5 +2,20 @@
   "orderMode": {
     "registerAllergy": "เริ่มต้นด้วยการลงทะเบียนข้อมูลการแพ้",
     "startOrder": "เริ่มสั่งซื้อทันที"
+  },
+  "allergy": {
+    "registration": "การลงทะเบียนข้อมูลการแพ้",
+    "startOrder": "เริ่มการสั่งซื้อ",
+    "allergen": {
+      "fish": "ปลา",
+      "egg": "ไข่",
+      "orange": "ส้ม",
+      "crab": "ปู",
+      "beef": "เนื้อวัว",
+      "kiwi": "กีวี",
+      "shrimp": "กุ้ง",
+      "soba": "บัควีท",
+      "peanuts": "ถั่วลิสง"
+    }
   }
 }

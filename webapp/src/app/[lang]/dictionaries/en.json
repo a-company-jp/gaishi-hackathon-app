@@ -2,5 +2,20 @@
   "orderMode": {
     "registerAllergy": "Start by registering allergy information",
     "startOrder": "Start ordering immediately"
+  },
+  "allergy": {
+    "registration": "Allergy information registration",
+    "startOrder": "Start order",
+    "allergen": {
+      "fish": "Fish",
+      "egg": "Egg",
+      "orange": "Orange",
+      "crab": "Crab",
+      "beef": "Beef",
+      "kiwi": "Kiwi",
+      "shrimp": "Shrimp",
+      "soba": "Buckwheat",
+      "peanuts": "Peanuts"
+    }
   }
 }

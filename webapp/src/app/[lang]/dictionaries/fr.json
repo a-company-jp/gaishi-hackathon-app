@@ -2,5 +2,20 @@
   "orderMode": {
     "registerAllergy": "Commencez par enregistrer les informations sur les allergies",
     "startOrder": "Commencez à commander immédiatement"
+  },
+  "allergy": {
+    "registration": "Enregistrement des informations sur les allergies",
+    "startOrder": "Commencer la commande",
+    "allergen": {
+      "fish": "Poisson",
+      "egg": "Œuf",
+      "orange": "Orange",
+      "crab": "Crabe",
+      "beef": "Bœuf",
+      "kiwi": "Kiwi",
+      "shrimp": "Crevette",
+      "soba": "Sarrasin",
+      "peanuts": "Cacahuètes"
+    }
   }
 }

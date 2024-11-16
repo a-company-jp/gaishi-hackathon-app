@@ -2,5 +2,20 @@
   "orderMode": {
     "registerAllergy": "Inizia registrando le informazioni sulle allergie",
     "startOrder": "Inizia subito l'ordine"
+  },
+  "allergy": {
+    "registration": "Registrazione delle informazioni sulle allergie",
+    "startOrder": "Inizia l'ordine",
+    "allergen": {
+      "fish": "Pesce",
+      "egg": "Uovo",
+      "orange": "Arancia",
+      "crab": "Granchio",
+      "beef": "Manzo",
+      "kiwi": "Kiwi",
+      "shrimp": "Gambero",
+      "soba": "Grano saraceno",
+      "peanuts": "Arachidi"
+    }
   }
 }
