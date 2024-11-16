@@ -77,3 +77,19 @@ import {
   id = "projects/${google_project.itadakimasu.project_id}/locations/global/certificates/i-a-shion-p"
   to = google_certificate_manager_certificate.wildcard_i_a_shion_pro
 }
+
+import {
+  id = "${google_project.itadakimasu.project_id}/lb-frontend"
+  to = google_compute_url_map.lb_frontend
+}
+
+
+import {
+  id = "${google_project.itadakimasu.project_id}/itadakimasu-frontend"
+  to = google_compute_backend_bucket.itadakimasu_frontend
+}
+
+import {
+  id = "${google_project.itadakimasu.project_id}/itadakimasu-docs"
+  to = google_compute_backend_bucket.itadakimasu_docs
+}
