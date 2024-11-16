@@ -4,6 +4,7 @@ import React, { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { languages, Language, languageNames } from "@/app/types/language";
+import { useRouter } from "next/navigation";
 
 const welcomeMessages: Record<Language, string> = {
   ja: "ようこそ、お母さん食堂へ！",
@@ -36,6 +37,8 @@ function LanguageSelectPage() {
     languages[0]
   );
 
+  const router = useRouter();
+
   return (
     <>
       <div className="flex items-center justify-center h-24 w-full sticky top-0 bg-lightPrimary border-b border-gray-200 shadow-md p-4">
@@ -59,7 +62,10 @@ function LanguageSelectPage() {
         ))}
       </ul>
       <div className="flex justify-center items-center p-10">
-        <Button className="w-40 h-12 bg-white border border-gray-200 text-md font-bold bg-zinc-800 text-white">
+        <Button
+          className="w-40 h-12 bg-white border border-gray-200 text-md font-bold bg-zinc-800 text-white"
+          onClick={() => router.push(`/${selectedLanguage}/order-mode`)}
+        >
           <span>{nextButtonText[selectedLanguage]}</span>
         </Button>
       </div>

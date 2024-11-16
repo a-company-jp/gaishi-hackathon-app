@@ -1,0 +1,6 @@
+{
+  "orderMode": {
+    "registerAllergy": "Start by registering allergy information",
+    "startOrder": "Start ordering immediately"
+  }
+}
