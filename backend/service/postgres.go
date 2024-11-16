@@ -143,9 +143,18 @@ func (s *PostgresService) GetMenuItemsByCategory(restaurantID string, categoryID
 }
 
 // GetMenuCategories retrieves menu categories for a specific restaurant
-func (s *PostgresService) GetMenuCategories(restaurantID string) ([]*db_model.MenuCategory, error) {
-	var categories []*db_model.MenuCategory
-	result := s.dbC.Where("restaurant_id = ?", restaurantID).Preload("MenuItems").Find(&categories)
+func (s *PostgresService) GetMenuCategories(restaurantID int) ([]*model.MenuCategory, error) {
+	var categories []*model.MenuCategory
+	query := `
+		SELECT
+		    mc.id as id,
+		    mct.name as name
+		FROM menu_categories mc
+		LEFT JOIN menu_category_translations mct
+		    ON mc.id = mct.menu_category_id
+		WHERE mc.restaurant_id = ?
+		`
+	result := s.dbC.Raw(query, restaurantID).Scan(&categories)
 	if result.Error != nil {
 		return nil, result.Error
 	}
@@ -153,9 +162,18 @@ func (s *PostgresService) GetMenuCategories(restaurantID string) ([]*db_model.Me
 }
 
 // GetAllAllergens retrieves all allergens
-func (s *PostgresService) GetAllAllergens() ([]*db_model.Allergen, error) {
-	var allergens []*db_model.Allergen
-	result := s.dbC.Find(&allergens)
+func (s *PostgresService) GetAllAllergens(lang string) ([]*model.Allergen, error) {
+	var allergens []*model.Allergen
+	query := `
+		SELECT
+		    a.id as id,
+		    at.name as name
+		FROM allergens a
+		LEFT JOIN allergen_translations at
+		    ON a.id = at.allergen_id
+		WHERE at.language_code = ?
+	`
+	result := s.dbC.Raw(query, lang).Scan(&allergens)
 	if result.Error != nil {
 		return nil, result.Error
 	}

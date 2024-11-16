@@ -108,14 +108,14 @@ type ComplexityRoot struct {
 	}
 
 	Query struct {
-		Allergens           func(childComplexity int) int
-		Cart                func(childComplexity int) int
+		Allergens           func(childComplexity int, lang *string) int
+		Cart                func(childComplexity int, lang *string) int
 		HealthCheck         func(childComplexity int) int
-		MenuCategories      func(childComplexity int, restaurantID string) int
-		MenuItems           func(childComplexity int) int
-		MenuItemsByCategory func(childComplexity int, categoryID string) int
+		MenuCategories      func(childComplexity int, lang *string, restaurantID string) int
+		MenuItems           func(childComplexity int, lang *string) int
+		MenuItemsByCategory func(childComplexity int, lang *string, categoryID string) int
 		MyCuuid             func(childComplexity int) int
-		Order               func(childComplexity int) int
+		Order               func(childComplexity int, lang *string) int
 		Restaurant          func(childComplexity int) int
 		TableSession        func(childComplexity int) int
 	}
@@ -172,12 +172,12 @@ type QueryResolver interface {
 	HealthCheck(ctx context.Context) (*string, error)
 	Restaurant(ctx context.Context) (*model.Restaurant, error)
 	TableSession(ctx context.Context) (*model.TableSession, error)
-	MenuItems(ctx context.Context) ([]*model.MenuItem, error)
-	MenuItemsByCategory(ctx context.Context, categoryID string) ([]*model.MenuItem, error)
-	MenuCategories(ctx context.Context, restaurantID string) ([]*model.MenuCategory, error)
-	Allergens(ctx context.Context) ([]*model.Allergen, error)
-	Cart(ctx context.Context) (*model.Cart, error)
-	Order(ctx context.Context) (*model.OrderedItem, error)
+	MenuItems(ctx context.Context, lang *string) ([]*model.MenuItem, error)
+	MenuItemsByCategory(ctx context.Context, lang *string, categoryID string) ([]*model.MenuItem, error)
+	MenuCategories(ctx context.Context, lang *string, restaurantID string) ([]*model.MenuCategory, error)
+	Allergens(ctx context.Context, lang *string) ([]*model.Allergen, error)
+	Cart(ctx context.Context, lang *string) (*model.Cart, error)
+	Order(ctx context.Context, lang *string) (*model.OrderedItem, error)
 }
 type SubscriptionResolver interface {
 	CartUpdated(ctx context.Context) (<-chan *model.Cart, error)
@@ -483,14 +483,24 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 			break
 		}
 
-		return e.complexity.Query.Allergens(childComplexity), true
+		args, err := ec.field_Query_allergens_args(context.TODO(), rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Query.Allergens(childComplexity, args["lang"].(*string)), true
 
 	case "Query.cart":
 		if e.complexity.Query.Cart == nil {
 			break
 		}
 
-		return e.complexity.Query.Cart(childComplexity), true
+		args, err := ec.field_Query_cart_args(context.TODO(), rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Query.Cart(childComplexity, args["lang"].(*string)), true
 
 	case "Query.healthCheck":
 		if e.complexity.Query.HealthCheck == nil {
@@ -509,14 +519,19 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 			return 0, false
 		}
 
-		return e.complexity.Query.MenuCategories(childComplexity, args["restaurantId"].(string)), true
+		return e.complexity.Query.MenuCategories(childComplexity, args["lang"].(*string), args["restaurantId"].(string)), true
 
 	case "Query.menuItems":
 		if e.complexity.Query.MenuItems == nil {
 			break
 		}
 
-		return e.complexity.Query.MenuItems(childComplexity), true
+		args, err := ec.field_Query_menuItems_args(context.TODO(), rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Query.MenuItems(childComplexity, args["lang"].(*string)), true
 
 	case "Query.menuItemsByCategory":
 		if e.complexity.Query.MenuItemsByCategory == nil {
@@ -528,7 +543,7 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 			return 0, false
 		}
 
-		return e.complexity.Query.MenuItemsByCategory(childComplexity, args["categoryId"].(string)), true
+		return e.complexity.Query.MenuItemsByCategory(childComplexity, args["lang"].(*string), args["categoryId"].(string)), true
 
 	case "Query.myCUUID":
 		if e.complexity.Query.MyCuuid == nil {
@@ -542,7 +557,12 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 			break
 		}
 
-		return e.complexity.Query.Order(childComplexity), true
+		args, err := ec.field_Query_order_args(context.TODO(), rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Query.Order(childComplexity, args["lang"].(*string)), true
 
 	case "Query.restaurant":
 		if e.complexity.Query.Restaurant == nil {
@@ -846,12 +866,12 @@ var sources = []*ast.Source{
   healthCheck: String
   restaurant: Restaurant
   tableSession: TableSession
-  menuItems: [MenuItem!]!
-  menuItemsByCategory(categoryId: ID!): [MenuItem!]!
-  menuCategories(restaurantId: ID!): [MenuCategory!]!
-  allergens: [Allergen!]!
-  cart: Cart
-  order: OrderedItem
+  menuItems(lang: String): [MenuItem!]!
+  menuItemsByCategory(lang: String,categoryId: ID!): [MenuItem!]!
+  menuCategories(lang: String,restaurantId: ID!): [MenuCategory!]!
+  allergens(lang: String): [Allergen!]!
+  cart(lang: String): Cart
+  order(lang: String): OrderedItem
 }
 
 type Mutation {
@@ -1195,16 +1215,80 @@ func (ec *executionContext) field_Query___type_argsName(
 	return zeroVal, nil
 }
 
-func (ec *executionContext) field_Query_menuCategories_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
+func (ec *executionContext) field_Query_allergens_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
 	var err error
 	args := map[string]interface{}{}
-	arg0, err := ec.field_Query_menuCategories_argsRestaurantID(ctx, rawArgs)
+	arg0, err := ec.field_Query_allergens_argsLang(ctx, rawArgs)
 	if err != nil {
 		return nil, err
 	}
-	args["restaurantId"] = arg0
+	args["lang"] = arg0
 	return args, nil
 }
+func (ec *executionContext) field_Query_allergens_argsLang(
+	ctx context.Context,
+	rawArgs map[string]interface{},
+) (*string, error) {
+	ctx = graphql.WithPathContext(ctx, graphql.NewPathWithField("lang"))
+	if tmp, ok := rawArgs["lang"]; ok {
+		return ec.unmarshalOString2ᚖstring(ctx, tmp)
+	}
+
+	var zeroVal *string
+	return zeroVal, nil
+}
+
+func (ec *executionContext) field_Query_cart_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
+	var err error
+	args := map[string]interface{}{}
+	arg0, err := ec.field_Query_cart_argsLang(ctx, rawArgs)
+	if err != nil {
+		return nil, err
+	}
+	args["lang"] = arg0
+	return args, nil
+}
+func (ec *executionContext) field_Query_cart_argsLang(
+	ctx context.Context,
+	rawArgs map[string]interface{},
+) (*string, error) {
+	ctx = graphql.WithPathContext(ctx, graphql.NewPathWithField("lang"))
+	if tmp, ok := rawArgs["lang"]; ok {
+		return ec.unmarshalOString2ᚖstring(ctx, tmp)
+	}
+
+	var zeroVal *string
+	return zeroVal, nil
+}
+
+func (ec *executionContext) field_Query_menuCategories_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
+	var err error
+	args := map[string]interface{}{}
+	arg0, err := ec.field_Query_menuCategories_argsLang(ctx, rawArgs)
+	if err != nil {
+		return nil, err
+	}
+	args["lang"] = arg0
+	arg1, err := ec.field_Query_menuCategories_argsRestaurantID(ctx, rawArgs)
+	if err != nil {
+		return nil, err
+	}
+	args["restaurantId"] = arg1
+	return args, nil
+}
+func (ec *executionContext) field_Query_menuCategories_argsLang(
+	ctx context.Context,
+	rawArgs map[string]interface{},
+) (*string, error) {
+	ctx = graphql.WithPathContext(ctx, graphql.NewPathWithField("lang"))
+	if tmp, ok := rawArgs["lang"]; ok {
+		return ec.unmarshalOString2ᚖstring(ctx, tmp)
+	}
+
+	var zeroVal *string
+	return zeroVal, nil
+}
+
 func (ec *executionContext) field_Query_menuCategories_argsRestaurantID(
 	ctx context.Context,
 	rawArgs map[string]interface{},
@@ -1221,13 +1305,31 @@ func (ec *executionContext) field_Query_menuCategories_argsRestaurantID(
 func (ec *executionContext) field_Query_menuItemsByCategory_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
 	var err error
 	args := map[string]interface{}{}
-	arg0, err := ec.field_Query_menuItemsByCategory_argsCategoryID(ctx, rawArgs)
+	arg0, err := ec.field_Query_menuItemsByCategory_argsLang(ctx, rawArgs)
 	if err != nil {
 		return nil, err
 	}
-	args["categoryId"] = arg0
+	args["lang"] = arg0
+	arg1, err := ec.field_Query_menuItemsByCategory_argsCategoryID(ctx, rawArgs)
+	if err != nil {
+		return nil, err
+	}
+	args["categoryId"] = arg1
 	return args, nil
 }
+func (ec *executionContext) field_Query_menuItemsByCategory_argsLang(
+	ctx context.Context,
+	rawArgs map[string]interface{},
+) (*string, error) {
+	ctx = graphql.WithPathContext(ctx, graphql.NewPathWithField("lang"))
+	if tmp, ok := rawArgs["lang"]; ok {
+		return ec.unmarshalOString2ᚖstring(ctx, tmp)
+	}
+
+	var zeroVal *string
+	return zeroVal, nil
+}
+
 func (ec *executionContext) field_Query_menuItemsByCategory_argsCategoryID(
 	ctx context.Context,
 	rawArgs map[string]interface{},
@@ -1238,6 +1340,52 @@ func (ec *executionContext) field_Query_menuItemsByCategory_argsCategoryID(
 	}
 
 	var zeroVal string
+	return zeroVal, nil
+}
+
+func (ec *executionContext) field_Query_menuItems_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
+	var err error
+	args := map[string]interface{}{}
+	arg0, err := ec.field_Query_menuItems_argsLang(ctx, rawArgs)
+	if err != nil {
+		return nil, err
+	}
+	args["lang"] = arg0
+	return args, nil
+}
+func (ec *executionContext) field_Query_menuItems_argsLang(
+	ctx context.Context,
+	rawArgs map[string]interface{},
+) (*string, error) {
+	ctx = graphql.WithPathContext(ctx, graphql.NewPathWithField("lang"))
+	if tmp, ok := rawArgs["lang"]; ok {
+		return ec.unmarshalOString2ᚖstring(ctx, tmp)
+	}
+
+	var zeroVal *string
+	return zeroVal, nil
+}
+
+func (ec *executionContext) field_Query_order_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
+	var err error
+	args := map[string]interface{}{}
+	arg0, err := ec.field_Query_order_argsLang(ctx, rawArgs)
+	if err != nil {
+		return nil, err
+	}
+	args["lang"] = arg0
+	return args, nil
+}
+func (ec *executionContext) field_Query_order_argsLang(
+	ctx context.Context,
+	rawArgs map[string]interface{},
+) (*string, error) {
+	ctx = graphql.WithPathContext(ctx, graphql.NewPathWithField("lang"))
+	if tmp, ok := rawArgs["lang"]; ok {
+		return ec.unmarshalOString2ᚖstring(ctx, tmp)
+	}
+
+	var zeroVal *string
 	return zeroVal, nil
 }
 
@@ -3262,7 +3410,7 @@ func (ec *executionContext) _Query_menuItems(ctx context.Context, field graphql.
 	}()
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return ec.resolvers.Query().MenuItems(rctx)
+		return ec.resolvers.Query().MenuItems(rctx, fc.Args["lang"].(*string))
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -3279,7 +3427,7 @@ func (ec *executionContext) _Query_menuItems(ctx context.Context, field graphql.
 	return ec.marshalNMenuItem2ᚕᚖgithubᚗcomᚋaᚑcompanyᚑjpᚋgaishiᚑhackathonᚑappᚋbackendᚋgraphᚋmodelᚐMenuItemᚄ(ctx, field.Selections, res)
 }
 
-func (ec *executionContext) fieldContext_Query_menuItems(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+func (ec *executionContext) fieldContext_Query_menuItems(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
 		Object:     "Query",
 		Field:      field,
@@ -3305,6 +3453,17 @@ func (ec *executionContext) fieldContext_Query_menuItems(_ context.Context, fiel
 			return nil, fmt.Errorf("no field named %q was found under type MenuItem", field.Name)
 		},
 	}
+	defer func() {
+		if r := recover(); r != nil {
+			err = ec.Recover(ctx, r)
+			ec.Error(ctx, err)
+		}
+	}()
+	ctx = graphql.WithFieldContext(ctx, fc)
+	if fc.Args, err = ec.field_Query_menuItems_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
+		ec.Error(ctx, err)
+		return fc, err
+	}
 	return fc, nil
 }
 
@@ -3322,7 +3481,7 @@ func (ec *executionContext) _Query_menuItemsByCategory(ctx context.Context, fiel
 	}()
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return ec.resolvers.Query().MenuItemsByCategory(rctx, fc.Args["categoryId"].(string))
+		return ec.resolvers.Query().MenuItemsByCategory(rctx, fc.Args["lang"].(*string), fc.Args["categoryId"].(string))
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -3393,7 +3552,7 @@ func (ec *executionContext) _Query_menuCategories(ctx context.Context, field gra
 	}()
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return ec.resolvers.Query().MenuCategories(rctx, fc.Args["restaurantId"].(string))
+		return ec.resolvers.Query().MenuCategories(rctx, fc.Args["lang"].(*string), fc.Args["restaurantId"].(string))
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -3456,7 +3615,7 @@ func (ec *executionContext) _Query_allergens(ctx context.Context, field graphql.
 	}()
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return ec.resolvers.Query().Allergens(rctx)
+		return ec.resolvers.Query().Allergens(rctx, fc.Args["lang"].(*string))
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -3473,7 +3632,7 @@ func (ec *executionContext) _Query_allergens(ctx context.Context, field graphql.
 	return ec.marshalNAllergen2ᚕᚖgithubᚗcomᚋaᚑcompanyᚑjpᚋgaishiᚑhackathonᚑappᚋbackendᚋgraphᚋmodelᚐAllergenᚄ(ctx, field.Selections, res)
 }
 
-func (ec *executionContext) fieldContext_Query_allergens(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+func (ec *executionContext) fieldContext_Query_allergens(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
 		Object:     "Query",
 		Field:      field,
@@ -3488,6 +3647,17 @@ func (ec *executionContext) fieldContext_Query_allergens(_ context.Context, fiel
 			}
 			return nil, fmt.Errorf("no field named %q was found under type Allergen", field.Name)
 		},
+	}
+	defer func() {
+		if r := recover(); r != nil {
+			err = ec.Recover(ctx, r)
+			ec.Error(ctx, err)
+		}
+	}()
+	ctx = graphql.WithFieldContext(ctx, fc)
+	if fc.Args, err = ec.field_Query_allergens_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
+		ec.Error(ctx, err)
+		return fc, err
 	}
 	return fc, nil
 }
@@ -3506,7 +3676,7 @@ func (ec *executionContext) _Query_cart(ctx context.Context, field graphql.Colle
 	}()
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return ec.resolvers.Query().Cart(rctx)
+		return ec.resolvers.Query().Cart(rctx, fc.Args["lang"].(*string))
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -3520,7 +3690,7 @@ func (ec *executionContext) _Query_cart(ctx context.Context, field graphql.Colle
 	return ec.marshalOCart2ᚖgithubᚗcomᚋaᚑcompanyᚑjpᚋgaishiᚑhackathonᚑappᚋbackendᚋgraphᚋmodelᚐCart(ctx, field.Selections, res)
 }
 
-func (ec *executionContext) fieldContext_Query_cart(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+func (ec *executionContext) fieldContext_Query_cart(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
 		Object:     "Query",
 		Field:      field,
@@ -3540,6 +3710,17 @@ func (ec *executionContext) fieldContext_Query_cart(_ context.Context, field gra
 			return nil, fmt.Errorf("no field named %q was found under type Cart", field.Name)
 		},
 	}
+	defer func() {
+		if r := recover(); r != nil {
+			err = ec.Recover(ctx, r)
+			ec.Error(ctx, err)
+		}
+	}()
+	ctx = graphql.WithFieldContext(ctx, fc)
+	if fc.Args, err = ec.field_Query_cart_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
+		ec.Error(ctx, err)
+		return fc, err
+	}
 	return fc, nil
 }
 
@@ -3557,7 +3738,7 @@ func (ec *executionContext) _Query_order(ctx context.Context, field graphql.Coll
 	}()
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return ec.resolvers.Query().Order(rctx)
+		return ec.resolvers.Query().Order(rctx, fc.Args["lang"].(*string))
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -3571,7 +3752,7 @@ func (ec *executionContext) _Query_order(ctx context.Context, field graphql.Coll
 	return ec.marshalOOrderedItem2ᚖgithubᚗcomᚋaᚑcompanyᚑjpᚋgaishiᚑhackathonᚑappᚋbackendᚋgraphᚋmodelᚐOrderedItem(ctx, field.Selections, res)
 }
 
-func (ec *executionContext) fieldContext_Query_order(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+func (ec *executionContext) fieldContext_Query_order(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
 		Object:     "Query",
 		Field:      field,
@@ -3592,6 +3773,17 @@ func (ec *executionContext) fieldContext_Query_order(_ context.Context, field gr
 			}
 			return nil, fmt.Errorf("no field named %q was found under type OrderedItem", field.Name)
 		},
+	}
+	defer func() {
+		if r := recover(); r != nil {
+			err = ec.Recover(ctx, r)
+			ec.Error(ctx, err)
+		}
+	}()
+	ctx = graphql.WithFieldContext(ctx, fc)
+	if fc.Args, err = ec.field_Query_order_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
+		ec.Error(ctx, err)
+		return fc, err
 	}
 	return fc, nil
 }
