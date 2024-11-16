@@ -21,6 +21,7 @@ export type Dictionary = {
   order: {
     menu: {
       addToCart: string;
+      selectQuantity: string;
       yourAllergies: string;
       allergenList: string;
       allergenListDescription: string;

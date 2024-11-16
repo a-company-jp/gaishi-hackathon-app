@@ -21,6 +21,7 @@
   "order": {
     "menu": {
       "addToCart": "Añadir al carrito",
+      "selectQuantity": "Por favor, seleccione la cantidad.",
       "yourAllergies": "Tus alérgenos",
       "allergenList": "Lista de alérgenos",
       "allergenListDescription": "Puede verificar y editar sus alérgenos."

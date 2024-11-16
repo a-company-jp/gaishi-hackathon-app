@@ -37,7 +37,9 @@ function MenuModal({
       <DialogContent className="w-3/4">
         <DialogHeader>
           <DialogTitle>{selectedItem?.name}</DialogTitle>
-          <DialogDescription>個数を選択してください。</DialogDescription>
+          <DialogDescription>
+            {dict.order.menu.selectQuantity}
+          </DialogDescription>
         </DialogHeader>
         <div className="flex items-center justify-center gap-4 py-4">
           <Button

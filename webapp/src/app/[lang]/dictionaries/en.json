@@ -21,6 +21,7 @@
   "order": {
     "menu": {
       "addToCart": "Add to Cart",
+      "selectQuantity": "Please select quantity.",
       "yourAllergies": "Your Allergens",
       "allergenList": "Allergen List",
       "allergenListDescription": "You can check and edit your allergens."
