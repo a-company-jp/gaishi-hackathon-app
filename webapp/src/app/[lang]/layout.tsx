@@ -4,16 +4,15 @@ export async function generateStaticParams() {
   return languages.map((lang) => ({ lang }));
 }
 
-export default async function Root({
+export default function Root({
   children,
   params,
 }: {
   children: React.ReactNode;
-  params: Promise<{ lang: Language }>;
+  params: { lang: Language };
 }) {
-  const resolvedParams = await params;
   return (
-    <html lang={resolvedParams.lang}>
+    <html lang={params.lang}>
       <body>{children}</body>
     </html>
   );
