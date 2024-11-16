@@ -82,17 +82,17 @@ func (r *mutationResolver) CompleteTableSession(ctx context.Context, tableSessio
 }
 
 // SetUserAllergies is the resolver for the setUserAllergies field.
-func (r *mutationResolver) SetUserAllergies(ctx context.Context, sessionUserID string, allergenIds []string) (*model.TableSessionUser, error) {
+func (r *mutationResolver) SetUserAllergies(ctx context.Context, allergenIds []string) (*model.TableSessionUser, error) {
 	panic(fmt.Errorf("not implemented: SetUserAllergies - setUserAllergies"))
 }
 
 // AddItemToCart is the resolver for the addItemToCart field.
-func (r *mutationResolver) AddItemToCart(ctx context.Context, orderID string, menuItemID string, quantity int, sessionUserID string) (*model.Cart, error) {
+func (r *mutationResolver) AddItemToCart(ctx context.Context, orderID string, menuItemID string, quantity int) (*model.Cart, error) {
 	panic(fmt.Errorf("not implemented: AddItemToCart - addItemToCart"))
 }
 
 // RemoveItemFromCart is the resolver for the removeItemFromCart field.
-func (r *mutationResolver) RemoveItemFromCart(ctx context.Context, orderID string, orderItemID string, sessionUserID string) (*model.Cart, error) {
+func (r *mutationResolver) RemoveItemFromCart(ctx context.Context, orderID string, orderItemID string) (*model.Cart, error) {
 	panic(fmt.Errorf("not implemented: RemoveItemFromCart - removeItemFromCart"))
 }
 
@@ -125,8 +125,9 @@ func (r *queryResolver) HealthCheck(ctx context.Context) (*string, error) {
 }
 
 // Restaurant is the resolver for the restaurant field.
-func (r *queryResolver) Restaurant(ctx context.Context, id string) (*model.Restaurant, error) {
-	restaurant, err := r.PostgresSvc.GetRestaurant(id)
+func (r *queryResolver) Restaurant(ctx context.Context) (*model.Restaurant, error) {
+	restID := ctx.Value(middleware.CTX_RESTAURANT_ID).(int)
+	restaurant, err := r.PostgresSvc.GetRestaurant(restID)
 	if err != nil {
 		return nil, err
 	}
@@ -147,13 +148,14 @@ func (r *queryResolver) Restaurant(ctx context.Context, id string) (*model.Resta
 }
 
 // TableSession is the resolver for the tableSession field.
-func (r *queryResolver) TableSession(ctx context.Context, tableSession string) (*model.TableSession, error) {
+func (r *queryResolver) TableSession(ctx context.Context) (*model.TableSession, error) {
 	panic(fmt.Errorf("not implemented: TableSession - tableSession"))
 }
 
 // MenuItems is the resolver for the menuItems field.
-func (r *queryResolver) MenuItems(ctx context.Context, restaurantID string) ([]*model.MenuItem, error) {
-	rest, err := r.PostgresSvc.GetRestaurant(restaurantID)
+func (r *queryResolver) MenuItems(ctx context.Context) ([]*model.MenuItem, error) {
+	restID := ctx.Value(middleware.CTX_RESTAURANT_ID).(int)
+	rest, err := r.PostgresSvc.GetRestaurant(restID)
 	if err != nil {
 		return nil, fmt.Errorf("failed to get restaurant, %w", err)
 	}
@@ -165,7 +167,7 @@ func (r *queryResolver) MenuItems(ctx context.Context, restaurantID string) ([]*
 }
 
 // MenuItemsByCategory is the resolver for the menuItemsByCategory field.
-func (r *queryResolver) MenuItemsByCategory(ctx context.Context, restaurantID string, categoryID string) ([]*model.MenuItem, error) {
+func (r *queryResolver) MenuItemsByCategory(ctx context.Context, categoryID string) ([]*model.MenuItem, error) {
 	panic(fmt.Errorf("not implemented: MenuItemsByCategory - menuItemsByCategory"))
 }
 
@@ -180,22 +182,22 @@ func (r *queryResolver) Allergens(ctx context.Context) ([]*model.Allergen, error
 }
 
 // Cart is the resolver for the cart field.
-func (r *queryResolver) Cart(ctx context.Context, tableSessionID string) (*model.Cart, error) {
+func (r *queryResolver) Cart(ctx context.Context) (*model.Cart, error) {
 	panic(fmt.Errorf("not implemented: Cart - cart"))
 }
 
 // Order is the resolver for the order field.
-func (r *queryResolver) Order(ctx context.Context, orderID string) (*model.OrderedItem, error) {
+func (r *queryResolver) Order(ctx context.Context) (*model.OrderedItem, error) {
 	panic(fmt.Errorf("not implemented: Order - order"))
 }
 
 // CartUpdated is the resolver for the cartUpdated field.
-func (r *subscriptionResolver) CartUpdated(ctx context.Context, tableSessionID string) (<-chan *model.Cart, error) {
+func (r *subscriptionResolver) CartUpdated(ctx context.Context) (<-chan *model.Cart, error) {
 	panic(fmt.Errorf("not implemented: CartUpdated - cartUpdated"))
 }
 
 // OrderUpdated is the resolver for the orderUpdated field.
-func (r *subscriptionResolver) OrderUpdated(ctx context.Context, orderID string) (<-chan *model.OrderedItem, error) {
+func (r *subscriptionResolver) OrderUpdated(ctx context.Context) (<-chan *model.OrderedItem, error) {
 	panic(fmt.Errorf("not implemented: OrderUpdated - orderUpdated"))
 }
 

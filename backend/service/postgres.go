@@ -26,7 +26,7 @@ func NewPostgresService(dbC *gorm.DB) *PostgresService {
 // --- ユーティリティメソッド ---
 
 // GetRestaurant retrieves a restaurant by ID
-func (s *PostgresService) GetRestaurant(id string) (*db_model.Restaurant, error) {
+func (s *PostgresService) GetRestaurant(id int) (*db_model.Restaurant, error) {
 	var rest db_model.Restaurant
 	result := s.dbC.First(&rest, id)
 	if result.Error != nil {
