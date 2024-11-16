@@ -7,6 +7,7 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
+import { Dictionary } from "@/app/types/dictionary";
 
 interface MenuModalProps {
   isOpen: boolean;
@@ -19,6 +20,7 @@ interface MenuModalProps {
   quantity: number;
   onQuantityChange: (quantity: number) => void;
   onAddToCart: () => void;
+  dict: Dictionary;
 }
 
 function MenuModal({
@@ -28,6 +30,7 @@ function MenuModal({
   quantity,
   onQuantityChange,
   onAddToCart,
+  dict,
 }: MenuModalProps) {
   return (
     <Dialog open={isOpen} onOpenChange={onOpenChange}>
@@ -55,7 +58,7 @@ function MenuModal({
           className="mx-auto w-48 bg-yellow-400 hover:bg-yellow-500 text-gray-800"
           onClick={onAddToCart}
         >
-          カートに追加
+          {dict.order.menu.addToCart}
         </Button>
       </DialogContent>
     </Dialog>

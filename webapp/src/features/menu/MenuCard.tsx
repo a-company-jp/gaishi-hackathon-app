@@ -1,6 +1,7 @@
 import React from "react";
 import { Button } from "@/components/ui/button";
 import Image from "next/image";
+import { Dictionary } from "@/app/types/dictionary";
 
 type Props = {
   id: string;
@@ -10,6 +11,7 @@ type Props = {
   setSelectedItemId: (id: string) => void;
   setIsModalOpen: (open: boolean) => void;
   disabled: boolean;
+  dict: Dictionary;
 };
 
 function MenuCard({
@@ -20,6 +22,7 @@ function MenuCard({
   setSelectedItemId,
   setIsModalOpen,
   disabled,
+  dict,
 }: Props) {
   return (
     <div
@@ -47,7 +50,7 @@ function MenuCard({
               }}
               disabled={disabled}
             >
-              カートに入れる
+              {dict.order.menu.addToCart}
             </Button>
           </div>
         </div>
