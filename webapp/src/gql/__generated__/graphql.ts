@@ -247,6 +247,12 @@ export type GetMenuItemsQuery = {
   }>;
 };
 
+export type GetAllergensQueryVariables = Exact<{ [key: string]: never }>;
+
+export type GetAllergensQuery = {
+  allergens: Array<{ id: string; name: string }>;
+};
+
 export type GetCartQueryQueryVariables = Exact<{
   tableSessionID: Scalars["ID"]["input"];
 }>;
@@ -502,6 +508,32 @@ export const GetMenuItemsDocument = {
     },
   ],
 } as unknown as DocumentNode<GetMenuItemsQuery, GetMenuItemsQueryVariables>;
+export const GetAllergensDocument = {
+  kind: "Document",
+  definitions: [
+    {
+      kind: "OperationDefinition",
+      operation: "query",
+      name: { kind: "Name", value: "GetAllergens" },
+      selectionSet: {
+        kind: "SelectionSet",
+        selections: [
+          {
+            kind: "Field",
+            name: { kind: "Name", value: "allergens" },
+            selectionSet: {
+              kind: "SelectionSet",
+              selections: [
+                { kind: "Field", name: { kind: "Name", value: "id" } },
+                { kind: "Field", name: { kind: "Name", value: "name" } },
+              ],
+            },
+          },
+        ],
+      },
+    },
+  ],
+} as unknown as DocumentNode<GetAllergensQuery, GetAllergensQueryVariables>;
 export const GetCartQueryDocument = {
   kind: "Document",
   definitions: [

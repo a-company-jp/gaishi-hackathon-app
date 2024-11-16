@@ -350,6 +350,15 @@ const MenuItemsQuery = gql(`
   }
 `);
 
+const AllergensQuery = gql(`
+  query GetAllergens {
+    allergens {
+      id
+      name
+    }
+  }
+`);
+
 function MenuPage() {
   const tenantId = useSelector((state: RootState) => state.tenantId.id);
   const { loading, error, data } = useQuery(MenuItemsQuery, {

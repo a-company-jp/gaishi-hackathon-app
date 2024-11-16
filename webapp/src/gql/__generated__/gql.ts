@@ -22,6 +22,8 @@ const documents = {
     types.SetAllergiesMutationDocument,
   "\n  query GetMenuItems($restaurantId: ID!) {\n    menuItems(restaurantId: $restaurantId) {\n      id\n      name\n      price\n      category {\n        id\n      }\n      allergens {\n        id\n        name\n      }\n    }\n  }\n":
     types.GetMenuItemsDocument,
+  "\n  query GetAllergens {\n    allergens {\n      id\n      name\n    }\n  }\n":
+    types.GetAllergensDocument,
   "\n  query GetCartQuery($tableSessionID: ID!) {\n    cart (tableSessionID: $tableSessionID) {\n      id\n      items {\n        id\n        menuItem {\n           id\n           name\n           price\n        }\n        quantity\n      }\n      totalCartPrice\n    }\n  }\n":
     types.GetCartQueryDocument,
 };
@@ -64,6 +66,12 @@ export function gql(
 export function gql(
   source: "\n  query GetMenuItems($restaurantId: ID!) {\n    menuItems(restaurantId: $restaurantId) {\n      id\n      name\n      price\n      category {\n        id\n      }\n      allergens {\n        id\n        name\n      }\n    }\n  }\n"
 ): (typeof documents)["\n  query GetMenuItems($restaurantId: ID!) {\n    menuItems(restaurantId: $restaurantId) {\n      id\n      name\n      price\n      category {\n        id\n      }\n      allergens {\n        id\n        name\n      }\n    }\n  }\n"];
+/**
+ * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function gql(
+  source: "\n  query GetAllergens {\n    allergens {\n      id\n      name\n    }\n  }\n"
+): (typeof documents)["\n  query GetAllergens {\n    allergens {\n      id\n      name\n    }\n  }\n"];
 /**
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
