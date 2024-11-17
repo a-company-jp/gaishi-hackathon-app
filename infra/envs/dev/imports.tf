@@ -3,10 +3,10 @@ import {
   to = google_cloud_run_v2_service.backend
 }
 
-# import {
-#   id = "projects/${google_project.itadakimasu.project_id}/locations/asia-northeast1/services/frontend-main"
-#   to = google_cloud_run_v2_service.frontend
-# }
+import {
+  id = "projects/${google_project.itadakimasu.project_id}/locations/asia-northeast1/services/frontend-main"
+  to = google_cloud_run_v2_service.frontend
+}
 
 import {
   id = "projects/${google_project.itadakimasu.project_id}/locations/asia-northeast1/repositories/itadakimasu"
