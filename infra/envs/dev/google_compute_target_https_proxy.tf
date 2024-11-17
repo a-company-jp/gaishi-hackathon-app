@@ -7,11 +7,8 @@ resource "google_compute_target_https_proxy" "lb_frontend_target_proxy" {
   quic_override               = "NONE"
   server_tls_policy           = null
   certificate_map             = "//certificatemanager.googleapis.com/${google_certificate_manager_certificate_map.frontend.id}"
-  ssl_certificates = [
-    "https://www.googleapis.com/compute/v1/projects/itadakimasu-engulid/global/sslCertificates/i-a-shion-pro",
-    "https://www.googleapis.com/compute/v1/projects/itadakimasu-engulid/global/sslCertificates/store-i-a-shion-pro"
-  ]
-  ssl_policy     = null
-  tls_early_data = "DISABLED"
-  url_map        = google_compute_url_map.lb_frontend.id
+  ssl_certificates            = []
+  ssl_policy                  = null
+  tls_early_data              = "DISABLED"
+  url_map                     = google_compute_url_map.lb_frontend.id
 }
