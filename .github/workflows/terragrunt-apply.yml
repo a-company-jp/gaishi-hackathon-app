@@ -27,7 +27,7 @@ jobs:
 
       - name: Login to Google Cloud
         id: auth
-        uses: ./.github/actions/gcloud-auth.yaml
+        uses: ./.github/actions/gcloud-auth
 
       - name: Terragrunt Init
         working-directory: infra

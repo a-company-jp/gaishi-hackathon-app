@@ -24,7 +24,7 @@ jobs:
 
       - name: Login to Google Cloud
         id: auth
-        uses: ./.github/actions/gcloud-auth.yaml
+        uses: ./.github/actions/gcloud-auth
 
       - name: Set up Cloud SDK
         uses: 'google-github-actions/setup-gcloud@v2'
