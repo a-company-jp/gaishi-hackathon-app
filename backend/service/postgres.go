@@ -5,6 +5,7 @@ import (
 	"errors"
 	"fmt"
 	"github.com/a-company-jp/gaishi-hackathon-app/backend/graph/model"
+	"log"
 	"sort"
 	"time"
 
@@ -242,6 +243,187 @@ func (s *PostgresService) GetActiveTableSessionByTableID(tid int) (*db_model.Tab
 	return &session, nil
 }
 
+type CartItemDetailed struct {
+	CartItemID          int     `gorm:"column:cart_item_id"`
+	Quantity            int     `gorm:"column:quantity"`
+	AddedByAccountID    string  `gorm:"column:added_by_account_id"`
+	MenuItemID          int     `gorm:"column:menu_item_id"`
+	MenuItemName        string  `gorm:"column:menu_item_name"`
+	MenuItemDescription *string `gorm:"column:menu_item_description"`
+	MenuItemPrice       int     `gorm:"column:menu_item_price"`
+	MenuItemAvailable   bool    `gorm:"column:menu_item_available"`
+	MenuCategoryID      *int    `gorm:"column:menu_category_id"`
+	MenuCategoryName    *string `gorm:"column:menu_category_name"`
+	AllergenID          *int    `gorm:"column:allergen_id"`
+	AllergenName        *string `gorm:"column:allergen_name"`
+	UserNumber          int     `gorm:"column:user_number"`
+	TableSessionUserID  int     `gorm:"column:table_session_user_id"`
+}
+
+func (s *PostgresService) GetCartByAccountID(accountID uuid.UUID, language string) (*model.Cart, error) {
+	var tableSessionID int
+	// Step 1: Find active table_session for the account
+	err := s.dbC.Table("table_sessions").
+		Select("table_sessions.id").
+		Joins("JOIN table_session_users ON table_sessions.id = table_session_users.table_session_id").
+		Where("table_session_users.account_id = ? AND table_sessions.is_active = ?", accountID, true).
+		Scan(&tableSessionID).Error
+	if err != nil {
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			return nil, errors.New("active table session not found for account")
+		}
+		return nil, err
+	}
+
+	// Step 2: Get the cart for the table_session
+	var cart db_model.Cart
+	err = s.dbC.Preload("Items").Where("table_session_id = ?", tableSessionID).First(&cart).Error
+	if err != nil {
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			return nil, errors.New("cart not found for table session")
+		}
+		return nil, err
+	}
+
+	// Step 3: Get cart items with translations
+	var cartItemsDetailed []CartItemDetailed
+
+	query := `
+        SELECT 
+            ci.id AS cart_item_id,
+            ci.quantity,
+            ci.added_by_account_id,
+            mi.id AS menu_item_id,
+            mit.name AS menu_item_name,
+            mit.description AS menu_item_description,
+            mi.price AS menu_item_price,
+            mi.available AS menu_item_available,
+            mc.id AS menu_category_id,
+            mct.name AS menu_category_name,
+            a.id AS allergen_id,
+            at.name AS allergen_name,
+            tsu.user_number AS user_number,
+            tsu.id AS table_session_user_id
+        FROM cart_items ci
+        JOIN carts c ON ci.cart_id = c.id
+        JOIN table_session_users tsu ON ci.added_by_account_id = tsu.account_id AND tsu.table_session_id = c.table_session_id
+        JOIN menu_items mi ON ci.menu_item_id = mi.id
+        LEFT JOIN menu_item_translations mit ON mi.id = mit.menu_item_id AND mit.language_code = ?
+        LEFT JOIN menu_categories mc ON mi.category_id = mc.id
+        LEFT JOIN menu_category_translations mct ON mc.id = mct.menu_category_id AND mct.language_code = ?
+        LEFT JOIN menu_item_allergens mia ON mi.id = mia.menu_item_id
+        LEFT JOIN allergens a ON mia.allergen_id = a.id
+        LEFT JOIN allergen_translations at ON a.id = at.allergen_id AND at.language_code = ?
+        WHERE c.id = ?
+    `
+
+	err = s.dbC.Raw(query, language, language, language, cart.ID).Scan(&cartItemsDetailed).Error
+	if err != nil {
+		return nil, err
+	}
+
+	// Step 4: Map results to model.Cart
+	cartModel := &model.Cart{
+		ID:             fmt.Sprintf("%d", cart.ID),
+		TableSession:   nil,
+		TotalCartPrice: cart.TotalCartPrice,
+		Items:          []*model.CartItem{},
+	}
+
+	// Map to hold MenuItemID to model.MenuItem
+	menuItemMap := make(map[int]*model.MenuItem)
+
+	for _, ci := range cartItemsDetailed {
+		// Initialize the MenuItem in the map if not present
+		if _, exists := menuItemMap[ci.MenuItemID]; !exists {
+			var category *model.MenuCategory
+			if ci.MenuCategoryID != nil && ci.MenuCategoryName != nil {
+				category = &model.MenuCategory{
+					ID:   fmt.Sprintf("%d", *ci.MenuCategoryID),
+					Name: *ci.MenuCategoryName,
+				}
+			}
+
+			menuItemMap[ci.MenuItemID] = &model.MenuItem{
+				ID:          fmt.Sprintf("%d", ci.MenuItemID),
+				Price:       ci.MenuItemPrice,
+				Available:   ci.MenuItemAvailable,
+				Name:        ci.MenuItemName,
+				Description: ci.MenuItemDescription,
+				Category:    category,
+				Allergens:   []*model.Allergen{},
+			}
+		}
+
+		// Add allergen if present
+		if ci.AllergenID != nil && ci.AllergenName != nil {
+			allergen := &model.Allergen{
+				ID:   fmt.Sprintf("%d", *ci.AllergenID),
+				Name: *ci.AllergenName,
+			}
+			menuItemMap[ci.MenuItemID].Allergens = append(menuItemMap[ci.MenuItemID].Allergens, allergen)
+		}
+
+		// TODO: fix this
+		sessionUser := &model.TableSessionUser{
+			TableSession: &model.TableSession{
+				ID: fmt.Sprintf("%d", tableSessionID),
+			},
+			UserNumber: ci.UserNumber,
+			Allergies:  []*model.Allergen{}, // Fetch allergies separately if needed
+		}
+
+		// Create CartItem
+		cartItem := &model.CartItem{
+			ID:       fmt.Sprintf("%d", ci.CartItemID),
+			MenuItem: menuItemMap[ci.MenuItemID],
+			Quantity: ci.Quantity,
+			AddedBy:  sessionUser,
+		}
+
+		cartModel.Items = append(cartModel.Items, cartItem)
+	}
+
+	return cartModel, nil
+}
+
+func (s *PostgresService) GetActiveTableSessionByAID(aid string) (*model.TableSession, error) {
+	var session db_model.TableSession
+	query := `
+		SELECT
+		    ts.id as id,
+		    ts.table_id as table_id,
+		    ts.start_time as start_time,
+		    ts.end_time as end_time,
+		    ts.is_active as is_active,
+		    ts.created_at as created_at,
+		    ts.updated_at as updated_at,
+		    c.id as cart_id,
+		    c.total_cart_price as total_cart_price,
+		    c.created_at as cart_created_at,
+		    c.updated_at as cart_updated_at,
+		    ci.id as cart_item_id,
+		    ci.menu_item_id as menu_item_id,
+		    ci.quantity as quantity,
+		    ci.added_by_account_id as added_by_account_id
+		FROM table_session_users tsu
+		LEFT JOIN table_sessions ts
+		    ON tsu.table_session_id = ts.id	
+		LEFT JOIN carts c
+			ON ts.id = c.table_session_id
+		LEFT JOIN cart_items ci
+			ON c.id = ci.cart_id
+		WHERE tsu.account_id = ?
+	`
+	result := s.dbC.Raw(query, aid).Scan(&session)
+	if result.Error != nil {
+		return nil, result.Error
+	}
+	log.Printf("sessionxxx: %v", session)
+
+	return &model.TableSession{}, nil
+}
+
 func (s *PostgresService) GetActiveTableSessionByTableUUID(tuuid uuid.UUID) (*db_model.TableSession, error) {
 	type TargetSchema struct {
 		TableSession db_model.TableSession
@@ -342,9 +524,71 @@ func (s *PostgresService) GetUserAllergies(sessionUserID int) ([]*db_model.Aller
 // --- カート関連 ---
 
 // GetCart retrieves a cart for a table session
-func (s *PostgresService) GetCart(tableSessionID int) (*db_model.Cart, error) {
-	var cart db_model.Cart
-	result := s.dbC.Preload("Items.MenuItem.Allergens").Where("table_session_id = ?", tableSessionID).First(&cart)
+func (s *PostgresService) GetCart(tableSessionID int) (*model.Cart, error) {
+	var cart model.Cart
+	query := `
+		SELECT
+		    c.id as id,
+		    c.total_cart_price as total_cart_price,
+		    c.table_session_id as table_session_id,
+		    c.created_at as created_at,
+		    c.updated_at as updated_at,
+		    ci.id as cart_item_id,
+		    ci.menu_item_id as menu_item_id,
+		    ci.quantity as quantity,
+		    ci.added_by_account_id as added_by_account_id,
+		    mi.id as menu_item_id,
+		    mi.price as price,
+		    mi.available as available,
+		    mit.name as name,
+		    mit.description as description
+		FROM carts c
+		LEFT JOIN cart_items ci
+		    ON c.id = ci.cart_id
+		LEFT JOIN menu_items mi
+			ON ci.menu_item_id = mi.id
+		LEFT JOIN menu_item_translations mit
+			ON mi.id = mit.menu_item_id
+		WHERE c.table_session_id = ?
+	`
+	result := s.dbC.Raw(query, tableSessionID).Scan(&cart)
+	if result.Error != nil {
+		return nil, result.Error
+	}
+	return &cart, nil
+}
+
+func (s *PostgresService) GetCartByAID(aid, lang string) (*model.Cart, error) {
+	// TODO: handle lang param
+	var cart model.Cart
+	query := `
+		SELECT
+		    c.id as id,
+		    c.total_cart_price as total_cart_price,
+		    c.table_session_id as table_session_id,
+		    c.created_at as created_at,
+		    c.updated_at as updated_at,
+		    ci.id as cart_item_id,
+		    ci.menu_item_id as menu_item_id,
+		    ci.quantity as quantity,
+		    ci.added_by_account_id as added_by_account_id,
+		    mi.id as menu_item_id,
+		    mi.price as price,
+		    mi.available as available,
+		    mit.name as name,
+		    mit.description as description
+		FROM table_session_users tsu
+		LEFT JOIN carts c
+		    ON tsu.table_session_id = c.table_session_id
+		LEFT JOIN cart_items ci
+		    ON c.id = ci.cart_id
+		LEFT JOIN menu_items mi
+		    ON ci.menu_item_id = mi.id
+		LEFT JOIN menu_item_translations mit
+		    ON mi.id = mit.menu_item_id
+		WHERE tsu.account_id = ?
+		`
+	result := s.dbC.Raw(query, aid).Scan(&cart)
 	if result.Error != nil {
 		return nil, result.Error
 	}

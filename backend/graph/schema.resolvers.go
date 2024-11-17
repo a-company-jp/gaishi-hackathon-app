@@ -204,7 +204,12 @@ func (r *queryResolver) Cart(ctx context.Context, lang *string) (*model.Cart, er
 		lang = &l
 	}
 	aid := ctx.Value(middleware.CTX_ACCOUNT_UUID).(string)
-	byAID, err := r.PostgresSvc.GetCartByAID(aid)
+	sessionByAID, err := r.PostgresSvc.GetActiveTableSessionByAID(aid)
+	if err != nil {
+		return nil, err
+	}
+	log.Printf("sessionByAID: %#v", sessionByAID)
+	byAID, err := r.PostgresSvc.GetCartByAID(aid, *lang)
 	if err != nil {
 		return nil, err
 	}
