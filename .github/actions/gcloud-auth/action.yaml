@@ -2,12 +2,9 @@ name: Common Google Cloud Auth
 
 on:
   workflow_call:
-
 jobs:
   auth:
     runs-on: ubuntu-latest
-    outputs:
-      access_token: ${{ jobs.auth.outputs.access_token }}
     permissions:
       contents: 'read'
       id-token: 'write'
