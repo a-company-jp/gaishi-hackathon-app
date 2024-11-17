@@ -17,7 +17,7 @@ resource "google_compute_subnetwork" "default" {
   ip_cidr_range                    = "10.146.0.0/20"
   ipv6_access_type                 = null
   name                             = "default"
-  network                          = "https://www.googleapis.com/compute/v1/projects/itadakimasu-engulid/global/networks/default"
+  network                          = google_compute_network.default.id
   private_ip_google_access         = false
   private_ipv6_google_access       = "DISABLE_GOOGLE_ACCESS"
   project                          = google_project.itadakimasu.project_id
