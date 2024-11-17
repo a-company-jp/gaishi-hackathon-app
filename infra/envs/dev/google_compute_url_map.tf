@@ -14,12 +14,12 @@ resource "google_compute_url_map" "lb_frontend" {
     path_matcher = "path-matcher-1"
   }
   path_matcher {
-    default_service = "https://www.googleapis.com/compute/v1/projects/itadakimasu-engulid/global/backendBuckets/itadakimasu-docs"
+    default_service = google_compute_backend_bucket.itadakimasu_docs.id
     description     = null
     name            = "path-matcher-1"
   }
   path_matcher {
-    default_service = "https://www.googleapis.com/compute/v1/projects/itadakimasu-engulid/global/backendBuckets/itadakimasu-frontend"
+    default_service = google_compute_backend_bucket.itadakimasu_frontend.id
     description     = null
     name            = "path-matcher-2"
     path_rule {

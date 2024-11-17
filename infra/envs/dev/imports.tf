@@ -93,3 +93,24 @@ import {
   id = "${google_project.itadakimasu.project_id}/itadakimasu-docs"
   to = google_compute_backend_bucket.itadakimasu_docs
 }
+
+import {
+  id = "${google_project.itadakimasu.project_id}/itadakimasu-frontend"
+  to = google_storage_bucket.itadakimasu_frontend
+}
+
+import {
+  id = "${google_project.itadakimasu.project_id}/itadakimasu-docs"
+  to = google_storage_bucket.itadakimasu_docs
+}
+
+import {
+    id = "${google_project.itadakimasu.project_id}/${var.region}/cloudrun-backend-main-endpoint-group"
+  to = google_compute_region_network_endpoint_group.cloudrun_backend_main_endpoint_group
+}
+
+import {
+  id = "${google_project.itadakimasu.project_id}/frontend-main"
+  to = google_compute_backend_service.frontend-main
+}
+
