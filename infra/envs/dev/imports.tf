@@ -105,7 +105,7 @@ import {
 }
 
 import {
-    id = "${google_project.itadakimasu.project_id}/${var.region}/cloudrun-backend-main-endpoint-group"
+  id = "${google_project.itadakimasu.project_id}/${var.region}/cloudrun-backend-main-endpoint-group"
   to = google_compute_region_network_endpoint_group.cloudrun_backend_main_endpoint_group
 }
 

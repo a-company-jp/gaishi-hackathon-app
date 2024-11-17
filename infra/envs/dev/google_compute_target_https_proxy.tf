@@ -13,5 +13,5 @@ resource "google_compute_target_https_proxy" "lb_frontend_target_proxy" {
   ]
   ssl_policy     = null
   tls_early_data = "DISABLED"
-  url_map        = "https://www.googleapis.com/compute/v1/projects/itadakimasu-engulid/global/urlMaps/lb-frontend"
+  url_map        = google_compute_url_map.lb_frontend.id
 }

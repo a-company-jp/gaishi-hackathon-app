@@ -1,5 +1,5 @@
 resource "google_compute_url_map" "lb_frontend" {
-  default_service = "https://www.googleapis.com/compute/v1/projects/itadakimasu-engulid/global/backendBuckets/itadakimasu-frontend"
+  default_service = google_compute_backend_bucket.itadakimasu_frontend.id
   description     = null
   name            = "lb-frontend"
   project         = google_project.itadakimasu.project_id
@@ -24,7 +24,7 @@ resource "google_compute_url_map" "lb_frontend" {
     name            = "path-matcher-2"
     path_rule {
       paths   = ["/api/*"]
-      service = "https://www.googleapis.com/compute/v1/projects/itadakimasu-engulid/global/backendServices/frontend-main"
+      service = google_compute_backend_service.frontend-main.id
     }
   }
 }
