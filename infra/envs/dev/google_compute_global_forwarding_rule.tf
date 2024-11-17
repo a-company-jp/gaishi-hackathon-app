@@ -11,5 +11,5 @@ resource "google_compute_global_forwarding_rule" "lb_frontend" {
   project               = google_project.itadakimasu.project_id
   source_ip_ranges      = []
   subnetwork            = null
-  target                = "https://www.googleapis.com/compute/v1/projects/itadakimasu-engulid/global/targetHttpsProxies/lb-frontend-target-proxy"
+  target                = google_compute_target_https_proxy.lb_frontend_target_proxy.id
 }

@@ -114,3 +114,7 @@ import {
   to = google_compute_backend_service.frontend-main
 }
 
+import {
+  id = "${google_project.itadakimasu.project_id}/default-security-policy-for-backend-service-frontend-main"
+  to = google_compute_security_policy.load-balancer-default-policy
+}
