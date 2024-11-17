@@ -1,6 +1,6 @@
 resource "google_sql_database_instance" "main-sql" {
   database_version     = "POSTGRES_16"
-  deletion_protection  = true
+  deletion_protection  = false
   encryption_key_name  = null
   instance_type        = "CLOUD_SQL_INSTANCE"
   maintenance_version  = "POSTGRES_16_4.R20240910.01_15"
@@ -14,7 +14,7 @@ resource "google_sql_database_instance" "main-sql" {
     availability_type            = "ZONAL"
     collation                    = null
     connector_enforcement        = "NOT_REQUIRED"
-    deletion_protection_enabled  = true
+    deletion_protection_enabled  = false
     disk_autoresize              = true
     disk_autoresize_limit        = 0
     disk_size                    = 10

@@ -3,7 +3,7 @@ resource "google_cloud_run_v2_service" "frontend" {
   client               = "cloud-console"
   client_version       = null
   custom_audiences     = []
-  deletion_protection  = true
+  deletion_protection  = false
   description          = null
   ingress              = "INGRESS_TRAFFIC_ALL"
   invoker_iam_disabled = false
@@ -76,7 +76,7 @@ resource "google_cloud_run_v2_service" "backend" {
   client               = "cloud-console"
   client_version       = null
   custom_audiences     = []
-  deletion_protection  = true
+  deletion_protection  = false
   description          = null
   ingress              = "INGRESS_TRAFFIC_ALL"
   invoker_iam_disabled = false
