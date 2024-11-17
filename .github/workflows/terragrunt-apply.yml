@@ -27,11 +27,7 @@ jobs:
 
       - name: Login to Google Cloud
         id: auth
-        uses: google-github-actions/auth@v2
-        with:
-          token_format: access_token
-          workload_identity_provider: 'projects/236289982072/locations/global/workloadIdentityPools/gh-pool/providers/provider-github'
-          service_account: 'gh-actions@itadakimasu-engulid.iam.gserviceaccount.com'
+        uses: ./.github/actions/gcloud-auth.yaml
 
       - name: Terragrunt Init
         working-directory: infra
