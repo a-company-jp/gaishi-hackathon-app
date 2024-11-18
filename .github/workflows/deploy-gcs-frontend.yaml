@@ -42,11 +42,7 @@ jobs:
           NODE_ENV: production
       - name: Login to Google Cloud
         id: auth
-        uses: google-github-actions/auth@v2
-        with:
-          token_format: access_token
-          workload_identity_provider: 'projects/236289982072/locations/global/workloadIdentityPools/gh-pool/providers/provider-github'
-          service_account: 'gh-actions@itadakimasu-engulid.iam.gserviceaccount.com'
+        uses: ./.github/actions/gcloud-auth
       - id: 'upload-file'
         uses: 'google-github-actions/upload-cloud-storage@v2'
         with:
@@ -63,11 +59,7 @@ jobs:
     steps:
       - name: Login to Google Cloud
         id: auth
-        uses: google-github-actions/auth@v2
-        with:
-          token_format: access_token
-          workload_identity_provider: 'projects/236289982072/locations/global/workloadIdentityPools/gh-pool/providers/provider-github'
-          service_account: 'gh-actions@itadakimasu-engulid.iam.gserviceaccount.com'
+        uses: ./.github/actions/gcloud-auth
       - name: Set up Cloud SDK
         uses: 'google-github-actions/setup-gcloud@v2'
         with:
